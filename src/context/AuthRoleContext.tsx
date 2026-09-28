@@ -15,8 +15,8 @@ const CITIZEN_PROFILE: UserProfile = {
   name: 'Tanvir Hossain',
   email: 'tanvir.citizen@nagarchitra.org',
   role: 'CITIZEN',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-  joinedDate: 'March 2026',
+  avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+  joinedDate: '০১ মার্চ ২০২৬',
   location: 'Mirpur 10, Dhaka',
   stats: {
     reportsCount: 14,

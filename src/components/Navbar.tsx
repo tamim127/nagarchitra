@@ -82,10 +82,10 @@ export const Navbar: React.FC = () => {
           <Link href="/profile" className="flex items-center gap-1.5 hover:text-white transition pl-1">
             <img
               src={currentUser.avatar}
-              alt="Tamiul"
+              alt={currentUser.name}
               className="w-5 h-5 rounded-full object-cover ring-1 ring-accent/40"
             />
-            <span className="text-[11px] font-bold text-slate-200 hidden sm:inline">Tamiul</span>
+            <span className="text-[11px] font-bold text-slate-200 hidden sm:inline">{currentUser.name} ▾</span>
             <span className="text-[9px] text-slate-400 font-bangla hidden sm:inline">সিটিজেন</span>
           </Link>
         </div>
