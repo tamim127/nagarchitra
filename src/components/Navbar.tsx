@@ -134,16 +134,6 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Right Action: Report Button or spacing */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Link
-              href="/report"
-              className="px-4 py-2 rounded-xl bg-accent hover:bg-accent-400 text-slate-950 font-bold text-xs shadow-md transition"
-            >
-              রিপোর্ট করুন +
-            </Link>
-          </div>
-
           {/* Mobile Menu Button */}
           <div className="flex lg:hidden items-center gap-2">
             <button

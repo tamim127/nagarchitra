@@ -34,6 +34,7 @@ import {
   Sparkles,
   Shield,
   HelpCircle,
+  TrendingUp,
 } from 'lucide-react';
 
 export default function OpenDataPage() {
@@ -233,19 +234,19 @@ export default function OpenDataPage() {
   );
 
   return (
-    <div className="bg-[#F8F9FA] text-slate-900 min-h-screen">
+    <div className="bg-[#F8F9FA] text-slate-900 min-h-screen font-bangla">
       {/* 1. HERO SECTION (DEEP TEAL GRADIENT WITH BANGLADESH MAP & LATEST DATA SNAPSHOT) */}
-      <section className="bg-gradient-to-b from-[#082621] via-[#061F1B] to-[#041512] text-white pt-10 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section className="bg-gradient-to-b from-[#082621] via-[#061F1B] to-[#041512] text-white pt-8 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Background Ambient Glow */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-[1600px] mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             {/* Left Hero Text (5 cols) */}
-            <div className="lg:col-span-5 space-y-5">
+            <div className="lg:col-span-5 space-y-4">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#113831] border border-emerald-500/30 text-emerald-300 text-xs font-bold tracking-wide uppercase">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#113831] border border-emerald-500/30 text-emerald-300 text-xs font-bold tracking-wide uppercase font-sans">
                 <Database className="w-3.5 h-3.5 text-accent" />
                 <span>CIVIC DATA PORTAL</span>
               </div>
@@ -256,15 +257,15 @@ export default function OpenDataPage() {
               </h1>
 
               {/* Subtitle */}
-              <p className="text-sm sm:text-base text-slate-300 font-bangla leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-300 font-bangla leading-relaxed max-w-xl">
                 নগরচিত্রের উন্মুক্ত তথ্যভাণ্ডার থেকে ডাউনলোড করুন ঢাকা শহরের নাগরিক সমস্যা, সমাধান, ভৌগোলিক তথ্য এবং ত্রিবিধ পরিসংখ্যান।
               </p>
 
               {/* Download Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
+              <div className="flex flex-wrap items-center gap-3 pt-1">
                 <button
                   onClick={handleExportCSV}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent hover:bg-accent-400 text-slate-950 font-bold text-sm shadow-lg shadow-accent/20 transition hover:scale-102 active:scale-98 font-bangla"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-accent/20 transition hover:scale-102 active:scale-98 font-bangla"
                 >
                   <Download className="w-4 h-4 text-slate-950" />
                   <span>CSV ডাউনলোড</span>
@@ -272,7 +273,7 @@ export default function OpenDataPage() {
 
                 <button
                   onClick={handleExportJSON}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-sm backdrop-blur-sm transition hover:scale-102 active:scale-98 font-bangla"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs sm:text-sm backdrop-blur-xs transition hover:scale-102 active:scale-98 font-bangla"
                 >
                   <Code2 className="w-4 h-4 text-emerald-400" />
                   <span>JSON ডাউনলোড</span>
@@ -280,65 +281,64 @@ export default function OpenDataPage() {
               </div>
 
               {/* Sub-banner pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[11px] text-emerald-200 font-bangla">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/70 border border-emerald-500/30 text-[11px] text-emerald-200 font-bangla">
                 <span>🍃</span>
                 <span>সবার জন্য উন্মুক্ত - গবেষণা, সাংবাদিকতা ও উদ্ভাবনের জন্য</span>
               </div>
             </div>
 
-            {/* Center Bangladesh Map Visualization (3.5 cols) */}
-            <div className="lg:col-span-3.5 relative flex items-center justify-center">
-              <div className="relative w-full max-w-[340px] aspect-[4/5] flex items-center justify-center">
+            {/* Center Bangladesh Map Visualization (3 cols) */}
+            <div className="lg:col-span-3 relative flex items-center justify-center">
+              <div className="relative w-full max-w-[280px] aspect-[3/4] flex items-center justify-center">
                 {/* Glowing map silhouette vector */}
-                <svg viewBox="0 0 300 400" className="w-full h-full filter drop-shadow-[0_0_25px_rgba(16,185,129,0.25)]">
-                  {/* Bangladesh Contour Outline */}
+                <svg viewBox="0 0 300 380" className="w-full h-full filter drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                  {/* Accurate Bangladesh Boundary Shape */}
                   <path
-                    d="M 120,40 Q 150,20 180,35 Q 210,50 200,80 Q 220,110 240,140 Q 260,180 230,220 Q 250,250 240,290 Q 220,330 180,350 Q 150,330 120,360 Q 90,340 70,300 Q 50,250 60,200 Q 40,160 60,120 Q 70,80 100,60 Z"
-                    fill="#0A332C"
+                    d="M 115,25 Q 155,10 185,25 Q 210,40 195,70 Q 215,95 240,120 Q 260,160 230,200 Q 250,230 235,270 Q 220,310 180,335 Q 150,315 120,345 Q 85,325 65,285 Q 45,235 55,185 Q 35,145 55,105 Q 65,65 95,45 Z"
+                    fill="#082C25"
                     stroke="#10B981"
                     strokeWidth="1.5"
-                    strokeDasharray="4 2"
                   />
-                  {/* Grid Lines across territory */}
-                  <line x1="80" y1="120" x2="220" y2="120" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.4" />
-                  <line x1="60" y1="200" x2="240" y2="200" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.4" />
-                  <line x1="80" y1="280" x2="220" y2="280" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.4" />
+                  {/* Subtle Grid Lines across territory */}
+                  <line x1="75" y1="105" x2="215" y2="105" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.4" strokeDasharray="3 3" />
+                  <line x1="55" y1="185" x2="235" y2="185" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.4" strokeDasharray="3 3" />
+                  <line x1="75" y1="265" x2="215" y2="265" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.4" strokeDasharray="3 3" />
 
                   {/* Network Nodes & Dhaka Golden Hub */}
-                  <circle cx="150" cy="190" r="7" fill="#F59E0B" className="animate-ping" opacity="0.7" />
-                  <circle cx="150" cy="190" r="5" fill="#F59E0B" />
-                  <text x="160" y="194" fill="#FBBF24" fontSize="11" fontWeight="bold" fontFamily="sans-serif">
+                  <circle cx="145" cy="180" r="10" fill="#F59E0B" opacity="0.3" className="animate-ping" />
+                  <circle cx="145" cy="180" r="5" fill="#F59E0B" />
+                  <text x="156" y="184" fill="#FBBF24" fontSize="11" fontWeight="bold" fontFamily="sans-serif">
                     Dhaka
                   </text>
 
                   {/* Regional Nodes */}
-                  <circle cx="130" cy="100" r="3.5" fill="#34D399" />
-                  <line x1="150" y1="190" x2="130" y2="100" stroke="#10B981" strokeWidth="1" strokeOpacity="0.6" />
+                  <circle cx="125" cy="95" r="3.5" fill="#34D399" />
+                  <line x1="145" y1="180" x2="125" y2="95" stroke="#10B981" strokeWidth="1" strokeOpacity="0.5" strokeDasharray="2 2" />
 
-                  <circle cx="210" cy="240" r="3.5" fill="#34D399" />
-                  <line x1="150" y1="190" x2="210" y2="240" stroke="#10B981" strokeWidth="1" strokeOpacity="0.6" />
+                  <circle cx="205" cy="225" r="3.5" fill="#34D399" />
+                  <line x1="145" y1="180" x2="205" y2="225" stroke="#10B981" strokeWidth="1" strokeOpacity="0.5" strokeDasharray="2 2" />
 
-                  <circle cx="95" cy="250" r="3.5" fill="#34D399" />
-                  <line x1="150" y1="190" x2="95" y2="250" stroke="#10B981" strokeWidth="1" strokeOpacity="0.6" />
+                  <circle cx="90" cy="235" r="3.5" fill="#34D399" />
+                  <line x1="145" y1="180" x2="90" y2="235" stroke="#10B981" strokeWidth="1" strokeOpacity="0.5" strokeDasharray="2 2" />
 
-                  <circle cx="215" cy="140" r="3" fill="#34D399" />
-                  <line x1="150" y1="190" x2="215" y2="140" stroke="#10B981" strokeWidth="1" strokeOpacity="0.6" />
+                  <circle cx="210" cy="130" r="3" fill="#34D399" />
+                  <line x1="145" y1="180" x2="210" y2="130" stroke="#10B981" strokeWidth="1" strokeOpacity="0.5" strokeDasharray="2 2" />
                 </svg>
 
-                {/* Overlaid stats pill on map */}
-                <div className="absolute top-4 right-4 bg-[#0A2E28]/90 border border-emerald-500/40 backdrop-blur-md rounded-xl p-2.5 shadow-lg text-[11px] space-y-1">
+                {/* Overlaid stats badge on top-right of map */}
+                <div className="absolute top-2 right-0 bg-[#07241F]/90 border border-emerald-500/40 backdrop-blur-md rounded-xl p-2 shadow-lg text-[10px] space-y-0.5 font-sans">
                   <div className="font-bold text-white">Bangladesh</div>
-                  <div className="text-slate-300 font-sans"><strong className="text-emerald-400">8</strong> Divisions</div>
-                  <div className="text-slate-300 font-sans"><strong className="text-emerald-400">64</strong> Districts</div>
-                  <div className="text-slate-300 font-sans"><strong className="text-emerald-400">4,500+</strong> Wards</div>
+                  <div className="text-slate-300"><strong className="text-emerald-400">8</strong> Divisions</div>
+                  <div className="text-slate-300"><strong className="text-emerald-400">64</strong> Districts</div>
+                  <div className="text-slate-300"><strong className="text-emerald-400">4,500+</strong> Wards</div>
                 </div>
               </div>
             </div>
 
-            {/* Right: Latest Data Snapshot Card (3.5 cols) */}
-            <div className="lg:col-span-3.5 bg-[#092D27]/90 border border-emerald-500/30 rounded-3xl p-5 sm:p-6 backdrop-blur-md shadow-2xl space-y-4">
-              <div className="flex items-center justify-between border-b border-emerald-800/60 pb-3">
-                <span className="text-xs font-bold text-white tracking-wide">Latest Data Snapshot</span>
+            {/* Right: Latest Data Snapshot Card (4 cols) */}
+            <div className="lg:col-span-4 bg-[#072520]/95 border border-emerald-500/30 rounded-3xl p-5 backdrop-blur-md shadow-2xl space-y-4">
+              <div className="flex items-center justify-between border-b border-emerald-800/60 pb-2.5">
+                <span className="text-xs font-bold text-white tracking-wide font-sans">Latest Data Snapshot</span>
                 <span className="text-[10px] text-slate-400 font-sans">Apr 22, 2026 - 10:24 AM</span>
               </div>
 
@@ -354,59 +354,59 @@ export default function OpenDataPage() {
                     <circle cx="50" cy="50" r="38" stroke="#64748B" strokeWidth="11" strokeDasharray="238.7" strokeDashoffset="220" fill="transparent" />
                   </svg>
                   <div className="absolute flex flex-col items-center">
-                    <span className="text-base font-black text-white font-sans">1,248</span>
-                    <span className="text-[8px] uppercase tracking-wider text-slate-400">Total Records</span>
+                    <span className="text-base font-black text-white font-sans leading-none">1,248</span>
+                    <span className="text-[8px] uppercase tracking-wider text-slate-400 font-sans mt-0.5">Total Records</span>
                   </div>
                 </div>
 
                 {/* Legend list */}
-                <div className="flex-1 space-y-1.5 text-xs">
+                <div className="flex-1 space-y-1 text-xs font-sans">
                   <div className="flex items-center justify-between text-slate-300">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[11px]">
                       <span className="w-2 h-2 rounded-full bg-sky-400" />
                       <span>Road Damage</span>
                     </span>
-                    <span className="font-sans font-bold text-white">342</span>
+                    <span className="font-bold text-white text-[11px]">342</span>
                   </div>
 
                   <div className="flex items-center justify-between text-slate-300">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[11px]">
                       <span className="w-2 h-2 rounded-full bg-emerald-500" />
                       <span>Drainage</span>
                     </span>
-                    <span className="font-sans font-bold text-white">218</span>
+                    <span className="font-bold text-white text-[11px]">218</span>
                   </div>
 
                   <div className="flex items-center justify-between text-slate-300">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[11px]">
                       <span className="w-2 h-2 rounded-full bg-amber-500" />
                       <span>Waste</span>
                     </span>
-                    <span className="font-sans font-bold text-white">176</span>
+                    <span className="font-bold text-white text-[11px]">176</span>
                   </div>
 
                   <div className="flex items-center justify-between text-slate-300">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[11px]">
                       <span className="w-2 h-2 rounded-full bg-purple-500" />
                       <span>Street Light</span>
                     </span>
-                    <span className="font-sans font-bold text-white">124</span>
+                    <span className="font-bold text-white text-[11px]">124</span>
                   </div>
 
                   <div className="flex items-center justify-between text-slate-300">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[11px]">
                       <span className="w-2 h-2 rounded-full bg-cyan-500" />
                       <span>Safety</span>
                     </span>
-                    <span className="font-sans font-bold text-white">96</span>
+                    <span className="font-bold text-white text-[11px]">96</span>
                   </div>
 
                   <div className="flex items-center justify-between text-slate-300">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[11px]">
                       <span className="w-2 h-2 rounded-full bg-slate-500" />
                       <span>Other</span>
                     </span>
-                    <span className="font-sans font-bold text-white">92</span>
+                    <span className="font-bold text-white text-[11px]">92</span>
                   </div>
                 </div>
               </div>
@@ -416,8 +416,8 @@ export default function OpenDataPage() {
       </section>
 
       {/* 2. STATS BAR ("Data at a glance") */}
-      <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
-        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-md p-6">
+      <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 -mt-7 relative z-20">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-md p-5 sm:p-6 font-sans">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
             {/* Header Text */}
             <div className="space-y-0.5 col-span-2 md:col-span-1 pr-4">
@@ -489,37 +489,37 @@ export default function OpenDataPage() {
       </section>
 
       {/* 3. FEATURED DATASETS (5 CARDS IN A ROW) */}
-      <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
+      <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900">Featured Datasets</h2>
-            <p className="text-xs text-slate-500">Explore key datasets from NagarChitra's civic data platform</p>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-sans">Featured Datasets</h2>
+            <p className="text-xs text-slate-500 font-sans">Explore key datasets from NagarChitra's civic data platform</p>
           </div>
           <button
             onClick={handleExportCSV}
-            className="text-xs font-bold text-primary hover:text-emerald-700 flex items-center gap-1 transition"
+            className="text-xs font-bold text-primary hover:text-emerald-700 flex items-center gap-1 transition font-sans"
           >
             <span>View all datasets</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4.5">
           {/* Card 1: Public Issues */}
           <div className="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between">
             <div className="h-36 overflow-hidden relative">
               <img
                 src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=400&q=80"
                 alt="Public Issues"
-                className="w-full h-full object-cover group-hover:scale-105 transition"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute top-3 left-3 w-8 h-8 rounded-xl bg-amber-500/90 text-white flex items-center justify-center shadow-md">
+              <div className="absolute top-3 left-3 w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-md">
                 <AlertTriangle className="w-4 h-4" />
               </div>
             </div>
             <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
               <div className="space-y-1">
-                <h3 className="font-black text-sm text-slate-900 leading-snug">Public Issues</h3>
+                <h3 className="font-black text-sm text-slate-900 leading-snug font-sans">Public Issues</h3>
                 <p className="text-xs text-slate-500 font-bangla">নাগরিক সমস্যা প্রতিবেদন</p>
                 <div className="pt-2 text-[11px] text-slate-500 space-y-0.5 font-sans">
                   <div><strong>1,248</strong> records</div>
@@ -528,13 +528,13 @@ export default function OpenDataPage() {
               </div>
 
               <div className="space-y-3 pt-2">
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1 font-sans">
                   <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[9px] font-bold">GEOJSON</span>
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">CSV</span>
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">NDJSON</span>
                 </div>
 
-                <div className="flex items-center gap-1.5 pt-1">
+                <div className="flex items-center gap-1.5 pt-1 font-sans">
                   <Link
                     href="/explore"
                     className="flex-1 py-2 rounded-xl bg-[#092C26] hover:bg-[#11433B] text-white text-xs font-bold text-center transition"
@@ -567,7 +567,7 @@ export default function OpenDataPage() {
             </div>
             <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
               <div className="space-y-1">
-                <h3 className="font-black text-sm text-slate-900 leading-snug">Resolution Statistics</h3>
+                <h3 className="font-black text-sm text-slate-900 leading-snug font-sans">Resolution Statistics</h3>
                 <p className="text-xs text-slate-500 font-bangla">সমাধান পরিসংখ্যান</p>
                 <div className="pt-2 text-[11px] text-slate-500 space-y-0.5 font-sans">
                   <div><strong>892</strong> records</div>
@@ -576,12 +576,12 @@ export default function OpenDataPage() {
               </div>
 
               <div className="space-y-3 pt-2">
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1 font-sans">
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">CSV</span>
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">JSON</span>
                 </div>
 
-                <div className="flex items-center gap-1.5 pt-1">
+                <div className="flex items-center gap-1.5 pt-1 font-sans">
                   <Link
                     href="/statistics"
                     className="flex-1 py-2 rounded-xl bg-[#092C26] hover:bg-[#11433B] text-white text-xs font-bold text-center transition"
@@ -614,7 +614,7 @@ export default function OpenDataPage() {
             </div>
             <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
               <div className="space-y-1">
-                <h3 className="font-black text-sm text-slate-900 leading-snug">Area Intelligence</h3>
+                <h3 className="font-black text-sm text-slate-900 leading-snug font-sans">Area Intelligence</h3>
                 <p className="text-xs text-slate-500 font-bangla">এলাকা ভিত্তিক বিশ্লেষণ</p>
                 <div className="pt-2 text-[11px] text-slate-500 space-y-0.5 font-sans">
                   <div><strong>54</strong> records</div>
@@ -623,12 +623,12 @@ export default function OpenDataPage() {
               </div>
 
               <div className="space-y-3 pt-2">
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1 font-sans">
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">CSV</span>
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">JSON</span>
                 </div>
 
-                <div className="flex items-center gap-1.5 pt-1">
+                <div className="flex items-center gap-1.5 pt-1 font-sans">
                   <Link
                     href="/nagar/mirpur"
                     className="flex-1 py-2 rounded-xl bg-[#092C26] hover:bg-[#11433B] text-white text-xs font-bold text-center transition"
@@ -661,7 +661,7 @@ export default function OpenDataPage() {
             </div>
             <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
               <div className="space-y-1">
-                <h3 className="font-black text-sm text-slate-900 leading-snug">SLA Performance</h3>
+                <h3 className="font-black text-sm text-slate-900 leading-snug font-sans">SLA Performance</h3>
                 <p className="text-xs text-slate-500 font-bangla">এসএলএ পরিসংখ্যান</p>
                 <div className="pt-2 text-[11px] text-slate-500 space-y-0.5 font-sans">
                   <div><strong>327</strong> records</div>
@@ -670,12 +670,12 @@ export default function OpenDataPage() {
               </div>
 
               <div className="space-y-3 pt-2">
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1 font-sans">
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">CSV</span>
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">JSON</span>
                 </div>
 
-                <div className="flex items-center gap-1.5 pt-1">
+                <div className="flex items-center gap-1.5 pt-1 font-sans">
                   <Link
                     href="/statistics"
                     className="flex-1 py-2 rounded-xl bg-[#092C26] hover:bg-[#11433B] text-white text-xs font-bold text-center transition"
@@ -708,7 +708,7 @@ export default function OpenDataPage() {
             </div>
             <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
               <div className="space-y-1">
-                <h3 className="font-black text-sm text-slate-900 leading-snug">Citizen Confirmations</h3>
+                <h3 className="font-black text-sm text-slate-900 leading-snug font-sans">Citizen Confirmations</h3>
                 <p className="text-xs text-slate-500 font-bangla">নাগরিক যাচাই তথ্য</p>
                 <div className="pt-2 text-[11px] text-slate-500 space-y-0.5 font-sans">
                   <div><strong>456</strong> records</div>
@@ -717,12 +717,12 @@ export default function OpenDataPage() {
               </div>
 
               <div className="space-y-3 pt-2">
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1 font-sans">
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">CSV</span>
                   <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[9px] font-bold">JSON</span>
                 </div>
 
-                <div className="flex items-center gap-1.5 pt-1">
+                <div className="flex items-center gap-1.5 pt-1 font-sans">
                   <Link
                     href="/explore"
                     className="flex-1 py-2 rounded-xl bg-[#092C26] hover:bg-[#11433B] text-white text-xs font-bold text-center transition"
@@ -745,20 +745,20 @@ export default function OpenDataPage() {
 
       {/* 4. API EXPLORER SECTION (INTERACTIVE REST API SANDBOX) */}
       <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-[#0A2E28] rounded-3xl border border-emerald-600/30 p-6 sm:p-8 text-white shadow-xl space-y-6">
+        <div className="bg-[#0B2F2A] rounded-3xl border border-emerald-600/30 p-6 sm:p-8 text-white shadow-xl space-y-6">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-2xl bg-amber-500/20 text-accent flex items-center justify-center font-black">
-              <Code2 className="w-5 h-5" />
+              <Code2 className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white">API Explorer</h2>
-              <p className="text-xs text-slate-300">Integrate with our data using RESTful APIs</p>
+              <h2 className="text-xl sm:text-2xl font-black text-white font-sans">API Explorer</h2>
+              <p className="text-xs text-slate-300 font-sans">Integrate with our data using RESTful APIs</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Nav Tabs (2.5 cols) */}
-            <div className="lg:col-span-2.5 space-y-2">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            {/* Left Nav Tabs (2 cols) */}
+            <div className="lg:col-span-2 space-y-2 font-sans">
               {[
                 { id: 'all', label: 'All Endpoints', icon: <Layers className="w-4 h-4" /> },
                 { id: 'issues', label: 'Issues', icon: <FileText className="w-4 h-4" /> },
@@ -773,7 +773,7 @@ export default function OpenDataPage() {
                   }}
                   className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition ${
                     selectedEndpoint === tab.id || (tab.id === 'all' && selectedEndpoint === 'issues')
-                      ? 'bg-emerald-600/30 text-accent border border-emerald-500/40'
+                      ? 'bg-[#134D44] text-[#7DF3D8] border border-emerald-400/40 shadow-xs'
                       : 'text-slate-300 hover:bg-white/5'
                   }`}
                 >
@@ -783,16 +783,16 @@ export default function OpenDataPage() {
               ))}
             </div>
 
-            {/* Middle Endpoints List (4.5 cols) */}
-            <div className="lg:col-span-4.5 space-y-2.5">
+            {/* Middle Endpoints List (5 cols) */}
+            <div className="lg:col-span-5 space-y-2.5 font-sans">
               {endpoints.map((ep) => (
                 <div
                   key={ep.id}
                   onClick={() => setSelectedEndpoint(ep.id as any)}
                   className={`p-3.5 rounded-2xl border cursor-pointer transition ${
                     selectedEndpoint === ep.id
-                      ? 'bg-white text-slate-900 border-white shadow-lg'
-                      : 'bg-[#0E352F] text-white border-emerald-800/60 hover:bg-[#12423B]'
+                      ? 'bg-white text-slate-900 border-white shadow-md'
+                      : 'bg-white/95 text-slate-900 border-slate-200 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-1">
@@ -806,7 +806,7 @@ export default function OpenDataPage() {
                       >
                         {ep.method}
                       </span>
-                      <span className="font-bold">{ep.path}</span>
+                      <span className="font-bold text-slate-900">{ep.path}</span>
                     </div>
 
                     <button
@@ -814,79 +814,72 @@ export default function OpenDataPage() {
                         e.stopPropagation();
                         handleCopy(ep.path, ep.id);
                       }}
-                      className="p-1 rounded hover:bg-slate-200/50 text-slate-400 hover:text-slate-800 transition"
+                      className="flex items-center gap-1 px-2 py-0.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-800 text-[10px] font-sans transition"
                       title="Copy Path"
                     >
-                      {copiedKey === ep.id ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copiedKey === ep.id ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                      <span>Copy</span>
                     </button>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-sans">{ep.description}</p>
+                  <p className="text-[11px] text-slate-500 font-sans">{ep.description}</p>
                 </div>
               ))}
             </div>
 
-            {/* Right Terminal / Sandbox (5 cols) */}
-            <div className="lg:col-span-5 bg-[#051714] rounded-2xl border border-emerald-900/60 p-4 space-y-4 font-mono text-xs">
-              <div className="flex items-center justify-between border-b border-emerald-900/80 pb-2">
-                <div className="flex items-center gap-2">
+            {/* Right Terminal Sandbox (5 cols) */}
+            <div className="lg:col-span-5 space-y-3 font-sans">
+              {/* Terminal Container */}
+              <div className="bg-[#051714] rounded-2xl border border-emerald-900/60 p-4 space-y-3 font-mono text-xs shadow-lg">
+                <div className="flex items-center justify-between border-b border-emerald-900/80 pb-2">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setActiveTab('request')}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold font-sans transition ${
+                        activeTab === 'request' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Request
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('response')}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold font-sans transition ${
+                        activeTab === 'response' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Response
+                    </button>
+                  </div>
+
                   <button
-                    onClick={() => setActiveTab('request')}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition ${
-                      activeTab === 'request' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
-                    }`}
+                    onClick={() => handleCopy(currentEndpoint.curl, 'curl_box')}
+                    className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-accent font-sans transition"
                   >
-                    Request
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('response')}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition ${
-                      activeTab === 'response' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    Response
+                    {copiedKey === 'curl_box' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>Copy</span>
                   </button>
                 </div>
 
-                <button
-                  onClick={() => handleCopy(currentEndpoint.curl, 'curl_box')}
-                  className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-accent transition"
-                >
-                  {copiedKey === 'curl_box' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                  <span>Copy</span>
-                </button>
+                <pre className="text-emerald-400 overflow-x-auto text-[11px] leading-relaxed p-1 bg-black/20 rounded-xl">
+                  <code>{currentEndpoint.curl}</code>
+                </pre>
               </div>
 
-              {/* Terminal Code View */}
-              {activeTab === 'request' ? (
-                <div className="space-y-4">
-                  <pre className="text-emerald-400 overflow-x-auto text-[11px] leading-relaxed p-2 bg-black/40 rounded-xl">
-                    <code>{currentEndpoint.curl}</code>
-                  </pre>
-
-                  {/* Sample Response Preview */}
-                  <div className="space-y-1.5 pt-2 border-t border-emerald-900/60">
-                    <div className="flex items-center justify-between text-slate-400 text-[11px]">
-                      <span>Sample Response</span>
-                      <button
-                        onClick={() => handleCopy(currentEndpoint.response, 'resp_box')}
-                        className="flex items-center gap-1 hover:text-accent transition"
-                      >
-                        {copiedKey === 'resp_box' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                        <span>Copy</span>
-                      </button>
-                    </div>
-                    <pre className="text-slate-300 overflow-x-auto text-[11px] leading-relaxed p-3 bg-white/5 rounded-xl">
-                      <code>{currentEndpoint.response}</code>
-                    </pre>
-                  </div>
+              {/* Sample Response Box */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-2 text-slate-900 font-mono text-xs">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                  <span className="text-xs font-bold text-slate-700 font-sans">Sample Response</span>
+                  <button
+                    onClick={() => handleCopy(currentEndpoint.response, 'resp_box')}
+                    className="flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-800 font-sans transition"
+                  >
+                    {copiedKey === 'resp_box' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    <span>Copy</span>
+                  </button>
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  <pre className="text-slate-300 overflow-x-auto text-[11px] leading-relaxed p-3 bg-white/5 rounded-xl">
-                    <code>{currentEndpoint.response}</code>
-                  </pre>
-                </div>
-              )}
+                <pre className="text-slate-800 overflow-x-auto text-[11px] leading-relaxed p-1">
+                  <code>{currentEndpoint.response}</code>
+                </pre>
+              </div>
             </div>
           </div>
         </div>
@@ -896,11 +889,11 @@ export default function OpenDataPage() {
       <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900">Public Issues Dataset</h2>
-            <p className="text-xs text-slate-500">Browse and explore all civic issues with advanced filters and search</p>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-sans">Public Issues Dataset</h2>
+            <p className="text-xs text-slate-500 font-sans">Browse and explore all civic issues with advanced filters and search</p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2.5 font-sans">
             {/* Search */}
             <div className="relative">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -909,18 +902,18 @@ export default function OpenDataPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by location, category, or issue ID..."
-                className="pl-9 pr-3 py-2 rounded-xl bg-white border border-slate-200 text-xs w-64 sm:w-72 focus:outline-none focus:ring-1 focus:ring-primary shadow-xs"
+                className="pl-9 pr-3 py-2 rounded-xl bg-white border border-slate-200 text-xs w-64 sm:w-72 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
               />
             </div>
 
             {/* Filter Button */}
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-xs">
+            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs">
               <Filter className="w-3.5 h-3.5 text-slate-500" />
               <span>Filter</span>
             </button>
 
             {/* Columns Button */}
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-xs">
+            <button className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-2xs">
               <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500" />
               <span>Columns</span>
             </button>
@@ -937,7 +930,7 @@ export default function OpenDataPage() {
         </div>
 
         {/* Dataset Table Card */}
-        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden font-sans">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider text-[11px] border-b border-slate-200">
@@ -975,8 +968,8 @@ export default function OpenDataPage() {
                         {row.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-slate-500 font-sans text-[11px] whitespace-nowrap">{row.reported}</td>
-                    <td className="px-4 py-3.5 text-slate-400 font-sans text-[11px] whitespace-nowrap">{row.updated}</td>
+                    <td className="px-4 py-3.5 text-slate-500 text-[11px] whitespace-nowrap">{row.reported}</td>
+                    <td className="px-4 py-3.5 text-slate-400 text-[11px] whitespace-nowrap">{row.updated}</td>
                     <td className="px-4 py-3.5 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
@@ -997,7 +990,7 @@ export default function OpenDataPage() {
           </div>
 
           {/* Table Pagination */}
-          <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t border-slate-100 text-xs text-slate-500 gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t border-slate-100 text-xs text-slate-500 gap-3 font-sans">
             <span>Showing 1-5 of 1,248 records</span>
 
             <div className="flex items-center gap-1 font-sans">
@@ -1006,7 +999,7 @@ export default function OpenDataPage() {
                   key={p}
                   onClick={() => setCurrentPage(p)}
                   className={`w-7 h-7 rounded-lg font-bold flex items-center justify-center transition ${
-                    currentPage === p ? 'bg-[#08221E] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+                    currentPage === p ? 'bg-[#08221E] text-white shadow-2xs' : 'text-slate-600 hover:bg-slate-100'
                   }`}
                 >
                   {p}
@@ -1025,7 +1018,7 @@ export default function OpenDataPage() {
       </section>
 
       {/* 6. BOTTOM DUAL CARDS (Data Methodology & Use the Data) */}
-      <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Card: Data Methodology & Provenance */}
           <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-6 flex flex-col justify-between">
