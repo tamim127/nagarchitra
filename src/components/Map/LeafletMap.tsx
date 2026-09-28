@@ -12,6 +12,7 @@ interface LeafletMapProps {
   zoom?: number;
   height?: string;
   interactive?: boolean;
+  hideLegend?: boolean;
 }
 
 const getMarkerColor = (status: IssueStatus, severity: IssueSeverity) => {
@@ -40,6 +41,7 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
   zoom = 12,
   height = '100%',
   interactive = true,
+  hideLegend = false,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
@@ -219,13 +221,15 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
       {/* Floating Map Legend */}
-      <div className="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border border-slate-200 text-xs hidden sm:flex items-center gap-3">
-        <span className="font-semibold text-slate-700">Status:</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-600 inline-block animate-pulse"></span> Critical</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-600 inline-block"></span> In Progress</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Resolved</span>
-        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-primary inline-block"></span> Reported</span>
-      </div>
+      {!hideLegend && (
+        <div className="absolute bottom-3 left-3 z-[400] bg-white/95 backdrop-blur-sm px-3 py-2 rounded-lg shadow-md border border-slate-200 text-xs hidden sm:flex items-center gap-3">
+          <span className="font-semibold text-slate-700">Status:</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-600 inline-block animate-pulse"></span> Critical</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-600 inline-block"></span> In Progress</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Resolved</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-primary inline-block"></span> Reported</span>
+        </div>
+      )}
     </div>
   );
 };

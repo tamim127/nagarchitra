@@ -24,7 +24,7 @@ export const Navbar: React.FC = () => {
     { href: '/explore', label: 'Explore', labelBn: 'এক্সপ্লোর' },
     { href: '/report', label: 'Report', labelBn: 'রিপোর্ট' },
     { href: '/nagar/mirpur', label: 'Areas', labelBn: 'এলাকা' },
-    { href: '/authority', label: 'Statistics', labelBn: 'পরিসংখ্যান' },
+    { href: '/statistics', label: 'Statistics', labelBn: 'পরিসংখ্যান' },
     { href: '/open-data', label: 'Open Data', labelBn: 'মুক্ত তথ্য' },
     { href: '/about/how-it-works', label: 'About', labelBn: 'সম্পর্কে' },
   ];
@@ -117,20 +117,28 @@ export const Navbar: React.FC = () => {
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-[#08221E] animate-pulse" />
+              <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-[#08221E]">
+                3
+              </span>
             </Link>
 
-            {/* User Profile Avatar with Online Status */}
+            {/* User Profile Avatar with Name & Role Pill */}
             <Link
               href="/profile"
-              className="relative flex items-center p-0.5 rounded-full ring-2 ring-accent/30 hover:ring-accent transition"
+              className="flex items-center gap-2 pl-1 pr-2 py-0.5 rounded-full hover:bg-[#0E3530] transition group"
             >
-              <img
-                src={currentUser.avatar}
-                alt={currentUser.name}
-                className="w-8 h-8 rounded-full object-cover"
-              />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-[#08221E]" />
+              <div className="relative">
+                <img
+                  src={currentUser.avatar}
+                  alt="Tamiul"
+                  className="w-8 h-8 rounded-full object-cover ring-2 ring-accent/40 group-hover:ring-accent transition"
+                />
+                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[#08221E]" />
+              </div>
+              <div className="hidden sm:flex flex-col text-left leading-tight">
+                <span className="text-xs font-bold text-white leading-none">Tamiul</span>
+                <span className="text-[10px] text-slate-400 font-bangla">সিটিজেন</span>
+              </div>
             </Link>
           </div>
 

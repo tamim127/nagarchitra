@@ -100,7 +100,7 @@ export const Footer: React.FC = () => {
                 <Link href="/nagar/mirpur" className="hover:text-white transition">এলাকা</Link>
               </li>
               <li>
-                <Link href="/authority" className="hover:text-white transition">পরিসংখ্যান</Link>
+                <Link href="/statistics" className="hover:text-white transition">পরিসংখ্যান</Link>
               </li>
             </ul>
           </div>
