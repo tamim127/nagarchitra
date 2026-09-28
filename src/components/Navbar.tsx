@@ -6,147 +6,145 @@ import { usePathname } from 'next/navigation';
 import { useAuthRole } from '@/context/AuthRoleContext';
 import { useLanguage } from '@/context/LanguageContext';
 import {
-  MapPin,
-  PlusCircle,
-  BarChart3,
-  Building,
+  Search,
+  Bell,
   Menu,
   X,
-  Languages,
-  Database,
-  User,
-  ShieldCheck,
+  MapPin,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const { role, currentUser } = useAuthRole();
-  const { language, toggleLanguage, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    {
-      href: '/explore',
-      label: t('Explore Map', 'ম্যাপ এক্সপ্লোর'),
-      icon: MapPin,
-    },
-    {
-      href: '/report',
-      label: t('Report Issue', 'সমস্যা রিপোর্ট'),
-      icon: PlusCircle,
-      highlight: true,
-    },
-    {
-      href: '/nagar/mirpur',
-      label: t('Area Pulse', 'এলাকাভিত্তিক চিত্র'),
-      icon: BarChart3,
-    },
-    {
-      href: '/authority',
-      label: t('Authority Workspace', 'কর্তৃপক্ষ ওয়ার্কস্পেস'),
-      icon: Building,
-      badge: role === 'AUTHORITY' ? 'Active' : undefined,
-    },
-    {
-      href: '/open-data',
-      label: t('Open Data', 'মুক্ত নাগরিক তথ্য'),
-      icon: Database,
-    },
+    { href: '/', label: 'Home', labelBn: 'হোম' },
+    { href: '/explore', label: 'Explore', labelBn: 'এক্সপ্লোর' },
+    { href: '/report', label: 'Report', labelBn: 'রিপোর্ট' },
+    { href: '/nagar/mirpur', label: 'Areas', labelBn: 'এলাকা' },
+    { href: '/authority', label: 'Statistics', labelBn: 'পরিসংখ্যান' },
+    { href: '/open-data', label: 'Open Data', labelBn: 'মুক্ত তথ্য' },
+    { href: '/about/how-it-works', label: 'About', labelBn: 'সম্পর্কে' },
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
+    <header className="sticky top-0 z-40 bg-[#08221E] border-b border-[#123631] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo & Tagline */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
-              <span className="font-extrabold text-xl tracking-tight text-accent">ন</span>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-accent-600 to-accent flex items-center justify-center text-slate-950 font-black shadow-md shadow-accent/20 group-hover:scale-105 transition-transform">
+              <MapPin className="w-5 h-5 text-slate-900 fill-slate-900" />
             </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-xl tracking-tight text-slate-900">
-                  Nagar<span className="text-primary font-black">Chitra</span>
-                </span>
-                <span className="text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold border border-slate-200">
-                  BD
-                </span>
-              </div>
-              <p className="text-[10px] text-slate-500 font-medium tracking-wide hidden sm:block">
-                {t('See. Report. Track.', 'সমস্যা দেখুন। রিপোর্ট করুন। পরিবর্তন ট্র্যাক করুন।')}
-              </p>
+            <div className="flex flex-col">
+              <span className="font-bangla font-black text-xl leading-none text-white tracking-tight">
+                নগরচিত্র
+              </span>
+              <span className="text-[10px] tracking-widest uppercase font-semibold text-accent/90">
+                NagarChitra
+              </span>
             </div>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Center Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-7">
             {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href || (link.href.startsWith('/nagar') && pathname.startsWith('/nagar'));
+              const isActive =
+                link.href === '/'
+                  ? pathname === '/'
+                  : pathname.startsWith(link.href);
+
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold transition-all ${
-                    link.highlight
-                      ? 'bg-primary text-white hover:bg-primary-light shadow-sm hover:shadow-md'
-                      : isActive
-                      ? 'text-primary bg-primary-50 font-bold'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  className={`relative text-sm font-semibold transition-colors py-2 ${
+                    isActive
+                      ? 'text-accent font-bold'
+                      : 'text-slate-300 hover:text-white'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${link.highlight ? 'text-accent' : ''}`} />
                   <span>{link.label}</span>
-                  {link.badge && (
-                    <span className="text-[10px] px-1.5 py-0.2 bg-amber-100 text-amber-800 rounded font-bold">
-                      {link.badge}
-                    </span>
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent rounded-full animate-fade-in" />
                   )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Action: Language Switcher & Profile */}
+          {/* Right Action Bar */}
           <div className="hidden sm:flex items-center gap-3">
-            {/* Language Toggle Button */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 transition"
-              title="Toggle English / বাংলা"
-            >
-              <Languages className="w-3.5 h-3.5 text-primary" />
-              <span>{language === 'en' ? 'বাংলা' : 'EN'}</span>
-            </button>
+            {/* Language Switcher Pill */}
+            <div className="flex items-center bg-[#0C2F2B] border border-[#184640] rounded-full p-0.5 text-xs font-bold text-slate-300">
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-2.5 py-1 rounded-full transition ${
+                  language === 'en'
+                    ? 'bg-accent text-slate-900 font-extrabold shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage('bn')}
+                className={`px-2.5 py-1 rounded-full transition font-bangla ${
+                  language === 'bn'
+                    ? 'bg-accent text-slate-900 font-extrabold shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                বাংলা
+              </button>
+            </div>
 
-            {/* Profile Link */}
+            {/* Quick Search Icon */}
+            <Link
+              href="/explore"
+              className="p-2 rounded-full text-slate-300 hover:text-white hover:bg-[#0E3530] transition"
+              title="Search issues"
+            >
+              <Search className="w-4 h-4" />
+            </Link>
+
+            {/* Notification Bell */}
+            <Link
+              href="/issues/waste-dumping-dhanmondi-27-3b44"
+              className="relative p-2 rounded-full text-slate-300 hover:text-white hover:bg-[#0E3530] transition"
+              title="Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-[#08221E] animate-pulse" />
+            </Link>
+
+            {/* User Profile Avatar with Online Status */}
             <Link
               href="/profile"
-              className="flex items-center gap-2 p-1.5 pl-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition"
+              className="relative flex items-center p-0.5 rounded-full ring-2 ring-accent/30 hover:ring-accent transition"
             >
-              <div className="text-right hidden xl:block">
-                <p className="text-xs font-bold text-slate-800 leading-none">{currentUser.name}</p>
-                <p className="text-[10px] text-slate-500 font-medium capitalize">{role.toLowerCase()}</p>
-              </div>
               <img
                 src={currentUser.avatar}
                 alt={currentUser.name}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20"
+                className="w-8 h-8 rounded-full object-cover"
               />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-[#08221E]" />
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex lg:hidden items-center gap-2">
             <button
-              onClick={toggleLanguage}
-              className="flex items-center gap-1 px-2 py-1 rounded border border-slate-200 text-xs font-bold text-slate-700"
+              onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
+              className="px-2 py-1 rounded bg-[#0C2F2B] border border-[#184640] text-xs font-bold text-accent"
             >
               {language === 'en' ? 'বাংলা' : 'EN'}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-[#0E3530]"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -154,31 +152,28 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Dropdown */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 space-y-2">
+        <div className="lg:hidden border-t border-[#123631] bg-[#08221E] px-4 py-4 space-y-2">
           {navLinks.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href;
+            const isActive =
+              link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-semibold ${
-                  link.highlight
-                    ? 'bg-primary text-white'
-                    : isActive
-                    ? 'bg-primary-50 text-primary font-bold'
-                    : 'text-slate-700 hover:bg-slate-100'
+                className={`block px-3 py-2 rounded-lg text-sm font-semibold ${
+                  isActive
+                    ? 'bg-accent text-slate-900 font-bold'
+                    : 'text-slate-200 hover:bg-[#0E3530]'
                 }`}
               >
-                <Icon className="w-5 h-5" />
-                <span>{link.label}</span>
+                {link.label} ({link.labelBn})
               </Link>
             );
           })}
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+          <div className="pt-3 border-t border-[#123631] flex items-center justify-between">
             <Link
               href="/profile"
               onClick={() => setMobileMenuOpen(false)}
@@ -187,11 +182,11 @@ export const Navbar: React.FC = () => {
               <img
                 src={currentUser.avatar}
                 alt={currentUser.name}
-                className="w-8 h-8 rounded-full object-cover"
+                className="w-7 h-7 rounded-full object-cover"
               />
-              <span className="text-sm font-bold text-slate-800">{currentUser.name}</span>
+              <span className="text-xs font-bold text-slate-200">{currentUser.name}</span>
             </Link>
-            <span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold uppercase">
+            <span className="text-[10px] px-2 py-0.5 rounded bg-accent/20 text-accent font-bold uppercase">
               {role}
             </span>
           </div>

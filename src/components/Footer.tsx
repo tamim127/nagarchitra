@@ -1,136 +1,202 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
-import { ShieldCheck, Heart, ExternalLink } from 'lucide-react';
+import {
+  MapPin,
+  Facebook,
+  Twitter,
+  Youtube,
+  Linkedin,
+  ArrowRight,
+  Heart,
+} from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      setSubscribed(true);
+      setEmail('');
+    }
+  };
 
   return (
-    <footer className="bg-slate-900 text-slate-300 pt-12 pb-8 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
-          {/* Brand Info */}
-          <div className="md:col-span-1 space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-extrabold text-lg">
-                <span className="text-accent">ন</span>
+    <footer className="bg-[#061F1B] text-slate-300 pt-14 pb-8 border-t border-[#0F352F] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
+          {/* Brand info */}
+          <div className="lg:col-span-4 space-y-4">
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-slate-950 font-black shadow-md">
+                <MapPin className="w-4 h-4 fill-slate-950" />
               </div>
-              <span className="text-lg font-bold text-white tracking-tight">
-                Nagar<span className="text-accent">Chitra</span>
+              <div className="flex flex-col">
+                <span className="font-bangla font-black text-xl leading-none text-white tracking-tight">
+                  নগরচিত্র
+                </span>
+                <span className="text-[10px] tracking-widest uppercase font-semibold text-accent/90">
+                  NagarChitra
+                </span>
+              </div>
+            </Link>
+
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+              See the Problem. Report the Problem. Track the Change.
+              <br />
+              <span className="font-bangla text-slate-400">
+                নাগরিক সমস্যার উন্মুক্ত ট্র্যাকিং ও সমাধানের নির্ভরযোগ্য প্ল্যাটফর্ম।
               </span>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              {t(
-                'A citizen-driven civic intelligence and public issue resolution tracking platform for Bangladesh. Turning complaints into auditable actions.',
-                'বাংলাদেশের প্রথম নাগরিক-চালিত সমস্যা নিরসন ও জবাবদিহিতা প্ল্যাটফর্ম। অভিযোগকে রূপান্তর করুন কার্যকর পদক্ষেপে।'
-              )}
             </p>
-            <div className="pt-1">
-              <span className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-                {t('Independent Civic-Tech Initiative', 'স্বাধীন নাগরিক উদ্যোগ')}
-              </span>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-2.5 pt-1 text-slate-400">
+              <a
+                href="#"
+                className="w-8 h-8 rounded-full bg-[#0E2E29] flex items-center justify-center hover:text-white hover:bg-accent hover:text-slate-900 transition"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a
+                href="#"
+                className="w-8 h-8 rounded-full bg-[#0E2E29] flex items-center justify-center hover:text-white hover:bg-accent hover:text-slate-900 transition"
+              >
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a
+                href="#"
+                className="w-8 h-8 rounded-full bg-[#0E2E29] flex items-center justify-center hover:text-white hover:bg-accent hover:text-slate-900 transition"
+              >
+                <Youtube className="w-4 h-4" />
+              </a>
+              <a
+                href="#"
+                className="w-8 h-8 rounded-full bg-[#0E2E29] flex items-center justify-center hover:text-white hover:bg-accent hover:text-slate-900 transition"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
-          {/* Quick Nav */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3">
-              {t('Civic Modules', 'নাগরিক সেবা')}
-            </h4>
-            <ul className="space-y-2 text-xs">
+          {/* Quick links */}
+          <div className="lg:col-span-2 space-y-3">
+            <h4 className="font-bangla font-bold text-sm text-white">দ্রুত লিঙ্ক</h4>
+            <ul className="space-y-2 text-xs font-bangla text-slate-400">
               <li>
-                <Link href="/explore" className="hover:text-white transition">
-                  {t('Explore Civic Map', 'ইন্টারেক্টিভ ঢাকা ম্যাপ')}
-                </Link>
+                <Link href="/" className="hover:text-white transition">হোম</Link>
               </li>
               <li>
-                <Link href="/report" className="hover:text-white transition">
-                  {t('Report a Problem', 'সমস্যার রিপোর্ট জমা')}
-                </Link>
+                <Link href="/explore" className="hover:text-white transition">ম্যাপ</Link>
               </li>
               <li>
-                <Link href="/nagar/mirpur" className="hover:text-white transition">
-                  {t('Mirpur Area Pulse', 'মিরপুর এলাকা মেট্রিক্স')}
-                </Link>
+                <Link href="/report" className="hover:text-white transition">রিপোর্ট করুন</Link>
               </li>
               <li>
-                <Link href="/nagar/dhanmondi" className="hover:text-white transition">
-                  {t('Dhanmondi Area Pulse', 'ধানমন্ডি এলাকা মেট্রিক্স')}
-                </Link>
+                <Link href="/nagar/mirpur" className="hover:text-white transition">এলাকা</Link>
               </li>
               <li>
-                <Link href="/authority" className="hover:text-white transition">
-                  {t('Authority Operations', 'কর্তৃপক্ষ ওয়ার্কস্পেস')}
-                </Link>
+                <Link href="/authority" className="hover:text-white transition">পরিসংখ্যান</Link>
               </li>
             </ul>
           </div>
 
-          {/* Open Data & Governance */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3">
-              {t('Transparency & Data', 'স্বচ্ছতা ও মুক্ত তথ্য')}
-            </h4>
-            <ul className="space-y-2 text-xs">
+          {/* Help & Support */}
+          <div className="lg:col-span-2 space-y-3">
+            <h4 className="font-bangla font-bold text-sm text-white">সাহায্য</h4>
+            <ul className="space-y-2 text-xs font-bangla text-slate-400">
               <li>
-                <Link href="/open-data" className="hover:text-white transition">
-                  {t('Open Civic Datasets (CSV/JSON)', 'মুক্ত নাগরিক ডেটাসেট')}
-                </Link>
+                <Link href="/about/how-it-works" className="hover:text-white transition">FAQ</Link>
               </li>
               <li>
-                <Link href="/about/data-methodology" className="hover:text-white transition">
-                  {t('Data Verification Methodology', 'তথ্য যাচাই পদ্ধতি')}
-                </Link>
+                <Link href="/about/data-methodology" className="hover:text-white transition">ব্যবহারবিধি</Link>
               </li>
               <li>
-                <Link href="/about/how-it-works" className="hover:text-white transition">
-                  {t('10-Stage Lifecycle Workflow', '১০ ধাপের সমস্যা সমাধান চক্র')}
-                </Link>
+                <Link href="/privacy" className="hover:text-white transition">গোপনীয়তার নীতি</Link>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-white transition">
-                  {t('Moderation & Integrity', 'মডারেশন ও অডিট লগ')}
-                </Link>
+                <Link href="/terms" className="hover:text-white transition">যোগাযোগ</Link>
               </li>
             </ul>
           </div>
 
-          {/* Civic Pledge */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3">
-              {t('Civic Principle', 'নাগরিক অঙ্গীকার')}
+          {/* Newsletter Subscribe & BD Map Graphic */}
+          <div className="lg:col-span-4 space-y-3">
+            <h4 className="font-bangla font-bold text-sm text-white">
+              নিউজলেটার সাবস্ক্রাইব করুন
             </h4>
-            <p className="text-xs text-slate-400 leading-relaxed mb-3">
-              {t(
-                'Evidence over accusation. Verified resolution by residents before closing. Built to assist city corporations with actionable ground data.',
-                'অনুমানের বদলে তথ্যপ্রমাণ। বন্ধ করার পূর্বে স্থানীয় নাগরিকদের মতামত গ্রহণ। নগর প্রশাসনকে মাঠপর্যায়ের সুনির্দিষ্ট তথ্যে সহায়তা।'
-              )}
+            <p className="text-xs font-bangla text-slate-400">
+              আপডেটেড পেতে আপনার ইমেইল দিন
             </p>
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <span>Made with</span>
-              <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-              <span>for Bangladesh</span>
+
+            <form onSubmit={handleSubscribe} className="flex items-center gap-1.5 pt-1">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="আপনার ইমেইল লিখুন"
+                className="w-full bg-[#0D2E29] border border-[#16423B] px-3 py-2 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-accent font-bangla"
+              />
+              <button
+                type="submit"
+                className="px-3.5 py-2 rounded-xl bg-accent text-slate-950 font-bold hover:bg-accent-hover transition flex items-center justify-center shrink-0"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+            {subscribed && (
+              <span className="text-[11px] text-accent font-bangla block">
+                ✓ ধন্যবাদ! সাবস্ক্রিপশন সম্পন্ন হয়েছে।
+              </span>
+            )}
+
+            {/* Bangladesh Map Mini-Graphic Accent */}
+            <div className="pt-2 flex items-center gap-3 text-slate-400">
+              <div className="w-10 h-10 rounded-lg bg-[#0C2A25] border border-[#17433B] flex items-center justify-center p-1.5">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-emerald-500 fill-current opacity-80">
+                  <path d="M45,15 Q55,10 65,18 Q75,25 72,38 Q68,48 78,58 Q85,68 75,80 Q65,92 50,88 Q35,85 28,72 Q20,60 25,45 Q30,30 45,15 Z" />
+                  <circle cx="52" cy="50" r="14" className="text-red-500 fill-current" />
+                </svg>
+              </div>
+              <span className="text-[11px] font-bangla text-slate-400">
+                একটি রূপরেখা <br />
+                <strong className="text-white">বাংলাদেশের জন্য</strong>
+              </span>
             </div>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
-          <p>© 2026 NagarChitra (নগরচিত্র) BD. Prototype release for civic demonstration.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-slate-400 transition">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-slate-400 transition">
-              Terms of Use
-            </Link>
-            <Link href="/about/data-methodology" className="hover:text-slate-400 transition">
-              Methodology
-            </Link>
+        <div className="pt-6 border-t border-[#0F352F] flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+          <p>© 2026 NagarChitra. All rights reserved.</p>
+
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 font-semibold text-slate-300">
+              <button
+                onClick={() => setLanguage('en')}
+                className={`hover:text-white ${language === 'en' ? 'text-accent font-bold' : ''}`}
+              >
+                EN
+              </button>
+              <span>|</span>
+              <button
+                onClick={() => setLanguage('bn')}
+                className={`font-bangla hover:text-white ${language === 'bn' ? 'text-accent font-bold' : ''}`}
+              >
+                বাংলা
+              </button>
+            </div>
+            <span>•</span>
+            <div className="flex items-center gap-1 text-slate-400">
+              <span>Built with</span>
+              <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
+              <span>for Bangladesh</span>
+            </div>
           </div>
         </div>
       </div>
