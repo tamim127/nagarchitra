@@ -107,43 +107,22 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
             display: flex;
             align-items: center;
             justify-content: center;
-            width: ${isSelected ? '36px' : '28px'};
-            height: ${isSelected ? '36px' : '28px'};
-            background-color: ${color};
-            border: 2px solid white;
-            border-radius: 50%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.35);
             cursor: pointer;
-            transition: transform 0.2s ease;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
           ">
-            ${
-              isCritical
-                ? `<span style="
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 50%;
-                    background-color: ${color};
-                    opacity: 0.6;
-                    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-                  "></span>`
-                : ''
-            }
-            <div style="
-              width: 10px;
-              height: 10px;
-              background-color: white;
-              border-radius: 50%;
-            "></div>
+            <svg viewBox="0 0 24 32" width="28" height="34" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 0C5.37258 0 0 5.37258 0 12C0 20.5 12 32 12 32C12 32 24 20.5 24 12C24 5.37258 18.6274 0 12 0Z" fill="${color}"/>
+              <circle cx="12" cy="11" r="5" fill="white"/>
+            </svg>
           </div>
         `;
 
         const icon = L.divIcon({
           html: customHtml,
           className: 'civic-marker-icon',
-          iconSize: [isSelected ? 36 : 28, isSelected ? 36 : 28],
-          iconAnchor: [isSelected ? 18 : 14, isSelected ? 18 : 14],
-          popupAnchor: [0, -16],
+          iconSize: [28, 34],
+          iconAnchor: [14, 34],
+          popupAnchor: [0, -32],
         });
 
         const marker = L.marker([issue.location.latitude, issue.location.longitude], { icon }).addTo(map);
@@ -219,6 +198,24 @@ export const LeafletMap: React.FC<LeafletMapProps> = ({
     <div className="relative w-full overflow-hidden rounded-xl shadow-inner border border-slate-200" style={{ height }}>
       {/* Map Target */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
+
+      {/* Top right control */}
+      <div className="absolute top-2.5 right-2.5 z-[400] flex flex-col gap-1.5">
+        <button
+          type="button"
+          onClick={() => {
+            if (mapInstanceRef.current) {
+              mapInstanceRef.current.setView(center, zoom);
+            }
+          }}
+          className="w-7 h-7 rounded-lg bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition"
+          title="Fullscreen / Center"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+          </svg>
+        </button>
+      </div>
 
       {/* Floating Map Legend */}
       {!hideLegend && (

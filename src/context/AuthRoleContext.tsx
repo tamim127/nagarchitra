@@ -12,10 +12,10 @@ interface AuthRoleContextType {
 
 const CITIZEN_PROFILE: UserProfile = {
   id: 'u-1',
-  name: 'Tanvir Hossain',
-  email: 'tanvir.citizen@nagarchitra.org',
+  name: 'Tuhin Rahman',
+  email: 'tuhin@email.com',
   role: 'CITIZEN',
-  avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80',
+  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
   joinedDate: '০১ মার্চ ২০২৬',
   location: 'Mirpur 10, Dhaka',
   stats: {

@@ -21,79 +21,32 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { href: '/', label: 'Home', labelBn: 'হোম' },
-    { href: '/explore', label: 'Explore', labelBn: 'এক্সপ্লোর' },
+    { href: '/explore', label: 'Explore', labelBn: 'অনুসন্ধান' },
     { href: '/report', label: 'Report', labelBn: 'রিপোর্ট' },
     { href: '/nagar/mirpur', label: 'Areas', labelBn: 'এলাকা' },
     { href: '/statistics', label: 'Statistics', labelBn: 'পরিসংখ্যান' },
-    { href: '/open-data', label: 'Open Data', labelBn: 'মুক্ত তথ্য' },
-    { href: '/about', label: 'About', labelBn: 'সম্পর্কে' },
+    { href: '/open-data', label: 'Open Data', labelBn: 'ওপেন ডাটা' },
+    { href: '/about', label: 'About', labelBn: 'সম্পর্ক' },
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#08221E] border-b border-[#123631] text-white">
+    <header className="sticky top-0 z-40 bg-[#072520] border-b border-[#0f3b33] text-white">
       {/* Top Demo Mode Banner */}
-      <div className="bg-[#051814] border-b border-[#0D302A] text-xs px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-slate-300">
+      <div className="bg-[#051a16] border-b border-[#0b2923] text-xs px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-slate-300">
         <div className="flex items-center gap-2">
           <span className="px-1.5 py-0.5 rounded bg-accent text-slate-950 font-black text-[9px] tracking-wider uppercase">
             DEMO MODE
           </span>
-          <span className="text-[11px] text-slate-400 hidden sm:inline">
+          <span className="text-[11px] text-slate-300">
             Actions are simulated in local state. Review different stakeholder perspectives.
           </span>
         </div>
-
-        {/* Right mini controls in top bar */}
-        <div className="flex items-center gap-3.5 text-xs">
-          {/* Language Switcher */}
-          <div className="flex items-center bg-[#082621] border border-[#13423B] rounded-full p-0.5 text-[11px] font-bold text-slate-300">
-            <button
-              onClick={() => setLanguage('en')}
-              className={`px-2 py-0.5 rounded-full transition ${
-                language === 'en'
-                  ? 'bg-accent text-slate-900 font-extrabold'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              EN
-            </button>
-            <button
-              onClick={() => setLanguage('bn')}
-              className={`px-2 py-0.5 rounded-full transition font-bangla ${
-                language === 'bn'
-                  ? 'bg-accent text-slate-900 font-extrabold'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              বাংলা
-            </button>
-          </div>
-
-          <Link href="/explore" className="text-slate-400 hover:text-white transition" title="Search">
-            <Search className="w-3.5 h-3.5" />
-          </Link>
-
-          <Link href="/issues/waste-dumping-dhanmondi-27-3b44" className="relative text-slate-400 hover:text-white transition" title="Notifications">
-            <Bell className="w-3.5 h-3.5" />
-            <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-red-500 text-white text-[8px] font-bold flex items-center justify-center">
-              3
-            </span>
-          </Link>
-
-          <Link href="/profile" className="flex items-center gap-1.5 hover:text-white transition pl-1">
-            <img
-              src={currentUser.avatar}
-              alt={currentUser.name}
-              className="w-5 h-5 rounded-full object-cover ring-1 ring-accent/40"
-            />
-            <span className="text-[11px] font-bold text-slate-200 hidden sm:inline">{currentUser.name} ▾</span>
-            <span className="text-[9px] text-slate-400 font-bangla hidden sm:inline">সিটিজেন</span>
-          </Link>
-        </div>
       </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-accent-600 to-accent flex items-center justify-center text-slate-950 font-black shadow-md shadow-accent/20 group-hover:scale-105 transition-transform">
               <MapPin className="w-5 h-5 text-slate-900 fill-slate-900" />
             </div>
@@ -108,7 +61,7 @@ export const Navbar: React.FC = () => {
           </Link>
 
           {/* Center Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-7">
+          <nav className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => {
               const isActive =
                 link.href === '/'
@@ -119,13 +72,13 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative text-sm font-semibold transition-colors py-2 ${
+                  className={`relative text-sm transition-colors py-2 font-bangla ${
                     isActive
-                      ? 'text-accent font-bold'
-                      : 'text-slate-300 hover:text-white'
+                      ? 'text-white font-bold'
+                      : 'text-slate-300 hover:text-white font-medium'
                   }`}
                 >
-                  <span>{link.label}</span>
+                  <span>{language === 'bn' ? link.labelBn : link.label}</span>
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent rounded-full animate-fade-in" />
                   )}
@@ -133,6 +86,68 @@ export const Navbar: React.FC = () => {
               );
             })}
           </nav>
+
+          {/* Right Action Controls */}
+          <div className="hidden sm:flex items-center gap-4 shrink-0">
+            {/* Language Switcher Pill */}
+            <div className="flex items-center bg-[#0d342d] border border-[#164e43] rounded-full p-0.5 text-xs font-bold text-slate-300">
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-2.5 py-0.5 rounded-full transition ${
+                  language === 'en'
+                    ? 'bg-teal-600 text-white font-extrabold'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage('bn')}
+                className={`px-2.5 py-0.5 rounded-full transition font-bangla ${
+                  language === 'bn'
+                    ? 'bg-teal-600 text-white font-extrabold'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                বাংলা
+              </button>
+            </div>
+
+            {/* Search Icon */}
+            <Link
+              href="/explore"
+              className="text-slate-300 hover:text-white transition p-1.5"
+              title="Search"
+            >
+              <Search className="w-4 h-4" />
+            </Link>
+
+            {/* Notification Bell */}
+            <Link
+              href="/issues/road-damage-mirpur-10-8f92"
+              className="relative text-slate-300 hover:text-white transition p-1.5"
+              title="Notifications"
+            >
+              <Bell className="w-4 h-4" />
+              <span className="absolute 1 top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
+            </Link>
+
+            {/* User Profile Chip */}
+            <Link
+              href="/profile"
+              className="flex items-center gap-2 hover:opacity-90 transition pl-1 border-l border-[#13423a]"
+            >
+              <img
+                src={currentUser.avatar}
+                alt={currentUser.name}
+                className="w-7 h-7 rounded-full object-cover ring-1 ring-accent/40"
+              />
+              <div className="flex flex-col text-left leading-none">
+                <span className="text-xs font-bold text-white">{currentUser.name}</span>
+                <span className="text-[10px] text-slate-400 font-bangla mt-0.5">নাগরিক</span>
+              </div>
+            </Link>
+          </div>
 
           {/* Mobile Menu Button */}
           <div className="flex lg:hidden items-center gap-2">
