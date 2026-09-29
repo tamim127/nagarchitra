@@ -50,24 +50,19 @@ export default function HomePage() {
 
   return (
     <div className="bg-[#F8F9FA] text-slate-900 pb-16 space-y-12">
-      {/* 1. HERO SECTION WITH BACKGROUND VIDEO */}
-      <section className="relative min-h-[580px] lg:min-h-[640px] flex items-center overflow-hidden bg-[#051815] text-white">
-        {/* Background Video */}
+      {/* 1. HERO SECTION WITH CUSTOM GENERATED DHAKA CIVIC PANORAMA */}
+      <section className="relative min-h-[600px] lg:min-h-[660px] flex items-center overflow-hidden bg-[#051815] text-white">
+        {/* Background Visual Asset */}
         <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover scale-105 filter brightness-[0.75] contrast-[1.1]"
-            poster="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=1920&q=80"
-          >
-            <source src="/videos/hero_city.webm" type="video/webm" />
-          </video>
+          <img
+            src="/images/dhaka_civic_hero.jpg"
+            alt="নগরচিত্র বাংলাদেশ - স্মার্ট সিটি ও নাগরিক সমাধান প্ল্যাটফর্ম"
+            className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.12]"
+          />
 
           {/* Cinematic Dark Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#051815]/95 via-[#051815]/80 to-[#051815]/50 z-10" />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#051815] to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#051815]/95 via-[#051815]/85 to-[#051815]/45 z-10" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#051815] via-[#051815]/75 to-transparent z-10" />
         </div>
 
         {/* Hero Content */}
@@ -76,8 +71,11 @@ export default function HomePage() {
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-black/40 border border-accent/40 backdrop-blur-md shadow-sm">
-                <span className="text-accent text-xs">⬡</span>
+              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/50 border border-accent/40 backdrop-blur-md shadow-lg">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
                 <span className="text-[11px] font-bold tracking-wider uppercase text-accent font-sans">
                   A CIVIC INTELLIGENCE PLATFORM FOR BANGLADESH
                 </span>
@@ -85,16 +83,16 @@ export default function HomePage() {
 
               {/* Main Headline */}
               <div className="space-y-1">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-bangla tracking-tight leading-[1.15] text-white">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-bangla tracking-tight leading-[1.15] text-white drop-shadow-md">
                   আপনার শহরকে
                 </h1>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-bangla tracking-tight leading-[1.15] text-accent">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-bangla tracking-tight leading-[1.15] text-accent drop-shadow-md">
                   আরও বাসযোগ্য করুন
                 </h1>
               </div>
 
               {/* Subtitle */}
-              <p className="font-bangla text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+              <p className="font-bangla text-slate-200 text-sm sm:text-base leading-relaxed max-w-xl drop-shadow">
                 সমস্যা দেখুন, রিপোর্ট করুন, পরিবর্তনকে অনুসরণ করুন। একসাথে আমরা গড়ে তুলতে পারি একটি পরিচ্ছন্ন, নিরাপদ ও বাসযোগ্য বাংলাদেশ।
               </p>
 
@@ -102,7 +100,7 @@ export default function HomePage() {
               <div className="flex flex-wrap items-center gap-3.5 pt-2">
                 <Link
                   href="/report"
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-accent text-slate-950 font-bangla font-black text-sm hover:bg-accent-hover transition shadow-lg shadow-accent/25 group"
+                  className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-accent text-slate-950 font-bangla font-black text-sm hover:bg-accent-hover transition shadow-lg shadow-accent/25 hover:shadow-accent/40 group active:scale-95"
                 >
                   <Zap className="w-4 h-4 fill-slate-950 text-slate-950" />
                   <span>সমস্যা রিপোর্ট করুন</span>
@@ -110,7 +108,7 @@ export default function HomePage() {
 
                 <Link
                   href="/explore"
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bangla font-bold text-sm border border-white/25 backdrop-blur-md transition group"
+                  className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bangla font-bold text-sm border border-white/25 backdrop-blur-md transition group active:scale-95"
                 >
                   <MapPin className="w-4 h-4 text-accent" />
                   <span>ম্যাপ দেখুন</span>
@@ -119,16 +117,16 @@ export default function HomePage() {
               </div>
 
               {/* Bottom Feature Tags */}
-              <div className="flex flex-wrap items-center gap-4 pt-4 text-xs font-bangla text-slate-300">
-                <span className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
+              <div className="flex flex-wrap items-center gap-3 pt-4 text-xs font-bangla text-slate-200">
+                <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-sm">
                   <Users className="w-3.5 h-3.5 text-accent" />
                   <span>জনগণের অংশগ্রহণ</span>
                 </span>
-                <span className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
+                <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-sm">
                   <ShieldCheck className="w-3.5 h-3.5 text-accent" />
                   <span>স্বচ্ছতা ও জবাবদিহিতা</span>
                 </span>
-                <span className="flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full border border-white/10">
+                <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-sm">
                   <Building className="w-3.5 h-3.5 text-accent" />
                   <span>স্মার্ট সিটি, স্মার্ট বাংলাদেশ</span>
                 </span>
@@ -137,50 +135,84 @@ export default function HomePage() {
 
             {/* Right Card: আপনার এলাকা খুঁজুন */}
             <div className="lg:col-span-5 flex flex-col items-end space-y-4">
-              <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-white/20 text-slate-900 space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700">
-                    <MapPin className="w-4 h-4" />
+              <div className="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-7 shadow-2xl border border-white/40 text-slate-900 space-y-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 shadow-sm">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-bangla font-black text-base text-slate-900 leading-tight">
+                        আপনার এলাকা খুঁজুন
+                      </h3>
+                      <p className="text-[11px] font-bangla text-slate-500">
+                        ওয়ার্ড বা এলাকার নাগরিক রিপোর্ট দেখুন
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="font-bangla font-extrabold text-base text-slate-900">
-                    আপনার এলাকা খুঁজুন
-                  </h3>
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    লাইভ
+                  </span>
                 </div>
 
                 {/* Search Input */}
-                <div className="relative">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (heroSearch.trim()) {
+                      window.location.href = `/explore?q=${encodeURIComponent(heroSearch.trim())}`;
+                    }
+                  }}
+                  className="relative"
+                >
                   <input
                     type="text"
                     value={heroSearch}
                     onChange={(e) => setHeroSearch(e.target.value)}
-                    placeholder="জেলা, উপজেলা বা এলাকা লিখুন"
-                    className="w-full pl-4 pr-10 py-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bangla focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-800"
+                    placeholder="জেলা, উপজেলা বা এলাকা লিখুন (যেমন: মিরপুর ১০)"
+                    className="w-full pl-4 pr-11 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bangla focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-800 transition"
                   />
-                  <Link
-                    href={`/explore?q=${encodeURIComponent(heroSearch)}`}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary"
+                  <button
+                    type="submit"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition shadow-sm"
+                    title="খুঁজুন"
                   >
                     <Search className="w-4 h-4" />
-                  </Link>
-                </div>
+                  </button>
+                </form>
 
                 {/* Quick Area Pills */}
-                <div className="flex flex-wrap gap-2 pt-1 font-bangla">
-                  {[
-                    { name: 'ঢাকা', slug: 'mirpur' },
-                    { name: 'চট্টগ্রাম', slug: 'dhanmondi' },
-                    { name: 'রাজশাহী', slug: 'uttara' },
-                    { name: 'খুলনা', slug: 'mohammadpur' },
-                    { name: 'সিলেট', slug: 'gulshan' },
-                  ].map((city) => (
-                    <Link
-                      key={city.name}
-                      href={`/nagar/${city.slug}`}
-                      className="px-3.5 py-1.5 rounded-lg bg-slate-100 hover:bg-primary hover:text-white transition text-xs font-semibold text-slate-700"
-                    >
-                      {city.name}
-                    </Link>
-                  ))}
+                <div>
+                  <span className="block text-[11px] font-bangla font-semibold text-slate-400 mb-2">
+                    জনপ্রিয় এলাকা ও শহর:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5 font-bangla">
+                    {[
+                      { name: 'ঢাকা', slug: 'mirpur' },
+                      { name: 'মিরপুর', slug: 'mirpur' },
+                      { name: 'ধানমন্ডি', slug: 'dhanmondi' },
+                      { name: 'উত্তরা', slug: 'uttara' },
+                      { name: 'চট্টগ্রাম', slug: 'chattogram' },
+                      { name: 'সিলেট', slug: 'sylhet' },
+                    ].map((city) => (
+                      <Link
+                        key={city.name}
+                        href={`/explore?q=${encodeURIComponent(city.name)}`}
+                        className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-primary hover:text-white transition text-xs font-semibold text-slate-700 shadow-xs"
+                      >
+                        {city.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Trust metric strip */}
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bangla text-slate-500">
+                  <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    ২৪/৭ নাগরিক নজরদারি
+                  </span>
+                  <span className="text-slate-400">৮টি বিভাগে সক্রিয়</span>
                 </div>
               </div>
 
