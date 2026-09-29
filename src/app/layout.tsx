@@ -4,6 +4,8 @@ import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { AuthRoleProvider } from '@/context/AuthRoleContext';
 import { IssueProvider } from '@/context/IssueContext';
+import { SocketProvider } from '@/context/SocketContext';
+import { RealtimeToast } from '@/components/RealtimeToast';
 import { RoleSwitcherBanner } from '@/components/RoleSwitcherBanner';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -45,11 +47,14 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-accent/30 selection:text-primary">
         <LanguageProvider>
           <AuthRoleProvider>
-            <IssueProvider>
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </IssueProvider>
+            <SocketProvider>
+              <IssueProvider>
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <RealtimeToast />
+              </IssueProvider>
+            </SocketProvider>
           </AuthRoleProvider>
         </LanguageProvider>
       </body>

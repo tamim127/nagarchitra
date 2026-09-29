@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Issue, IssueStatus, StatusHistoryEntry, CitizenVerificationVote } from '@/types';
 import { INITIAL_ISSUES } from '@/data/initialIssues';
 import { useAuthRole } from './AuthRoleContext';
+import { useSocket } from './SocketContext';
 
 interface IssueContextType {
   issues: Issue[];
@@ -70,6 +71,13 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [issues, setIssues] = useState<Issue[]>(INITIAL_ISSUES);
   const [isLoaded, setIsLoaded] = useState(false);
   const { currentUser } = useAuthRole();
+  const {
+    socket,
+    emitNewIssue,
+    emitConfirmIssue,
+    emitStatusChange,
+    emitVote,
+  } = useSocket();
 
   // Load from localStorage if present
   useEffect(() => {
@@ -93,6 +101,78 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       localStorage.setItem('nagarchitra_issues_db_v2', JSON.stringify(issues));
     }
   }, [issues, isLoaded]);
+
+  // Real-time synchronization via Socket.io
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleCreated = (data: { issue: Issue }) => {
+      if (!data?.issue) return;
+      setIssues((prev) => {
+        if (prev.some((i) => i.id === data.issue.id)) return prev;
+        return [data.issue, ...prev];
+      });
+    };
+
+    const handleConfirmed = (data: { id: string; count: number }) => {
+      if (!data?.id) return;
+      setIssues((prev) =>
+        prev.map((i) =>
+          i.id === data.id ? { ...i, communityConfirmations: data.count } : i
+        )
+      );
+    };
+
+    const handleUpdated = (data: any) => {
+      if (!data?.id) return;
+      setIssues((prev) =>
+        prev.map((i) => {
+          if (i.id !== data.id) return i;
+          return {
+            ...i,
+            status: data.newStatus || i.status,
+            assignedDepartment: data.assignedDepartment || i.assignedDepartment,
+            assignedOfficer: data.assignedOfficer || i.assignedOfficer,
+            timeline: data.timelineEntry ? [data.timelineEntry, ...i.timeline] : i.timeline,
+            updatedAt: new Date().toISOString(),
+          };
+        })
+      );
+    };
+
+    const handleVoted = (data: any) => {
+      if (!data?.id) return;
+      setIssues((prev) =>
+        prev.map((i) => {
+          if (i.id !== data.id) return i;
+          return {
+            ...i,
+            status: data.status || i.status,
+            citizenVerifications: {
+              ...i.citizenVerifications,
+              fixedCount: typeof data.fixedCount === 'number' ? data.fixedCount : i.citizenVerifications.fixedCount,
+              stillExistsCount: typeof data.stillExistsCount === 'number' ? data.stillExistsCount : i.citizenVerifications.stillExistsCount,
+              votes: i.citizenVerifications?.votes || [],
+            },
+            timeline: data.timelineEntry ? [data.timelineEntry, ...i.timeline] : i.timeline,
+            updatedAt: new Date().toISOString(),
+          };
+        })
+      );
+    };
+
+    socket.on('issue:created', handleCreated);
+    socket.on('issue:confirmed', handleConfirmed);
+    socket.on('issue:updated', handleUpdated);
+    socket.on('issue:voted', handleVoted);
+
+    return () => {
+      socket.off('issue:created', handleCreated);
+      socket.off('issue:confirmed', handleConfirmed);
+      socket.off('issue:updated', handleUpdated);
+      socket.off('issue:voted', handleVoted);
+    };
+  }, [socket]);
 
   const getIssueById = (id: string) => {
     const cleanId = (id || '').trim().toLowerCase();
@@ -196,6 +276,10 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     setIssues((prev) => [newIssue, ...prev]);
+
+    // Broadcast across Socket.io
+    emitNewIssue(newIssue);
+
     return newIssue;
   };
 
@@ -207,6 +291,8 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     assignedDepartment?: string,
     assignedOfficer?: string
   ) => {
+    let broadcastPayload: any = null;
+
     setIssues((prev) =>
       prev.map((issue) => {
         if (issue.id !== id) return issue;
@@ -269,25 +355,49 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           updatedIssue.closedAt = new Date().toISOString();
         }
 
+        broadcastPayload = {
+          id: issue.id,
+          newStatus: updatedIssue.status,
+          note,
+          evidenceUrl,
+          assignedDepartment: updatedIssue.assignedDepartment,
+          assignedOfficer: updatedIssue.assignedOfficer,
+          timelineEntry,
+        };
+
         return updatedIssue;
       })
     );
+
+    // Broadcast across Socket.io
+    if (broadcastPayload) {
+      emitStatusChange(broadcastPayload);
+    }
   };
 
   const confirmIssue = (id: string) => {
+    let targetCount = 0;
+    let targetConfirmed = false;
+
     setIssues((prev) =>
       prev.map((issue) => {
         if (issue.id !== id) return issue;
         const current = !!issue.userConfirmed;
+        targetConfirmed = !current;
+        targetCount = current
+          ? Math.max(0, issue.communityConfirmations - 1)
+          : issue.communityConfirmations + 1;
+
         return {
           ...issue,
           userConfirmed: !current,
-          communityConfirmations: current
-            ? Math.max(0, issue.communityConfirmations - 1)
-            : issue.communityConfirmations + 1,
+          communityConfirmations: targetCount,
         };
       })
     );
+
+    // Broadcast across Socket.io
+    emitConfirmIssue(id, targetCount, targetConfirmed);
   };
 
   const followIssue = (id: string) => {
@@ -303,6 +413,8 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const voteResolution = (id: string, vote: 'FIXED' | 'STILL_EXISTS', comment?: string) => {
+    let broadcastPayload: any = null;
+
     setIssues((prev) =>
       prev.map((issue) => {
         if (issue.id !== id) return issue;
@@ -356,6 +468,15 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           });
         }
 
+        broadcastPayload = {
+          id: issue.id,
+          vote,
+          fixedCount,
+          stillExistsCount,
+          status: newStatus,
+          timelineEntry: additionalTimelineEntries[0],
+        };
+
         return {
           ...issue,
           status: newStatus,
@@ -370,6 +491,11 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         };
       })
     );
+
+    // Broadcast across Socket.io
+    if (broadcastPayload) {
+      emitVote(broadcastPayload);
+    }
   };
 
   const findNearbyDuplicates = (lat: number, lng: number, categoryId?: string, radiusMeters = 700) => {
@@ -448,7 +574,7 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const resetToDefaultData = () => {
     setIssues(INITIAL_ISSUES);
-    localStorage.removeItem('nagarchitra_issues_db_v1');
+    localStorage.removeItem('nagarchitra_issues_db_v2');
   };
 
   return (

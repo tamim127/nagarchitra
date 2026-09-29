@@ -5,18 +5,21 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthRole } from '@/context/AuthRoleContext';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSocket } from '@/context/SocketContext';
 import {
   Search,
   Bell,
   Menu,
   X,
   MapPin,
+  Radio,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const { role, currentUser } = useAuthRole();
   const { language, setLanguage, t } = useLanguage();
+  const { isConnected, onlineCount } = useSocket();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -31,15 +34,40 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-[#072520] border-b border-[#0f3b33] text-white">
-      {/* Top Demo Mode Banner */}
+      {/* Top Demo Mode & Real-time Live Banner */}
       <div className="bg-[#051a16] border-b border-[#0b2923] text-xs px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-slate-300">
         <div className="flex items-center gap-2">
           <span className="px-1.5 py-0.5 rounded bg-accent text-slate-950 font-black text-[9px] tracking-wider uppercase">
             {t('nav.demoMode')}
           </span>
-          <span className="text-[11px] text-slate-300">
+          <span className="text-[11px] text-slate-300 hidden sm:inline">
             {t('nav.demoBanner')}
           </span>
+        </div>
+
+        {/* Real-time Socket.io Live Status */}
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#0a2f28] border border-[#144b40] text-[10px]">
+            <span className="relative flex h-2 w-2">
+              {isConnected && (
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              )}
+              <span
+                className={`relative inline-flex rounded-full h-2 w-2 ${
+                  isConnected ? 'bg-emerald-400' : 'bg-amber-400'
+                }`}
+              ></span>
+            </span>
+            <span className="font-semibold text-emerald-300 tracking-tight">
+              {isConnected
+                ? language === 'bn'
+                  ? `সকেট.আইও লাইভ · ${onlineCount} জন নাগরিক সক্রিয়`
+                  : `Socket.io Live · ${onlineCount} Online`
+                : language === 'bn'
+                ? 'সকেট সংযুক্ত হচ্ছে...'
+                : 'Connecting to Live Socket...'}
+            </span>
+          </div>
         </div>
       </div>
 
