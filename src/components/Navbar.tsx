@@ -26,6 +26,7 @@ export const Navbar: React.FC = () => {
     { href: '/', label: 'Home', labelBn: 'হোম' },
     { href: '/explore', label: 'Explore', labelBn: 'এক্সপ্লোর' },
     { href: '/report', label: 'Report', labelBn: 'রিপোর্ট' },
+    { href: '/dashboard', label: 'Dashboard', labelBn: 'ড্যাশবোর্ড' },
     { href: '/nagar/mirpur', label: 'Areas', labelBn: 'এলাকা' },
     { href: '/statistics', label: 'Statistics', labelBn: 'পরিসংখ্যান' },
     { href: '/open-data', label: 'Open Data', labelBn: 'ওপেন ডেটা' },

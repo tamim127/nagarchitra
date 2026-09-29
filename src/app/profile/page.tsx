@@ -170,8 +170,15 @@ export default function ProfilePage() {
                   শহরকে আরও সুন্দর ও বাসযোগ্য করতে নাগরিক উদ্যোগে সক্রিয় থাকতে চাই।
                 </p>
 
-                {/* Edit Profile Button */}
-                <div className="pt-1">
+                {/* Dashboard Hub & Edit Profile Button */}
+                <div className="pt-1 flex items-center gap-2 flex-wrap">
+                  <Link
+                    href="/dashboard?role=citizen"
+                    className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-accent text-slate-950 text-xs font-black shadow-md hover:bg-accent-400 transition"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>নাগরিক ড্যাশবোর্ড হাব</span>
+                  </Link>
                   <button className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold backdrop-blur-xs transition">
                     <Edit3 className="w-3.5 h-3.5" />
                     <span>প্রোফাইল সম্পাদনা</span>
