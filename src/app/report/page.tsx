@@ -46,194 +46,236 @@ import confetti from 'canvas-confetti';
 interface CategoryItem {
   id: string;
   title: string;
+  titleEn: string;
   count: number;
   subtitle: string;
+  subtitleEn: string;
   icon: any;
   color: string;
   group: 'Infrastructure' | 'Environment' | 'Public Safety' | 'Water & Drainage' | 'Other';
   defaultSeverity: IssueSeverity;
   slaDays: number;
   assignedDept: string;
+  assignedDeptEn: string;
 }
 
 const REPORT_CATEGORIES: CategoryItem[] = [
   {
     id: 'road-damage',
     title: 'রাস্তা ও ফুটপাত',
+    titleEn: 'Roads & Footpaths',
     count: 128,
     subtitle: 'রাস্তা ভাঙা, ফুটপাথ ক্ষতিগ্রস্ত, রাস্তার বাধা, ট্রাফিক সিগন্যাল সমস্যাদি',
+    subtitleEn: 'Broken roads, damaged footpaths, potholes, traffic signal hazards',
     icon: Route,
     color: 'bg-[#0c4a45] text-white',
     group: 'Infrastructure',
     defaultSeverity: 'HIGH',
     slaDays: 5,
     assignedDept: 'সড়ক ও জনপথ বিভাগ',
+    assignedDeptEn: 'Roads and Highways Department',
   },
   {
     id: 'water-drainage',
     title: 'পানি ও ড্রেনেজ',
+    titleEn: 'Water & Drainage',
     count: 87,
     subtitle: 'জলাবদ্ধতা, ড্রেনেজ জট, পানি নিষ্কাশন সমস্যা, নালা পরিষ্কার',
+    subtitleEn: 'Waterlogging, clogged drains, overflowing sewers, drainage blockage',
     icon: Droplets,
     color: 'bg-blue-500 text-white',
     group: 'Water & Drainage',
     defaultSeverity: 'HIGH',
     slaDays: 3,
     assignedDept: 'ঢাকা ওয়াসা ও ড্রেনেজ বিভাগ',
+    assignedDeptEn: 'Dhaka WASA & Drainage Wing',
   },
   {
     id: 'waste-management',
     title: 'বর্জ্য ব্যবস্থাপনা',
+    titleEn: 'Waste Management',
     count: 64,
     subtitle: 'আবর্জনা ফেলা, ডাস্টবিন অবহেলা, বর্জ্য অপসারণ সংকট',
+    subtitleEn: 'Garbage accumulation, overflowing bins, missed trash collection',
     icon: Trash2,
     color: 'bg-teal-500 text-white',
     group: 'Environment',
     defaultSeverity: 'MEDIUM',
     slaDays: 2,
     assignedDept: 'বর্জ্য ব্যবস্থাপনা বিভাগ (সিটি কর্পোরেশন)',
+    assignedDeptEn: 'Waste Management Department (City Corp)',
   },
   {
     id: 'open-manhole',
     title: 'খোলা ম্যানহোল',
+    titleEn: 'Open Manhole',
     count: 42,
     subtitle: 'খোলা ম্যানহোল, ঢাকনা ভাঙা, নিরাপত্তা ঝুঁকি',
+    subtitleEn: 'Uncovered manhole, broken slabs, severe pedestrian risk',
     icon: CircleDot,
     color: 'bg-amber-700 text-white',
     group: 'Infrastructure',
     defaultSeverity: 'CRITICAL',
     slaDays: 1,
     assignedDept: 'সিটি কর্পোরেশন অঞ্চল প্রকৌশল',
+    assignedDeptEn: 'City Corporation Zonal Engineering',
   },
   {
     id: 'electricity-wires',
     title: 'বিদ্যুৎ সংযোগ ও তার',
+    titleEn: 'Electric Wires & Safety',
     count: 36,
     subtitle: 'খোলা তার, বিপজ্জনক সংযোগ, বিদ্যুৎ সমস্যা',
+    subtitleEn: 'Hanging live wires, dangerous transformers, power hazards',
     icon: Zap,
     color: 'bg-amber-400 text-slate-900',
     group: 'Public Safety',
     defaultSeverity: 'CRITICAL',
     slaDays: 1,
     assignedDept: 'ডেসকো / ডিপিডিসি জরুরি টিম',
+    assignedDeptEn: 'DESCO / DPDC Emergency Team',
   },
   {
     id: 'street-light',
     title: 'রাস্তার বাতি',
+    titleEn: 'Street Lighting',
     count: 28,
     subtitle: 'বাতি নষ্ট, জ্বলে না, নতুন বাতি প্রয়োজন',
+    subtitleEn: 'Broken street lamps, dark corridors, bulb replacement required',
     icon: Lightbulb,
     color: 'bg-purple-600 text-white',
     group: 'Infrastructure',
     defaultSeverity: 'MEDIUM',
     slaDays: 4,
     assignedDept: 'বিদ্যুৎ ও স্ট্রিট লাইট শাখা',
+    assignedDeptEn: 'Electrical & Street Light Division',
   },
   {
     id: 'sanitation-toilet',
     title: 'স্যানিটেশন ও পাবলিক টয়লেট',
+    titleEn: 'Public Toilets & Sanitation',
     count: 21,
     subtitle: 'টয়লেট নষ্ট, পরিষ্কার নয়, নতুন টয়লেট প্রয়োজন',
+    subtitleEn: 'Damaged public toilets, unhygienic conditions, sanitation needed',
     icon: Sparkles,
     color: 'bg-cyan-600 text-white',
     group: 'Environment',
     defaultSeverity: 'MEDIUM',
     slaDays: 3,
     assignedDept: 'পাবলিক হেলথ ও স্যানিটেশন শাখা',
+    assignedDeptEn: 'Public Health & Sanitation Wing',
   },
   {
     id: 'parks-greenery',
     title: 'উদ্যান ও সবুজায়ন',
+    titleEn: 'Parks & Greenery',
     count: 18,
     subtitle: 'গাছ কাটা, পার্কের রক্ষণাবেক্ষণ, পরিচ্ছন্নতা',
+    subtitleEn: 'Illegal tree cutting, park maintenance, public green spaces',
     icon: Trees,
     color: 'bg-emerald-700 text-white',
     group: 'Environment',
     defaultSeverity: 'LOW',
     slaDays: 7,
     assignedDept: 'পরিবেশ ও উদ্যান বিভাগ',
+    assignedDeptEn: 'Environment & Parks Department',
   },
   {
     id: 'gov-infrastructure',
     title: 'সরকারি ভবন ও অবকাঠামো',
+    titleEn: 'Government Infrastructure',
     count: 15,
     subtitle: 'স্কুল, হাসপাতাল, সরকারি ভবনের ক্ষতি বা সমস্যা',
+    subtitleEn: 'Schools, public hospitals, damaged government premises',
     icon: Building2,
     color: 'bg-slate-700 text-white',
     group: 'Infrastructure',
     defaultSeverity: 'MEDIUM',
     slaDays: 10,
     assignedDept: 'গণপূর্ত অধিদপ্তর (PWD)',
+    assignedDeptEn: 'Public Works Department (PWD)',
   },
   {
     id: 'environment-pollution',
     title: 'পরিবেশ দূষণ',
+    titleEn: 'Environmental Pollution',
     count: 12,
     subtitle: 'বায়ু দূষণ, শব্দ দূষণ, পানি দূষণ, ধোঁয়া',
+    subtitleEn: 'Air toxicity, industrial smoke, noise hazards, chemical runoff',
     icon: Wind,
     color: 'bg-emerald-600 text-white',
     group: 'Environment',
     defaultSeverity: 'HIGH',
     slaDays: 5,
     assignedDept: 'পরিবেশ অধিদপ্তর ও নাগরিক সুরক্ষা',
+    assignedDeptEn: 'Department of Environment & Civic Safety',
   },
   {
     id: 'traffic-transport',
     title: 'ট্রাফিক ও পরিবহন',
+    titleEn: 'Traffic & Transport',
     count: 10,
     subtitle: 'ট্রাফিক জ্যাম, সিগন্যাল সমস্যা, বাস/রাস্তার সমস্যা',
+    subtitleEn: 'Traffic gridlock, broken signals, bus stoppage bottlenecks',
     icon: Bus,
     color: 'bg-indigo-700 text-white',
     group: 'Public Safety',
     defaultSeverity: 'HIGH',
     slaDays: 3,
     assignedDept: 'ডিএমপি ট্রাফিক বিভাগ ও বিআরটিএ',
+    assignedDeptEn: 'DMP Traffic Division & BRTA',
   },
   {
     id: 'others',
     title: 'অন্যান্য',
+    titleEn: 'Other Issues',
     count: 8,
     subtitle: 'উপরে উল্লেখিত কোনো ক্যাটাগরির সাথে মিলছে না',
+    subtitleEn: 'Civic issues not matching any above standard category',
     icon: MoreHorizontal,
     color: 'bg-slate-500 text-white',
     group: 'Other',
     defaultSeverity: 'MEDIUM',
     slaDays: 7,
-    assignedDept: 'সাধারণ নাগরিক সেবা ও তথ্য সেল',
+    assignedDept: 'সাধারণ অভিযোগ ও প্রশাসন',
+    assignedDeptEn: 'General Complaints & Administration',
   },
 ];
 
 const SAMPLE_PRESET_PHOTOS = [
   'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1605600659908-0ef719419d41?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
 ];
 
 export default function ReportPage() {
   const router = useRouter();
   const { addIssue, findNearbyDuplicates } = useIssues();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
 
-  const [step, setStep] = useState(1);
+  // 5 Step Wizard state
+  const [step, setStep] = useState<number>(1);
 
-  // Form Fields
+  // Form fields
   const [selectedCatId, setSelectedCatId] = useState<string>('road-damage');
   const [categorySearchQuery, setCategorySearchQuery] = useState('');
-  const [latitude, setLatitude] = useState(23.8061);
-  const [longitude, setLongitude] = useState(90.3615);
-  const [address, setAddress] = useState('মিরপুর ১০, ঢাকা');
+  const [latitude, setLatitude] = useState(23.8073);
+  const [longitude, setLongitude] = useState(90.369);
+  const [address, setAddress] = useState('মিরপুর ১০ গোলচত্বর, ঢাকা');
   const [area, setArea] = useState('Mirpur');
   const [ward, setWard] = useState('১০ নং ওয়ার্ড');
-  const [photos, setPhotos] = useState<string[]>([SAMPLE_PRESET_PHOTOS[0]]);
-  const [title, setTitle] = useState('মিরপুর ১০ - রাস্তায় বড় গর্ত');
+  const [title, setTitle] = useState('মিরপুর ১০ প্রধান সড়কে বিশাল গর্ত ও ভাঙা স্ল্যাব');
   const [description, setDescription] = useState(
-    'মিরপুর ১০ নম্বর প্রধান সড়কের আগে বড় একটি গর্ত তৈরি হয়েছে। গত কয়েকদিন ধরে এখানে চলাচল ঝুঁকিপূর্ণ হয়ে পড়েছে। দয়া করে দ্রুত ব্যবস্থা নেওয়া হোক।'
+    'গত কয়েকদিনের ভারী বৃষ্টিতে মিরপুর ১০ গোলচত্বর থেকে রোকেয়া সরণির সংযোগস্থলে প্রায় ৪ ফুট দীর্ঘ গর্ত তৈরি হয়েছে। রিকশা ও বাইক উল্টে গিয়ে দুর্ঘটনা ঘটছে।'
   );
+  const [photos, setPhotos] = useState<string[]>([
+    'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80',
+  ]);
   const [severity, setSeverity] = useState<IssueSeverity>('HIGH');
   const [pledgeAccepted, setPledgeAccepted] = useState(true);
 
-  // Duplicate warning modal state
+  // Duplicate Check Modal State
   const [duplicateMatches, setDuplicateMatches] = useState<any[]>([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [bypassDuplicateCheck, setBypassDuplicateCheck] = useState(false);
@@ -241,13 +283,16 @@ export default function ReportPage() {
   const selectedCategory =
     REPORT_CATEGORIES.find((c) => c.id === selectedCatId) || REPORT_CATEGORIES[0];
 
-  // Filter categories by query
-  const filteredCategories = REPORT_CATEGORIES.filter((c) =>
-    categorySearchQuery.trim() === ''
-      ? true
-      : c.title.toLowerCase().includes(categorySearchQuery.toLowerCase()) ||
-        c.subtitle.toLowerCase().includes(categorySearchQuery.toLowerCase())
-  );
+  const filteredCategories = REPORT_CATEGORIES.filter((c) => {
+    if (!categorySearchQuery.trim()) return true;
+    const q = categorySearchQuery.toLowerCase();
+    return (
+      c.title.toLowerCase().includes(q) ||
+      c.titleEn.toLowerCase().includes(q) ||
+      c.subtitle.toLowerCase().includes(q) ||
+      c.subtitleEn.toLowerCase().includes(q)
+    );
+  });
 
   // Quick preset area selection
   const handleSelectAreaPreset = (areaSlug: string) => {
@@ -256,8 +301,8 @@ export default function ReportPage() {
       setArea(found.name);
       setLatitude(found.lat);
       setLongitude(found.lng);
-      setAddress(`${found.nameBn || found.name}, ঢাকা`);
-      setWard(found.wardList[0] || '১০ নং ওয়ার্ড');
+      setAddress(language === 'bn' ? `${found.nameBn || found.name}, ঢাকা` : `${found.name}, Dhaka`);
+      setWard(language === 'bn' ? (found.wardList[0] || '১০ নং ওয়ার্ড') : `Ward ${found.wardList[0]?.replace(/[^0-9]/g, '') || '10'}`);
     }
   };
 
@@ -286,7 +331,7 @@ export default function ReportPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCategory || !title.trim() || !description.trim()) {
-      alert('দয়া করে শিরোনাম এবং বিবরণ পূরণ করুন।');
+      alert(language === 'bn' ? 'দয়া করে শিরোনাম এবং বিবরণ পূরণ করুন।' : 'Please enter title and description.');
       return;
     }
 
@@ -294,7 +339,7 @@ export default function ReportPage() {
       title,
       description,
       categoryId: selectedCategory.id,
-      categoryName: selectedCategory.title,
+      categoryName: language === 'bn' ? selectedCategory.title : selectedCategory.titleEn,
       categoryGroup: selectedCategory.group,
       severity,
       latitude,
@@ -317,13 +362,12 @@ export default function ReportPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-16 font-bangla text-slate-800">
       {/* 1. Header Banner with City Illustration & Stepper */}
-      {/* 1. Header Banner with City Illustration & Stepper */}
       <div className="relative bg-gradient-to-b from-[#EBF5F3]/80 via-[#F0F8F6] to-[#F8FAFC] border-b border-slate-200/80 pt-6 pb-8 overflow-hidden">
-        {/* Dhaka Civic Illustration Panorama Backdrop on the Right */}
+        {/* Backdrop Illustration */}
         <div className="absolute right-0 top-0 bottom-0 w-2/5 max-w-lg pointer-events-none opacity-20 lg:opacity-25 hidden md:block overflow-hidden">
           <img
             src="/images/report_hero_civic.jpg"
-            alt="নাগরিক সেবা ও শহর উন্নয়ন চিত্র"
+            alt="Civic Illustration"
             className="w-full h-full object-cover object-right"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#F0F8F6] via-[#F0F8F6]/40 to-transparent" />
@@ -337,75 +381,32 @@ export default function ReportPage() {
               href="/"
               className="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 transition font-medium"
             >
-              <span>← হোমে ফিরে যান</span>
+              <span>{t('report.backHome')}</span>
             </Link>
 
             {/* Stepper Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className={`px-3 py-1 rounded-full transition flex items-center gap-1 shrink-0 ${
-                  step === 1
-                    ? 'bg-[#0c4a45] text-white font-bold shadow-sm'
-                    : 'bg-white/80 border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                <span>1</span>
-                <span>ক্যাটাগরি</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className={`px-3 py-1 rounded-full transition flex items-center gap-1 shrink-0 ${
-                  step === 2
-                    ? 'bg-[#0c4a45] text-white font-bold shadow-sm'
-                    : 'bg-white/80 border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                <span>2</span>
-                <span>লোকেশন</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setStep(3)}
-                className={`px-3 py-1 rounded-full transition flex items-center gap-1 shrink-0 ${
-                  step === 3
-                    ? 'bg-[#0c4a45] text-white font-bold shadow-sm'
-                    : 'bg-white/80 border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                <span>3</span>
-                <span>ছবি ও বিবরণ</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setStep(4)}
-                className={`px-3 py-1 rounded-full transition flex items-center gap-1 shrink-0 ${
-                  step === 4
-                    ? 'bg-[#0c4a45] text-white font-bold shadow-sm'
-                    : 'bg-white/80 border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                <span>4</span>
-                <span>গুরুত্বর মাত্রা</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setStep(5)}
-                className={`px-3 py-1 rounded-full transition flex items-center gap-1 shrink-0 ${
-                  step === 5
-                    ? 'bg-[#0c4a45] text-white font-bold shadow-sm'
-                    : 'bg-white/80 border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                <span>5</span>
-                <span>জমা দিন</span>
-              </button>
+              {[
+                { s: 1, label: t('report.step1') },
+                { s: 2, label: t('report.step2') },
+                { s: 3, label: t('report.step3') },
+                { s: 4, label: t('report.step4') },
+                { s: 5, label: t('report.step5') },
+              ].map((item) => (
+                <button
+                  key={item.s}
+                  type="button"
+                  onClick={() => setStep(item.s)}
+                  className={`px-3 py-1 rounded-full transition flex items-center gap-1 shrink-0 ${
+                    step === item.s
+                      ? 'bg-[#0c4a45] text-white font-bold shadow-sm'
+                      : 'bg-white/80 border border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  <span>{formatNumber(item.s)}</span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
             </div>
           </div>
 
@@ -413,54 +414,49 @@ export default function ReportPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
             <div className="space-y-1.5 max-w-2xl">
               <span className="inline-block px-2.5 py-0.5 rounded-full bg-slate-900 text-white text-[11px] font-bold">
-                সমস্যা রিপোর্ট করুন
+                {t('report.badge')}
               </span>
 
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                {step === 1 && 'কোন ধরনের সমস্যার রিপোর্ট করতে চান?'}
-                {step === 2 && 'সমস্যার অবস্থান কোথায়?'}
-                {step === 3 && 'ছবি ও বিস্তারিত বিবরণ যোগ করুন'}
-                {step === 4 && 'সমস্যার গুরুত্বের মাত্রা নির্বাচন করুন'}
-                {step === 5 && 'রিপোর্ট পর্যালোচনা ও চূড়ান্ত দাখিল'}
+                {step === 1 && t('report.step1Title')}
+                {step === 2 && t('report.step2Title')}
+                {step === 3 && t('report.step3Title')}
+                {step === 4 && t('report.step4Title')}
+                {step === 5 && t('report.step5Title')}
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {step === 1 &&
-                  'নিচে আপনার সমস্যার ধরন নির্বাচন করুন। সঠিক ক্যাটাগরি নির্বাচন করলে দ্রুত সমাধান পেতে সাহায্য করবে।'}
-                {step === 2 &&
-                  'ম্যাপে পিন বসান অথবা আপনার এলাকার নাম নির্বাচন করুন। সঠিক অবস্থান সিটি কর্পোরেশনকে দ্রুত ঘটনাস্থলে পৌঁছাতে সাহায্য করে।'}
-                {step === 3 &&
-                  'সমস্যার পরিষ্কার ছবি ও সঠিক বিবরণ সংশ্লিষ্ট কর্তৃপক্ষের দ্রুত সমাধানের জন্য অত্যন্ত অপরিহার্য।'}
-                {step === 4 &&
-                  'জরুরি ও বিপজ্জনক সমস্যা সরাসরি বিশেষ অ্যালার্ট হিসেবে সিটি কর্পোরেশনে অগ্রাধিকার পায়।'}
-                {step === 5 &&
-                  'আপনার প্রদত্ত তথ্যগুলো যাচাই করে নিশ্চিত করুন।'}
+                {step === 1 && t('report.step1Desc')}
+                {step === 2 && t('report.step2Desc')}
+                {step === 3 && t('report.step3Desc')}
+                {step === 4 && t('report.step4Desc')}
+                {step === 5 && t('report.step5Desc')}
               </p>
             </div>
 
-            {/* Visual Civic Card with Generated Artwork */}
+            {/* Visual Civic Card */}
             <div className="hidden lg:flex items-center gap-3.5 bg-white/95 backdrop-blur-md border border-emerald-200/70 rounded-2xl p-2.5 shadow-md shadow-emerald-950/5 shrink-0 hover:shadow-lg transition">
               <div className="relative w-36 h-24 rounded-xl overflow-hidden shrink-0 border border-emerald-100 shadow-inner group">
                 <img
                   src="/images/report_hero_civic.jpg"
-                  alt="নাগরিক রিপোর্ট ঢাকা"
+                  alt="Civic Monitoring"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <span className="absolute bottom-1.5 left-2 text-[10px] font-bold text-white tracking-wide">
-                  স্মার্ট সিটি ঢাকা
+                  {language === 'bn' ? 'স্মার্ট সিটি ঢাকা' : 'Smart City Dhaka'}
                 </span>
               </div>
               <div className="space-y-1 pr-1 text-left max-w-[190px]">
                 <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                   <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                  <span>সিটি মনিটরিং</span>
+                  <span>{t('report.cardBadge')}</span>
                 </div>
                 <h4 className="text-xs font-black text-slate-900 leading-snug">
-                  আপনার ১টি রিপোর্ট পরিবর্তন করবে শহর!
+                  {t('report.cardTitle')}
                 </h4>
                 <p className="text-[10px] text-slate-500 leading-tight">
-                  সরাসরি সংশ্লিষ্ট সিটি কর্পোরেশন ও ওয়ার্ড অফিসে পৌঁছে যায়।
+                  {t('report.cardSub')}
                 </p>
               </div>
             </div>
@@ -468,10 +464,10 @@ export default function ReportPage() {
         </div>
       </div>
 
-      {/* 2. Main Two-Column Container */}
+      {/* 2. Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* LEFT SECTION: Step Content Wizard (~68% width) */}
+          {/* LEFT SECTION: Step Content Wizard */}
           <div className="lg:col-span-8 space-y-6">
             {/* ================= STEP 1: CATEGORY SELECTION ================= */}
             {step === 1 && (
@@ -484,7 +480,7 @@ export default function ReportPage() {
                       type="text"
                       value={categorySearchQuery}
                       onChange={(e) => setCategorySearchQuery(e.target.value)}
-                      placeholder="ক্যাটাগরি খুঁজুন (যেমন: রাস্তা, পানি, বর্জ্য...)"
+                      placeholder={t('report.searchCategory')}
                       className="w-full text-xs pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-1 focus:ring-[#0c4a45] shadow-sm text-slate-800"
                     />
                   </div>
@@ -495,15 +491,17 @@ export default function ReportPage() {
                     className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 shadow-sm transition shrink-0"
                   >
                     <LayoutGrid className="w-3.5 h-3.5" />
-                    <span>সমস্ত ক্যাটাগরি</span>
+                    <span>{t('cat.all')}</span>
                   </button>
                 </div>
 
-                {/* 3 Columns x 4 Rows Category Cards Grid */}
+                {/* Category Cards Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
                   {filteredCategories.map((cat) => {
                     const isSelected = selectedCatId === cat.id;
                     const IconComponent = cat.icon;
+                    const catTitle = language === 'bn' ? cat.title : cat.titleEn;
+                    const catSub = language === 'bn' ? cat.subtitle : cat.subtitleEn;
 
                     return (
                       <div
@@ -511,8 +509,8 @@ export default function ReportPage() {
                         onClick={() => {
                           setSelectedCatId(cat.id);
                           setSeverity(cat.defaultSeverity);
-                          if (!title || title.startsWith('মিরপুর ১০')) {
-                            setTitle(`মিরপুর ১০ - ${cat.title} সমস্যা`);
+                          if (!title || title.includes('সমস্যা') || title.includes('Issue')) {
+                            setTitle(language === 'bn' ? `মিরপুর ১০ - ${cat.title} সমস্যা` : `Mirpur 10 - ${cat.titleEn} Issue`);
                           }
                         }}
                         className={`group p-4 rounded-2xl border text-left transition cursor-pointer flex flex-col justify-between h-full relative ${
@@ -530,16 +528,16 @@ export default function ReportPage() {
                             </div>
 
                             <span className="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full font-mono">
-                              {cat.count}
+                              {formatNumber(cat.count)}
                             </span>
                           </div>
 
                           <div>
                             <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-[#0c4a45] transition">
-                              {cat.title}
+                              {catTitle}
                             </h3>
                             <p className="text-[11px] text-slate-500 line-clamp-2 mt-1 leading-snug">
-                              {cat.subtitle}
+                              {catSub}
                             </p>
                           </div>
                         </div>
@@ -559,9 +557,11 @@ export default function ReportPage() {
                       <Shield className="w-4 h-4" />
                     </div>
                     <div className="text-xs text-slate-600">
-                      <span className="font-bold text-slate-900 block">গোপনীয়তা ও নিরাপত্তা</span>
+                      <span className="font-bold text-slate-900 block">
+                        {t('Privacy & Data Protection', 'গোপনীয়তা ও নিরাপত্তা')}
+                      </span>
                       <span className="text-[11px] text-slate-500">
-                        আপনার ব্যক্তিগত তথ্য সুরক্ষিত থাকবে। প্রয়োজনীয় ক্ষেত্র ছাড়া আপনার ঠিকানা প্রকাশ করা হবে না।
+                        {t('Your personal identity remains private and protected.', 'আপনার ব্যক্তিগত তথ্য সুরক্ষিত থাকবে।')}
                       </span>
                     </div>
                   </div>
@@ -571,7 +571,7 @@ export default function ReportPage() {
                     onClick={() => setStep(2)}
                     className="bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-bold px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-sm transition shrink-0"
                   >
-                    <span>পরবর্তী ধাপ</span>
+                    <span>{t('report.continue')}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -583,17 +583,17 @@ export default function ReportPage() {
               <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-6">
                 <div className="border-b border-slate-100 pb-3">
                   <h3 className="font-extrabold text-base text-slate-900">
-                    সমস্যার অবস্থান নির্বাচন করুন
+                    {t('Select Problem Location', 'সমস্যার অবস্থান নির্বাচন করুন')}
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    ম্যাপে পিন টেনে নির্দিষ্ট অবস্থান নিশ্চিত করুন অথবা এলাকার নাম সিলেক্ট করুন।
+                    {t('Pinpoint on the map or pick an area preset.', 'ম্যাপে পিন টেনে নির্দিষ্ট অবস্থান নিশ্চিত করুন অথবা এলাকার নাম সিলেক্ট করুন।')}
                   </p>
                 </div>
 
                 {/* Quick Area Presets */}
                 <div className="space-y-1.5">
                   <span className="text-xs font-bold text-slate-700 block">
-                    ঢাকা মেট্রো এলাকা নির্বাচন (Presets):
+                    {t('Dhaka Metropolitan Area Presets:', 'ঢাকা মেট্রো এলাকা নির্বাচন (Presets):')}
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {DHAKA_AREAS.slice(0, 8).map((a) => (
@@ -607,7 +607,7 @@ export default function ReportPage() {
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
-                        {a.nameBn || a.name}
+                        {language === 'bn' ? (a.nameBn || a.name) : a.name}
                       </button>
                     ))}
                   </div>
@@ -630,20 +630,20 @@ export default function ReportPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2 space-y-1">
                     <label className="text-xs font-bold text-slate-700 block">
-                      রাস্তা বা ল্যান্ডমার্কের নাম *
+                      {t('Street or Landmark Name *', 'রাস্তা বা ল্যান্ডমার্কের নাম *')}
                     </label>
                     <input
                       type="text"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      placeholder="যেমন: মিরপুর ১০ গোলচত্বর প্রধান সড়ক"
+                      placeholder={t('e.g., Mirpur 10 Circle Main Road', 'যেমন: মিরপুর ১০ গোলচত্বর প্রধান সড়ক')}
                       className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-1 focus:ring-[#0c4a45]"
                     />
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 block">
-                      এলাকা ও ওয়ার্ড *
+                      {t('Area & Ward *', 'এলাকা ও ওয়ার্ড *')}
                     </label>
                     <input
                       type="text"
@@ -662,9 +662,11 @@ export default function ReportPage() {
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs text-slate-600">
                   <div className="flex items-center gap-1.5 font-mono">
                     <Crosshair className="w-3.5 h-3.5 text-[#0c4a45]" />
-                    <span>জিপিএস: {latitude.toFixed(4)}° N, {longitude.toFixed(4)}° E</span>
+                    <span>GPS: {latitude.toFixed(4)}° N, {longitude.toFixed(4)}° E</span>
                   </div>
-                  <span className="text-[11px] text-emerald-700 font-bold">✓ জিপিএস লকড</span>
+                  <span className="text-[11px] text-emerald-700 font-bold">
+                    ✓ {t('GPS Locked', 'জিপিএস লকড')}
+                  </span>
                 </div>
 
                 {/* Bottom Navigation */}
@@ -675,7 +677,7 @@ export default function ReportPage() {
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    <span>পূর্ববর্তী ধাপ</span>
+                    <span>{t('report.back')}</span>
                   </button>
 
                   <button
@@ -683,7 +685,7 @@ export default function ReportPage() {
                     onClick={handleNextFromLocation}
                     className="bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition"
                   >
-                    <span>পরবর্তী: ছবি ও বিবরণ</span>
+                    <span>{t('report.continue')}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -695,17 +697,17 @@ export default function ReportPage() {
               <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-6">
                 <div className="border-b border-slate-100 pb-3">
                   <h3 className="font-extrabold text-base text-slate-900">
-                    ছবি ও বিস্তারিত বিবরণ যোগ করুন
+                    {t('report.step3Title')}
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    সমস্যার ছবি ও বিবরণ যত স্পষ্ট হবে, সংশ্লিষ্ট কর্তৃপক্ষ তত দ্রুত ব্যবস্থা নিতে পারবে।
+                    {t('report.step3Desc')}
                   </p>
                 </div>
 
                 {/* Photo Previews */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-slate-700 block">
-                    সমস্যার ছবি (সর্বোচ্চ ৫টি):
+                    {t('Photos of the issue (up to 5):', 'সমস্যার ছবি (সর্বোচ্চ ৫টি):')}
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {photos.map((photoUrl, idx) => (
@@ -723,7 +725,7 @@ export default function ReportPage() {
                           <X className="w-3 h-3" />
                         </button>
                         <span className="absolute bottom-1 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/60 text-white">
-                          ছবি #{idx + 1}
+                          {t('Photo', 'ছবি')} #{formatNumber(idx + 1)}
                         </span>
                       </div>
                     ))}
@@ -734,17 +736,21 @@ export default function ReportPage() {
                         className="border-2 border-dashed border-slate-300 rounded-xl aspect-[4/3] flex flex-col items-center justify-center p-3 text-center hover:border-[#0c4a45] transition cursor-pointer bg-slate-50/50"
                       >
                         <Camera className="w-5 h-5 text-slate-400 mb-1" />
-                        <span className="text-xs font-bold text-slate-700">ছবি যুক্ত করুন</span>
-                        <span className="text-[10px] text-slate-400">ক্লিক করে নমুনা ছবি দিন</span>
+                        <span className="text-xs font-bold text-slate-700">
+                          {t('Add Photo', 'ছবি যুক্ত করুন')}
+                        </span>
+                        <span className="text-[10px] text-slate-400">
+                          {t('Click to add sample photo', 'ক্লিক করে নমুনা ছবি দিন')}
+                        </span>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Demo Presets Helper */}
+                {/* Presets Helper */}
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
                   <span className="text-[11px] font-bold text-slate-600 block">
-                    দ্রুত ডেমো ছবি যোগ করতে ক্লিক করুন:
+                    {t('Click to add demo photos:', 'দ্রুত ডেমো ছবি যোগ করতে ক্লিক করুন:')}
                   </span>
                   <div className="flex gap-2">
                     {SAMPLE_PRESET_PHOTOS.map((url, i) => (
@@ -764,28 +770,28 @@ export default function ReportPage() {
                 <div className="space-y-4 pt-1">
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 block">
-                      সমস্যার শিরোনাম *
+                      {t('Issue Title *', 'সমস্যার শিরোনাম *')}
                     </label>
                     <input
                       type="text"
                       required
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="যেমন: মিরপুর ১০ নম্বর প্রধান সড়কে বড় গর্ত"
+                      placeholder={t('e.g., Deep pothole on Mirpur 10 main road', 'যেমন: মিরপুর ১০ নম্বর প্রধান সড়কে বড় গর্ত')}
                       className="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-1 focus:ring-[#0c4a45]"
                     />
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-700 block">
-                      কী ঘটেছে বিস্তারিত লিখুন *
+                      {t('Detailed Description *', 'কী ঘটেছে বিস্তারিত লিখুন *')}
                     </label>
                     <textarea
                       required
                       rows={3}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      placeholder="সমস্যাটির বর্তমান অবস্থা, কতদিন ধরে চলছে এবং কী ধরনের ঝুঁকি তৈরি করছে তা লিখুন..."
+                      placeholder={t('Describe the problem severity, hazard duration, and pedestrian impact...', 'সমস্যাটির বর্তমান অবস্থা, কতদিন ধরে চলছে এবং কী ধরনের ঝুঁকি তৈরি করছে তা লিখুন...')}
                       className="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-1 focus:ring-[#0c4a45]"
                     />
                   </div>
@@ -799,7 +805,7 @@ export default function ReportPage() {
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    <span>পূর্ববর্তী ধাপ</span>
+                    <span>{t('report.back')}</span>
                   </button>
 
                   <button
@@ -807,7 +813,7 @@ export default function ReportPage() {
                     onClick={() => setStep(4)}
                     className="bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition"
                   >
-                    <span>পরবর্তী: গুরুত্বর মাত্রা</span>
+                    <span>{t('report.continue')}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -819,10 +825,10 @@ export default function ReportPage() {
               <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-6">
                 <div className="border-b border-slate-100 pb-3">
                   <h3 className="font-extrabold text-base text-slate-900">
-                    সমস্যার গুরুত্বের মাত্রা নির্বাচন করুন
+                    {t('report.step4Title')}
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    সঠিক গুরুত্ব নির্ধারণ করলে সংশ্লিষ্ট বিভাগ অগ্রাধিকার ভিত্তিতে ব্যবস্থা নেবে।
+                    {t('report.step4Desc')}
                   </p>
                 </div>
 
@@ -831,30 +837,30 @@ export default function ReportPage() {
                   {[
                     {
                       id: 'LOW' as IssueSeverity,
-                      label: 'স্বাভাবিক (Low)',
-                      desc: 'সাধারণ বা ছোটখাটো অসুবিধা, স্বাভাবিক চলাচল সচল',
-                      sla: 'এসএলএ: ১০ দিন',
+                      label: language === 'bn' ? 'স্বাভাবিক (Low)' : 'Low',
+                      desc: language === 'bn' ? 'সাধারণ বা ছোটখাটো অসুবিধা, স্বাভাবিক চলাচল সচল' : 'Minor inconvenience, standard movement unaffected',
+                      sla: language === 'bn' ? 'এসএলএ: ১০ দিন' : 'SLA: 10 Days',
                       badge: 'bg-slate-100 text-slate-800',
                     },
                     {
                       id: 'MEDIUM' as IssueSeverity,
-                      label: 'মাঝারি (Medium)',
-                      desc: 'নাগরিক চলাচলে বিঘ্ন ঘটছে, দ্রুত নজর দেওয়া দরকার',
-                      sla: 'এসএলএ: ৭ দিন',
+                      label: language === 'bn' ? 'মাঝারি (Medium)' : 'Medium',
+                      desc: language === 'bn' ? 'নাগরিক চলাচলে বিঘ্ন ঘটছে, দ্রুত নজর দেওয়া দরকার' : 'Disrupts citizen movement, requires timely attention',
+                      sla: language === 'bn' ? 'এসএলএ: ৭ দিন' : 'SLA: 7 Days',
                       badge: 'bg-amber-100 text-amber-800',
                     },
                     {
                       id: 'HIGH' as IssueSeverity,
-                      label: 'জরুরি (High)',
-                      desc: 'যানবাহনের ক্ষতি বা দুর্ঘটনার বড় ঝুঁকি তৈরি হয়েছে',
-                      sla: 'এসএলএ: ৩ দিন',
+                      label: language === 'bn' ? 'জরুরি (High)' : 'High',
+                      desc: language === 'bn' ? 'যানবাহনের ক্ষতি বা দুর্ঘটনার বড় ঝুঁকি তৈরি হয়েছে' : 'Risk of vehicular damage or serious accidents',
+                      sla: language === 'bn' ? 'এসএলএ: ৩ দিন' : 'SLA: 3 Days',
                       badge: 'bg-orange-100 text-orange-800',
                     },
                     {
                       id: 'CRITICAL' as IssueSeverity,
-                      label: 'চরম জরুরি (Critical)',
-                      desc: 'মানুষের জীবন ও নিরাপত্তার জন্য তাৎক্ষণিক মারাত্মক হুমকি',
-                      sla: 'এসএলএ: ২৪ ঘণ্টা (Priority Alert)',
+                      label: language === 'bn' ? 'চরম জরুরি (Critical)' : 'Critical',
+                      desc: language === 'bn' ? 'মানুষের জীবন ও নিরাপত্তার জন্য তাৎক্ষণিক মারাত্মক হুমকি' : 'Imminent hazard to human life and public safety',
+                      sla: language === 'bn' ? 'এসএলএ: ২৪ ঘণ্টা (Priority Alert)' : 'SLA: 24 Hours (Priority Alert)',
                       badge: 'bg-rose-100 text-rose-800',
                     },
                   ].map((sev) => {
@@ -897,13 +903,13 @@ export default function ReportPage() {
                   </div>
                   <div className="text-xs space-y-0.5">
                     <span className="text-[10px] text-slate-400 font-semibold block uppercase">
-                      অ্যাসাইন্ড বিভাগ
+                      {t('Assigned Department', 'অ্যাসাইন্ড বিভাগ')}
                     </span>
                     <p className="font-bold text-slate-900">
-                      {selectedCategory.assignedDept}
+                      {language === 'bn' ? selectedCategory.assignedDept : selectedCategory.assignedDeptEn}
                     </p>
                     <p className="text-[11px] text-slate-500">
-                      আপনার রিপোর্টটি স্বয়ংক্রিয়ভাবে সংশ্লিষ্ট বিভাগে ফরওয়ার্ড করা হবে।
+                      {t('Your report will be automatically forwarded to the responsible department.', 'আপনার রিপোর্টটি স্বয়ংক্রিয়ভাবে সংশ্লিষ্ট বিভাগে ফরওয়ার্ড করা হবে।')}
                     </p>
                   </div>
                 </div>
@@ -916,7 +922,7 @@ export default function ReportPage() {
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    <span>পূর্ববর্তী ধাপ</span>
+                    <span>{t('report.back')}</span>
                   </button>
 
                   <button
@@ -924,7 +930,7 @@ export default function ReportPage() {
                     onClick={() => setStep(5)}
                     className="bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-bold px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-sm transition"
                   >
-                    <span>পরবর্তী: চূড়ান্ত দাখিল</span>
+                    <span>{t('report.continue')}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -936,10 +942,10 @@ export default function ReportPage() {
               <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-6">
                 <div className="border-b border-slate-100 pb-3">
                   <h3 className="font-extrabold text-base text-slate-900">
-                    রিপোর্ট পর্যালোচনা ও চূড়ান্ত দাখিল
+                    {t('report.step5Title')}
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    প্রদত্ত তথ্যাদি যাচাই করুন এবং নিশ্চিত করে রিপোর্ট জমা দিন।
+                    {t('report.step5Desc')}
                   </p>
                 </div>
 
@@ -948,7 +954,7 @@ export default function ReportPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <span className="text-[10px] text-slate-500 font-bold uppercase block">
-                        সমস্যার শিরোনাম
+                        {t('Issue Title', 'সমস্যার শিরোনাম')}
                       </span>
                       <h4 className="text-base font-extrabold text-slate-900 mt-0.5">
                         {title}
@@ -956,7 +962,7 @@ export default function ReportPage() {
                     </div>
 
                     <span className="px-3 py-1 rounded-full bg-[#0c4a45] text-white text-xs font-bold shrink-0">
-                      {selectedCategory.title}
+                      {language === 'bn' ? selectedCategory.title : selectedCategory.titleEn}
                     </span>
                   </div>
 
@@ -966,18 +972,24 @@ export default function ReportPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
                     <div className="bg-white/70 p-2.5 rounded-xl border border-slate-200/60">
-                      <span className="text-[10px] text-slate-400 block font-medium">অবস্থান</span>
+                      <span className="text-[10px] text-slate-400 block font-medium">
+                        {t('Location', 'অবস্থান')}
+                      </span>
                       <span className="font-bold text-slate-800">{address}</span>
                     </div>
 
                     <div className="bg-white/70 p-2.5 rounded-xl border border-slate-200/60">
-                      <span className="text-[10px] text-slate-400 block font-medium">গুরুত্ব</span>
+                      <span className="text-[10px] text-slate-400 block font-medium">
+                        {t('Severity', 'গুরুত্ব')}
+                      </span>
                       <span className="font-bold text-orange-700">{severity}</span>
                     </div>
 
                     <div className="bg-white/70 p-2.5 rounded-xl border border-slate-200/60">
-                      <span className="text-[10px] text-slate-400 block font-medium">সংযুক্ত ছবি</span>
-                      <span className="font-bold text-slate-800">{photos.length} টি ছবি</span>
+                      <span className="text-[10px] text-slate-400 block font-medium">
+                        {t('Attached Photos', 'সংযুক্ত ছবি')}
+                      </span>
+                      <span className="font-bold text-slate-800">{formatNumber(photos.length)} {t('Photos', 'টি ছবি')}</span>
                     </div>
                   </div>
 
@@ -1004,7 +1016,10 @@ export default function ReportPage() {
                     className="mt-1 w-4 h-4 rounded text-[#0c4a45] focus:ring-[#0c4a45]"
                   />
                   <label htmlFor="pledge" className="text-xs text-slate-600 cursor-pointer">
-                    আমি নিশ্চিত করছি যে উল্লিখিত তথ্য ও প্রমাণ সত্য এবং বাস্তব জনস্বার্থে রিপোর্টটি দাখিল করা হচ্ছে।
+                    {t(
+                      'I confirm that the submitted information and evidence are authentic and reported in public interest.',
+                      'আমি নিশ্চিত করছি যে উল্লিখিত তথ্য ও প্রমাণ সত্য এবং বাস্তব জনস্বার্থে রিপোর্টটি দাখিল করা হচ্ছে।'
+                    )}
                   </label>
                 </div>
 
@@ -1016,7 +1031,7 @@ export default function ReportPage() {
                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition"
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    <span>পূর্ববর্তী ধাপ</span>
+                    <span>{t('report.back')}</span>
                   </button>
 
                   <button
@@ -1024,7 +1039,7 @@ export default function ReportPage() {
                     disabled={!pledgeAccepted}
                     className="bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-extrabold px-8 py-3 rounded-xl flex items-center gap-2 shadow-md transition disabled:opacity-50"
                   >
-                    <span>রিপোর্ট জমা দিন</span>
+                    <span>{t('report.submit')}</span>
                     <CheckCircle2 className="w-4 h-4 text-emerald-300" />
                   </button>
                 </div>
@@ -1032,21 +1047,21 @@ export default function ReportPage() {
             )}
           </div>
 
-          {/* RIGHT SIDEBAR: Location preview, Quick Help & City Banner (~32% width) */}
+          {/* RIGHT SIDEBAR: Location preview, Quick Help & City Banner */}
           <div className="lg:col-span-4 space-y-6">
-            {/* Card 1: লোকেশন নির্বাচন */}
+            {/* Card 1: Location selection */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
               <div>
                 <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-[#0c4a45]" />
-                  <span>লোকেশন নির্বাচন</span>
+                  <span>{t('Select Location', 'লোকেশন নির্বাচন')}</span>
                 </h3>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  ম্যাপে পিন করুন অথবা ঠিকানা লিখে খুঁজুন
+                  {t('Pinpoint on map or type an address to search', 'ম্যাপে পিন করুন অথবা ঠিকানা লিখে খুঁজুন')}
                 </p>
               </div>
 
-              {/* Mini Map with Green Circular Buffer Preview */}
+              {/* Mini Map */}
               <div className="h-44 rounded-xl overflow-hidden border border-slate-200 relative">
                 <CivicMap
                   issues={[]}
@@ -1057,7 +1072,6 @@ export default function ReportPage() {
                   hideLegend={true}
                 />
 
-                {/* Center Radar / Target Circle Graphic like screenshot */}
                 <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                   <div className="w-32 h-32 rounded-full border border-emerald-500/30 bg-emerald-500/10 animate-pulse flex items-center justify-center">
                     <div className="w-20 h-20 rounded-full border border-emerald-500/40 bg-emerald-500/15 flex items-center justify-center">
@@ -1076,7 +1090,7 @@ export default function ReportPage() {
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="ঠিকানা, এলাকা বা ওয়ার্ড লিখুন..."
+                  placeholder={t('Enter address, area or ward...', 'ঠিকানা, এলাকা বা ওয়ার্ড লিখুন...')}
                   className="w-full text-xs pl-8 pr-8 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0c4a45] text-slate-700"
                 />
                 <button
@@ -1090,43 +1104,47 @@ export default function ReportPage() {
               </div>
             </div>
 
-            {/* Card 2: দ্রুত সহায়তা (Checklist) */}
+            {/* Card 2: Quick Help Checklist */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
               <div className="flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
                   <Lightbulb className="w-4 h-4" />
                 </div>
                 <h4 className="font-extrabold text-xs text-slate-900">
-                  দ্রুত সহায়তা
+                  {t('Quick Tips', 'দ্রুত সহায়তা')}
                 </h4>
               </div>
 
               <ul className="space-y-2 text-[11px] text-slate-600">
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>সঠিক ক্যাটাগরি নির্বাচন করুন</span>
+                  <span>{t('Select accurate category', 'সঠিক ক্যাটাগরি নির্বাচন করুন')}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>ফটো সম্ভব পরিষ্কার ছবি আপলোড করুন</span>
+                  <span>{t('Upload clear hazard photos', 'পরিষ্কার ছবি আপলোড করুন')}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>সমস্যার বিস্তারিত বিবরণ দিন</span>
+                  <span>{t('Provide detailed incident description', 'সমস্যার বিস্তারিত বিবরণ দিন')}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>লোকেশন সঠিকভাবে পিন করুন</span>
+                  <span>{t('Pinpoint location accurately on the map', 'লোকেশন সঠিকভাবে পিন করুন')}</span>
                 </li>
               </ul>
             </div>
 
-            {/* Card 3: একসাথে গড়ি একটি পরিচ্ছন্ন ও নিরাপদ নগরী */}
+            {/* Card 3: Civic Trust Banner */}
             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 p-4 shadow-sm flex items-center gap-3">
               <div className="text-xl shrink-0">🌱</div>
               <div className="text-xs">
-                <span className="font-bold text-emerald-950 block">একসাথে গড়ি</span>
-                <span className="text-[11px] text-emerald-800">একটি পরিচ্ছন্ন ও নিরাপদ নগরী</span>
+                <span className="font-bold text-emerald-950 block">
+                  {t('Building Together', 'একসাথে গড়ি')}
+                </span>
+                <span className="text-[11px] text-emerald-800">
+                  {t('A cleaner, safer, smarter city', 'একটি পরিচ্ছন্ন ও নিরাপদ নগরী')}
+                </span>
               </div>
             </div>
           </div>

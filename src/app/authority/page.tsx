@@ -24,7 +24,7 @@ import { getStatusBadgeStyle, getSeverityBadge } from '@/components/IssueCard';
 export default function AuthorityDashboardPage() {
   const { issues, updateIssueStatus } = useIssues();
   const { role, setRole, currentUser } = useAuthRole();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
 
   const [filterDepartment, setFilterDepartment] = useState('ALL');
   const [filterStatus, setFilterStatus] = useState('ALL');
@@ -111,39 +111,39 @@ export default function AuthorityDashboardPage() {
       {/* SLA & Queue KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold text-slate-500 block mb-1">Total Assigned</span>
-          <div className="text-3xl font-black text-slate-900">{issues.length}</div>
-          <span className="text-[11px] text-slate-400 mt-1 block">Dhaka Zones 1-5</span>
+          <span className="text-xs font-bold text-slate-500 block mb-1">{t('Total Assigned', 'মোট অর্পিত')}</span>
+          <div className="text-3xl font-black text-slate-900">{formatNumber(issues.length)}</div>
+          <span className="text-[11px] text-slate-400 mt-1 block">{t('Dhaka Zones 1-5', 'ঢাকা জোন ১-৫')}</span>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold text-purple-700 block mb-1">Under Review</span>
+          <span className="text-xs font-bold text-purple-700 block mb-1">{t('Under Review', 'পর্যালোচনাধীন')}</span>
           <div className="text-3xl font-black text-purple-700">
-            {issues.filter((i) => i.status === 'UNDER_REVIEW' || i.status === 'SUBMITTED').length}
+            {formatNumber(issues.filter((i) => i.status === 'UNDER_REVIEW' || i.status === 'SUBMITTED').length)}
           </div>
-          <span className="text-[11px] text-slate-400 mt-1 block">Awaiting triage</span>
+          <span className="text-[11px] text-slate-400 mt-1 block">{t('Awaiting triage', 'যাচাই অপেক্ষমাণ')}</span>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold text-amber-600 block mb-1">In Progress</span>
+          <span className="text-xs font-bold text-amber-600 block mb-1">{t('In Progress', 'চলমান')}</span>
           <div className="text-3xl font-black text-amber-600">
-            {issues.filter((i) => i.status === 'IN_PROGRESS' || i.status === 'ASSIGNED').length}
+            {formatNumber(issues.filter((i) => i.status === 'IN_PROGRESS' || i.status === 'ASSIGNED').length)}
           </div>
-          <span className="text-[11px] text-slate-400 mt-1 block">Crews on site</span>
+          <span className="text-[11px] text-slate-400 mt-1 block">{t('Crews on site', 'মাঠ পর্যায়ের টিম নিয়োজিত')}</span>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold text-red-600 block mb-1">Critical SLA Queue</span>
-          <div className="text-3xl font-black text-red-600">{criticalIssues.length}</div>
+          <span className="text-xs font-bold text-red-600 block mb-1">{t('Critical SLA Queue', 'জরুরি এসএলএ কিউ')}</span>
+          <div className="text-3xl font-black text-red-600">{formatNumber(criticalIssues.length)}</div>
           <span className="text-[11px] text-slate-400 mt-1 block">&lt; 24h deadline</span>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm col-span-2 md:col-span-1">
-          <span className="text-xs font-bold text-emerald-600 block mb-1">Resolved</span>
+          <span className="text-xs font-bold text-emerald-600 block mb-1">{t('Resolved', 'সমাধানকৃত')}</span>
           <div className="text-3xl font-black text-emerald-600">
-            {issues.filter((i) => i.status === 'RESOLVED' || i.status === 'CLOSED').length}
+            {formatNumber(issues.filter((i) => i.status === 'RESOLVED' || i.status === 'CLOSED').length)}
           </div>
-          <span className="text-[11px] text-slate-400 mt-1 block">Proof uploaded</span>
+          <span className="text-[11px] text-slate-400 mt-1 block">{t('Proof uploaded', 'প্রমাণ আপলোড সম্পন্ন')}</span>
         </div>
       </div>
 

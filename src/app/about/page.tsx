@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 
 export default function AboutPage() {
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
 
   return (
     <div className="bg-[#F8F9FA] text-slate-900 min-h-screen font-bangla pb-16">
@@ -62,20 +62,34 @@ export default function AboutPage() {
             <div className="lg:col-span-8 space-y-5 max-w-3xl">
               {/* Pill Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E0F2FE] border border-sky-200 text-[#0284C7] text-xs font-bold uppercase tracking-wider font-sans">
-                <span>ABOUT NAGARCHITRA</span>
+                <span>{t('ABOUT NAGARCHITRA', 'আমাদের পরিচিতি')}</span>
               </div>
 
               {/* Title */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#072B24] leading-tight tracking-tight">
-                একটি সচেতন নাগরিক সমাজের
-                <span className="block mt-1">
-                  জন্য, একটি <span className="text-amber-500">স্মার্ট নগরীর পথে</span>
-                </span>
+                {language === 'bn' ? (
+                  <>
+                    একটি সচেতন নাগরিক সমাজের
+                    <span className="block mt-1">
+                      জন্য, একটি <span className="text-amber-500">স্মার্ট নগরীর পথে</span>
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Empowering Civic Communities
+                    <span className="block mt-1">
+                      Towards a <span className="text-amber-500">Smarter Urban Future</span>
+                    </span>
+                  </>
+                )}
               </h1>
 
               {/* Subtitle */}
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl font-medium">
-                নগরচিত্র হলো বাংলাদেশের নাগরিকদের জন্য একটি ডিজিটাল প্ল্যাটফর্ম, যেখানে আপনি শহরের বিভিন্ন সমস্যা রিপোর্ট করতে, যাচাই করতে এবং সমাধানের অগ্রগতি ট্র্যাক করতে পারেন।
+                {t(
+                  'NagarChitra is a civic tech platform for Bangladesh, empowering citizens to report public infrastructure issues, verify ground realities, and track municipal resolution progress transparently.',
+                  'নগরচিত্র হলো বাংলাদেশের নাগরিকদের জন্য একটি ডিজিটাল প্ল্যাটফর্ম, যেখানে আপনি শহরের বিভিন্ন সমস্যা রিপোর্ট করতে, যাচাই করতে এবং সমাধানের অগ্রগতি ট্র্যাক করতে পারেন।'
+                )}
               </p>
 
               {/* Action Buttons */}
@@ -85,15 +99,15 @@ export default function AboutPage() {
                   className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0B3D3A] hover:bg-[#14534F] text-white font-bold text-sm shadow-md transition hover:scale-102"
                 >
                   <Compass className="w-4 h-4 text-accent" />
-                  <span>কিভাবে কাজ করে?</span>
+                  <span>{t('How It Works', 'কিভাবে কাজ করে?')}</span>
                 </a>
 
                 <button
-                  onClick={() => alert('ভিডিও ডেমো শীঘ্রই উন্মুক্ত হবে!')}
+                  onClick={() => alert(t('Video demo coming soon!', 'ভিডিও ডেমো শীঘ্রই উন্মুক্ত হবে!'))}
                   className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-900 font-bold text-sm shadow-xs transition hover:scale-102"
                 >
                   <Play className="w-4 h-4 text-emerald-700 fill-emerald-700" />
-                  <span>ভিডিও দেখুন</span>
+                  <span>{t('Watch Video', 'ভিডিও দেখুন')}</span>
                 </button>
               </div>
             </div>
@@ -103,10 +117,10 @@ export default function AboutPage() {
               {/* Handwritten style callout */}
               <div className="hidden xl:flex flex-col items-center transform -rotate-6 select-none mr-12 text-[#0A3D36]">
                 <span className="text-base font-black tracking-wider drop-shadow-xs">
-                  পরিবর্তনের
+                  {t('Be a Partner in', 'পরিবর্তনের')}
                 </span>
                 <span className="text-xl font-black text-amber-600 drop-shadow-xs">
-                  অংশীদার হোন
+                  {t('Civic Change', 'অংশীদার হোন')}
                 </span>
                 <svg viewBox="0 0 50 30" className="w-10 h-6 text-amber-600 fill-none stroke-current stroke-2 mt-1">
                   <path d="M10,5 Q30,15 40,25" />
@@ -121,12 +135,15 @@ export default function AboutPage() {
                     🍃
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-slate-900">নগরচিত্রের লক্ষ্য</h3>
+                    <h3 className="font-black text-sm text-slate-900">{t("NagarChitra's Goal", 'নগরচিত্রের লক্ষ্য')}</h3>
                   </div>
                 </div>
 
                 <p className="text-xs text-slate-600 font-bold leading-relaxed italic">
-                  “প্রত্যেক নাগরিকের কণ্ঠস্বরকে শহরের উন্নয়নে কাজে লাগানো।”
+                  {t(
+                    '“Harnessing the voice of every citizen to improve our city.”',
+                    '“প্রত্যেক নাগরিকের কণ্ঠস্বরকে শহরের উন্নয়নে কাজে লাগানো।”'
+                  )}
                 </p>
 
                 {/* Silhouette Graphic Watermark */}
@@ -150,13 +167,16 @@ export default function AboutPage() {
           <div className="lg:col-span-8 space-y-6">
             <div className="space-y-1.5">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                আমাদের সম্পর্কে
+                {t('About Us', 'আমাদের সম্পর্কে')}
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                কিভাবে কাজ করে নগরচিত্র?
+                {t('How NagarChitra Works?', 'কিভাবে কাজ করে নগরচিত্র?')}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
-                নগরচিত্র একটি সহজ, স্বচ্ছ এবং অংশগ্রহণমূলক প্রক্রিয়ার মাধ্যমে শহরের সমস্যাগুলোকে সমাধানের দিকে এগিয়ে নিয়ে যায়। নিচে প্ল্যাটফর্মটির মূল ধাপগুলো দেখানো হলো:
+                {t(
+                  'NagarChitra moves city problems towards transparent resolution through an open, participatory workflow. Here are the core stages:',
+                  'নগরচিত্র একটি সহজ, স্বচ্ছ এবং অংশগ্রহণমূলক প্রক্রিয়ার মাধ্যমে শহরের সমস্যাগুলোকে সমাধানের দিকে এগিয়ে নিয়ে যায়। নিচে প্ল্যাটফর্মটির মূল ধাপগুলো দেখানো হলো:'
+                )}
               </p>
             </div>
 
@@ -176,10 +196,13 @@ export default function AboutPage() {
                   {/* Text */}
                   <div className="space-y-1">
                     <h3 className="text-base font-black text-slate-900">
-                      সমস্যা রিপোর্ট করুন
+                      {t('Report an Issue', 'সমস্যা রিপোর্ট করুন')}
                     </h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      সমস্যার ধরন নির্ধারণ করুন, লোকেশন পিন করুন, ছবি/ভিডিও যুক্ত করুন এবং বিস্তারিত তথ্য দিন।
+                      {t(
+                        'Select category, pin location, attach photo/video and provide details.',
+                        'সমস্যার ধরন নির্ধারণ করুন, লোকেশন পিন করুন, ছবি/ভিডিও যুক্ত করুন এবং বিস্তারিত তথ্য দিন।'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -208,10 +231,13 @@ export default function AboutPage() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-base font-black text-slate-900">
-                      কমিউনিটি যাচাই
+                      {t('Community Verification', 'কমিউনিটি যাচাই')}
                     </h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      আপনার পরিচিত বা এলাকার অন্য নাগরিকরা "আমি এটি দেখেছি" বাটনের মাধ্যমে সমস্যাটি নিশ্চিত করতে পারেন।
+                      {t(
+                        'Other residents can confirm the issue using "I See This Too" button.',
+                        'আপনার পরিচিত বা এলাকার অন্য নাগরিকরা "আমি এটি দেখেছি" বাটনের মাধ্যমে সমস্যাটি নিশ্চিত করতে পারেন।'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -240,10 +266,13 @@ export default function AboutPage() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-base font-black text-slate-900">
-                      বৈধতা যাচাই ও বিভাগ নির্ধারণ
+                      {t('Triage & Department Routing', 'বৈধতা যাচাই ও বিভাগ নির্ধারণ')}
                     </h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      নগরচিত্রের টিম রিপোর্টটি যাচাই করে, সঠিক বিভাগে পাঠায় এবং প্রাসঙ্গিক তথ্য সংযুক্ত করে।
+                      {t(
+                        'NagarChitra validates the report and routes it to the designated department.',
+                        'নগরচিত্রের টিম রিপোর্টটি যাচাই করে, সঠিক বিভাগে পাঠায় এবং প্রাসঙ্গিক তথ্য সংযুক্ত করে।'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -272,10 +301,13 @@ export default function AboutPage() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-base font-black text-slate-900">
-                      কাজ শুরু ও সমাধান
+                      {t('Work Started & Resolution', 'কাজ শুরু ও সমাধান')}
                     </h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      দায়িত্বপ্রাপ্ত কর্তৃপক্ষ কাজ শুরু করে এবং সমাধান হলে আগে ও পরের ছবি আপলোড করে।
+                      {t(
+                        'Assigned municipal teams start repair work and upload before/after photos upon completion.',
+                        'দায়িত্বপ্রাপ্ত কর্তৃপক্ষ কাজ শুরু করে এবং সমাধান হলে আগে ও পরের ছবি আপলোড করে।'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -315,10 +347,13 @@ export default function AboutPage() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-base font-black text-slate-900">
-                      নাগরিক যাচাই
+                      {t('Citizen Audit & Verification', 'নাগরিক যাচাই')}
                     </h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      সমাধান হয়েছে কিনা তা এলাকার নাগরিকরা যাচাই করেন। প্রয়োজনে সমস্যা পুনরায় খোলা হয়।
+                      {t(
+                        'Local residents confirm whether the issue is truly resolved or requires reopening.',
+                        'সমাধান হয়েছে কিনা তা এলাকার নাগরিকরা যাচাই করেন। প্রয়োজনে সমস্যা পুনরায় খোলা হয়।'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -329,15 +364,15 @@ export default function AboutPage() {
                   <div className="w-32 py-1.5 px-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-[10px] space-y-1 shrink-0 font-bangla">
                     <div className="flex items-center gap-1.5 text-emerald-700 font-bold">
                       <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                      <span>সম্পূর্ণ ঠিক হয়েছে</span>
+                      <span>{t('Fully Resolved', 'সম্পূর্ণ ঠিক হয়েছে')}</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-amber-700 font-semibold">
                       <span className="w-2 h-2 rounded-full bg-amber-500" />
-                      <span>আংশিক ঠিক হয়েছে</span>
+                      <span>{t('Partially Resolved', 'আংশিক ঠিক হয়েছে')}</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-red-600 font-semibold">
                       <span className="w-2 h-2 rounded-full bg-red-500" />
-                      <span>এখনও সমস্যা আছে</span>
+                      <span>{t('Still Exists', 'এখনও সমস্যা আছে')}</span>
                     </div>
                   </div>
                 </div>
@@ -354,10 +389,13 @@ export default function AboutPage() {
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-base font-black text-slate-900">
-                      সমস্যা বন্ধ
+                      {t('Issue Closed & Archived', 'সমস্যা বন্ধ')}
                     </h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      নাগরিকদের নিশ্চিতকরণের পর সমস্যাটি চূড়ান্তভাবে বন্ধ হয় এবং তথ্যটি পাবলিক ডাটাবেজে সংরক্ষিত থাকে।
+                      {t(
+                        'After citizen verification, the issue is closed and recorded in the open audit database.',
+                        'নাগরিকদের নিশ্চিতকরণের পর সমস্যাটি চূড়ান্তভাবে বন্ধ হয় এবং তথ্যটি পাবলিক ডাটাবেজে সংরক্ষিত থাকে।'
+                      )}
                     </p>
                   </div>
                 </div>
@@ -367,7 +405,7 @@ export default function AboutPage() {
                   {/* Graphic: Success Pill Badge */}
                   <div className="px-4 py-2.5 rounded-2xl bg-[#0B3D3A] text-white flex items-center gap-2 shadow-sm shrink-0">
                     <CheckCircle2 className="w-4 h-4 text-accent" />
-                    <span className="text-xs font-bold font-bangla">সমাধান সম্পন্ন</span>
+                    <span className="text-xs font-bold font-bangla">{t('Resolution Complete', 'সমাধান সম্পন্ন')}</span>
                   </div>
                 </div>
               </div>
@@ -380,46 +418,49 @@ export default function AboutPage() {
             <div className="bg-[#EAF6F3] border border-emerald-200/90 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
               <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800">
                 <span>🍃</span>
-                <span>আমাদের মিশন</span>
+                <span>{t('Our Mission', 'আমাদের মিশন')}</span>
               </div>
 
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
-                একটি স্বচ্ছ, জবাবদিহিমূলক ও বাসযোগ্য বাংলাদেশ গড়া।
+                {t('Building a transparent, accountable, and livable Bangladesh.', 'একটি স্বচ্ছ, জবাবদিহিমূলক ও বাসযোগ্য বাংলাদেশ গড়া।')}
               </h3>
 
               <p className="text-xs text-slate-600 leading-relaxed">
-                নাগরিকদের প্রত্যক্ষ অংশগ্রহণের মাধ্যমে শহরের সমস্যাগুলো দৃশ্যমান করা, সমাধানের প্রক্রিয়াকে স্বচ্ছ রাখা এবং দায়িত্বশীল কর্তৃপক্ষের কাজকে আরও কার্যকর করা — এটাই নগরচিত্রের প্রতিশ্রুতি।
+                {t(
+                  'Making civic problems visible through direct citizen engagement, keeping repair workflows transparent, and assisting public authorities to act efficiently — that is NagarChitra’s commitment.',
+                  'নাগরিকদের প্রত্যক্ষ অংশগ্রহণের মাধ্যমে শহরের সমস্যাগুলো দৃশ্যমান করা, সমাধানের প্রক্রিয়াকে স্বচ্ছ রাখা এবং দায়িত্বশীল কর্তৃপক্ষের কাজকে আরও কার্যকর করা — এটাই নগরচিত্রের প্রতিশ্রুতি।'
+                )}
               </p>
 
               {/* 4 Stats Grid */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="bg-white/90 rounded-2xl p-3 border border-emerald-200/60 shadow-2xs">
-                  <div className="text-xl font-black text-slate-900 font-sans">1,248</div>
-                  <div className="text-[11px] text-slate-500 font-medium">মোট রিপোর্ট</div>
+                  <div className="text-xl font-black text-slate-900 font-sans">{formatNumber('1,248')}</div>
+                  <div className="text-[11px] text-slate-500 font-medium">{t('Total Reports', 'মোট রিপোর্ট')}</div>
                 </div>
 
                 <div className="bg-white/90 rounded-2xl p-3 border border-emerald-200/60 shadow-2xs">
                   <div className="flex items-center gap-1 text-emerald-700">
                     <CheckCircle2 className="w-4 h-4" />
-                    <span className="text-xl font-black font-sans">327</span>
+                    <span className="text-xl font-black font-sans">{formatNumber('327')}</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium">সমাধানকৃত</div>
+                  <div className="text-[11px] text-slate-500 font-medium">{t('Resolved', 'সমাধানকৃত')}</div>
                 </div>
 
                 <div className="bg-white/90 rounded-2xl p-3 border border-emerald-200/60 shadow-2xs">
                   <div className="flex items-center gap-1 text-amber-700">
                     <Clock className="w-4 h-4" />
-                    <span className="text-xl font-black font-sans">214</span>
+                    <span className="text-xl font-black font-sans">{formatNumber('214')}</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium">চলমান</div>
+                  <div className="text-[11px] text-slate-500 font-medium">{t('In Progress', 'চলমান')}</div>
                 </div>
 
                 <div className="bg-white/90 rounded-2xl p-3 border border-emerald-200/60 shadow-2xs">
                   <div className="flex items-center gap-1 text-red-600">
                     <Flame className="w-4 h-4" />
-                    <span className="text-xl font-black font-sans">86</span>
+                    <span className="text-xl font-black font-sans">{formatNumber('86')}</span>
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium">জরুরি (Critical)</div>
+                  <div className="text-[11px] text-slate-500 font-medium">{t('Critical', 'জরুরি (Critical)')}</div>
                 </div>
               </div>
 
@@ -429,7 +470,7 @@ export default function AboutPage() {
                   href="/statistics"
                   className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:text-emerald-800 transition"
                 >
-                  <span>আরও জানুন</span>
+                  <span>{t('Learn More', 'আরও জানুন')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -438,7 +479,7 @@ export default function AboutPage() {
             {/* 2. আমাদের মূল বৈশিষ্ট্য কার্ড */}
             <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 space-y-4 shadow-xs">
               <h3 className="font-black text-base text-slate-900">
-                আমাদের মূল বৈশিষ্ট্য
+                {t('Our Core Features', 'আমাদের মূল বৈশিষ্ট্য')}
               </h3>
 
               <div className="space-y-3">
@@ -452,8 +493,8 @@ export default function AboutPage() {
                       <MapPin className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug">ইন্টারেক্টিভ মানচিত্র</h4>
-                      <p className="text-[11px] text-slate-400">লাইভ ম্যাপ, ফিল্টার, ক্লাস্টার</p>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{t('Interactive Map', 'ইন্টারেক্টিভ মানচিত্র')}</h4>
+                      <p className="text-[11px] text-slate-400">{t('Live map, filters, clusters', 'লাইভ ম্যাপ, ফিল্টার, ক্লাস্টার')}</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />
@@ -469,8 +510,8 @@ export default function AboutPage() {
                       <BarChart2 className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug">সেরা ড্যাশবোর্ড</h4>
-                      <p className="text-[11px] text-slate-400">এলাকা ভিত্তিক বিশ্লেষণ ও পরিসংখ্যান</p>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{t('Insights Dashboard', 'সেরা ড্যাশবোর্ড')}</h4>
+                      <p className="text-[11px] text-slate-400">{t('Area-based analysis & trends', 'এলাকা ভিত্তিক বিশ্লেষণ ও পরিসংখ্যান')}</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />
@@ -486,8 +527,8 @@ export default function AboutPage() {
                       <Database className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug">ওপেন ডাটা (পরবর্তী পর্যায়)</h4>
-                      <p className="text-[11px] text-slate-400">CSV / JSON ডাউনলোড</p>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{t('Open Data Portal', 'ওপেন ডাটা (পরবর্তী পর্যায়)')}</h4>
+                      <p className="text-[11px] text-slate-400">{t('CSV / JSON Downloads', 'CSV / JSON ডাউনলোড')}</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />
@@ -503,8 +544,8 @@ export default function AboutPage() {
                       <Building2 className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug">এজেন্সি ড্যাশবোর্ড</h4>
-                      <p className="text-[11px] text-slate-400">কর্তৃপক্ষের জন্য অপারেশন প্যানেল</p>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{t('Agency Portal', 'এজেন্সি ড্যাশবোর্ড')}</h4>
+                      <p className="text-[11px] text-slate-400">{t('Operational console for authorities', 'কর্তৃপক্ষের জন্য অপারেশন প্যানেল')}</p>
                     </div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />

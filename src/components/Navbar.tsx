@@ -21,11 +21,11 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { href: '/', label: 'Home', labelBn: 'হোম' },
-    { href: '/explore', label: 'Explore', labelBn: 'অনুসন্ধান' },
+    { href: '/explore', label: 'Explore', labelBn: 'এক্সপ্লোর' },
     { href: '/report', label: 'Report', labelBn: 'রিপোর্ট' },
     { href: '/nagar/mirpur', label: 'Areas', labelBn: 'এলাকা' },
     { href: '/statistics', label: 'Statistics', labelBn: 'পরিসংখ্যান' },
-    { href: '/open-data', label: 'Open Data', labelBn: 'ওপেন ডাটা' },
+    { href: '/open-data', label: 'Open Data', labelBn: 'ওপেন ডেটা' },
     { href: '/about', label: 'About', labelBn: 'সম্পর্ক' },
   ];
 
@@ -35,10 +35,10 @@ export const Navbar: React.FC = () => {
       <div className="bg-[#051a16] border-b border-[#0b2923] text-xs px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-slate-300">
         <div className="flex items-center gap-2">
           <span className="px-1.5 py-0.5 rounded bg-accent text-slate-950 font-black text-[9px] tracking-wider uppercase">
-            DEMO MODE
+            {t('nav.demoMode')}
           </span>
           <span className="text-[11px] text-slate-300">
-            Actions are simulated in local state. Review different stakeholder perspectives.
+            {t('nav.demoBanner')}
           </span>
         </div>
       </div>
@@ -95,7 +95,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => setLanguage('en')}
                 className={`px-2.5 py-0.5 rounded-full transition ${
                   language === 'en'
-                    ? 'bg-teal-600 text-white font-extrabold'
+                    ? 'bg-teal-600 text-white font-extrabold shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -105,7 +105,7 @@ export const Navbar: React.FC = () => {
                 onClick={() => setLanguage('bn')}
                 className={`px-2.5 py-0.5 rounded-full transition font-bangla ${
                   language === 'bn'
-                    ? 'bg-teal-600 text-white font-extrabold'
+                    ? 'bg-teal-600 text-white font-extrabold shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -117,7 +117,7 @@ export const Navbar: React.FC = () => {
             <Link
               href="/explore"
               className="text-slate-300 hover:text-white transition p-1.5"
-              title="Search"
+              title={t('Search', 'খুঁজুন')}
             >
               <Search className="w-4 h-4" />
             </Link>
@@ -126,10 +126,10 @@ export const Navbar: React.FC = () => {
             <Link
               href="/issues/road-damage-mirpur-10-8f92"
               className="relative text-slate-300 hover:text-white transition p-1.5"
-              title="Notifications"
+              title={t('Notifications', 'নোটিফিকেশন')}
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute 1 top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
             </Link>
 
             {/* User Profile Chip */}
@@ -144,7 +144,9 @@ export const Navbar: React.FC = () => {
               />
               <div className="flex flex-col text-left leading-none">
                 <span className="text-xs font-bold text-white">{currentUser.name}</span>
-                <span className="text-[10px] text-slate-400 font-bangla mt-0.5">নাগরিক</span>
+                <span className="text-[10px] text-slate-400 font-bangla mt-0.5">
+                  {language === 'bn' ? 'নাগরিক' : 'Citizen'}
+                </span>
               </div>
             </Link>
           </div>
@@ -184,7 +186,7 @@ export const Navbar: React.FC = () => {
                     : 'text-slate-200 hover:bg-[#0E3530]'
                 }`}
               >
-                {link.label} ({link.labelBn})
+                {language === 'bn' ? link.labelBn : link.label}
               </Link>
             );
           })}

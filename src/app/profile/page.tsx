@@ -28,7 +28,7 @@ import {
 
 export default function ProfilePage() {
   const { currentUser, role } = useAuthRole();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
 
   // Active filter tab for reports
   const [activeTab, setActiveTab] = useState<'all' | 'submitted' | 'verifying' | 'in_progress' | 'resolved'>('all');
@@ -227,9 +227,9 @@ export default function ProfilePage() {
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs text-slate-500 font-medium block">মোট রিপোর্ট</span>
-              <div className="text-2xl font-black text-slate-900 font-sans">12</div>
-              <span className="text-[10px] font-bold text-emerald-600 font-sans">+2 নতুন</span>
+              <span className="text-xs text-slate-500 font-medium block">{t('Total Reports', 'মোট রিপোর্ট')}</span>
+              <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber(12)}</div>
+              <span className="text-[10px] font-bold text-emerald-600 font-sans">+2 {t('New', 'নতুন')}</span>
             </div>
           </div>
 
@@ -239,9 +239,9 @@ export default function ProfilePage() {
               <Eye className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs text-slate-500 font-medium block">যাচাই করা রিপোর্ট</span>
-              <div className="text-2xl font-black text-slate-900 font-sans">8</div>
-              <span className="text-[10px] font-bold text-slate-500 font-sans">67%</span>
+              <span className="text-xs text-slate-500 font-medium block">{t('Verified Reports', 'যাচাই করা রিপোর্ট')}</span>
+              <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber(8)}</div>
+              <span className="text-[10px] font-bold text-slate-500 font-sans">{formatNumber('67%')}</span>
             </div>
           </div>
 
@@ -251,9 +251,9 @@ export default function ProfilePage() {
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs text-slate-500 font-medium block">সমাধানাধীন</span>
-              <div className="text-2xl font-black text-slate-900 font-sans">3</div>
-              <span className="text-[10px] font-bold text-amber-600 font-sans">25%</span>
+              <span className="text-xs text-slate-500 font-medium block">{t('In Progress', 'সমাধানাধীন')}</span>
+              <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber(3)}</div>
+              <span className="text-[10px] font-bold text-amber-600 font-sans">{formatNumber('25%')}</span>
             </div>
           </div>
 
@@ -263,9 +263,9 @@ export default function ProfilePage() {
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs text-slate-500 font-medium block">সমাধান হয়েছে</span>
-              <div className="text-2xl font-black text-slate-900 font-sans">6</div>
-              <span className="text-[10px] font-bold text-emerald-600 font-sans">50%</span>
+              <span className="text-xs text-slate-500 font-medium block">{t('Resolved', 'সমাধান হয়েছে')}</span>
+              <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber(6)}</div>
+              <span className="text-[10px] font-bold text-emerald-600 font-sans">{formatNumber('50%')}</span>
             </div>
           </div>
 
@@ -275,9 +275,9 @@ export default function ProfilePage() {
               <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
             </div>
             <div>
-              <span className="text-xs text-slate-500 font-medium block">কমিউনিটি রেটিং</span>
-              <div className="text-2xl font-black text-slate-900 font-sans">4</div>
-              <span className="text-[10px] font-bold text-emerald-600 font-sans">+2 নতুন</span>
+              <span className="text-xs text-slate-500 font-medium block">{t('Community Rating', 'কমিউনিটি রেটিং')}</span>
+              <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber(4)}</div>
+              <span className="text-[10px] font-bold text-emerald-600 font-sans">+2 {t('New', 'নতুন')}</span>
             </div>
           </div>
         </div>
@@ -295,13 +295,13 @@ export default function ProfilePage() {
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-black text-slate-900">আমার রিপোর্টসমূহ</h2>
-                  <p className="text-xs text-slate-500">আপনার করা রিপোর্টগুলো এখানে দেখতে পারবেন এবং তাদের বর্তমান অবস্থা ট্র্যাক করতে পারবেন।</p>
+                  <h2 className="text-lg font-black text-slate-900">{t('My Reports', 'আমার রিপোর্টসমূহ')}</h2>
+                  <p className="text-xs text-slate-500">{t('View your submitted reports and track their current progress status.', 'আপনার করা রিপোর্টগুলো এখানে দেখতে পারবেন এবং তাদের বর্তমান অবস্থা ট্র্যাক করতে পারবেন।')}</p>
                 </div>
               </div>
 
               <Link href="/explore" className="text-xs font-bold text-primary hover:text-emerald-700 transition flex items-center gap-1 shrink-0">
-                <span>সব দেখুন</span>
+                <span>{t('View All', 'সব দেখুন')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -309,11 +309,11 @@ export default function ProfilePage() {
             {/* Filter Tabs */}
             <div className="flex flex-wrap items-center gap-2 pt-1 font-sans">
               {[
-                { id: 'all', label: 'সব (12)' },
-                { id: 'submitted', label: 'জমা হয়েছে (3)' },
-                { id: 'verifying', label: 'যাচাই চলছে (2)' },
-                { id: 'in_progress', label: 'সমাধানাধীন (3)' },
-                { id: 'resolved', label: 'সমাধান হয়েছে (4)' },
+                { id: 'all', label: t('All (12)', 'সব (১২)') },
+                { id: 'submitted', label: t('Submitted (3)', 'জমা হয়েছে (৩)') },
+                { id: 'verifying', label: t('Verifying (2)', 'যাচাই চলছে (২)') },
+                { id: 'in_progress', label: t('In Progress (3)', 'সমাধানাধীন (৩)') },
+                { id: 'resolved', label: t('Resolved (4)', 'সমাধান হয়েছে (৪)') },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -347,15 +347,15 @@ export default function ProfilePage() {
                       />
                       <div className="space-y-1">
                         <h3 className="text-sm font-black text-slate-900 group-hover:text-primary transition">
-                          {report.title}
+                          {t(report.title)}
                         </h3>
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-500">
                           <span className="flex items-center gap-1">
                             <MapPin className="w-3 h-3 text-slate-400" />
-                            <span>{report.location}</span>
+                            <span>{t(report.location)}</span>
                           </span>
                           <span>•</span>
-                          <span>🏷️ {report.category}</span>
+                          <span>🏷️ {t(report.category)}</span>
                         </div>
                         <div className="text-[10px] font-mono text-slate-400 font-bold">
                           {report.id}
@@ -368,10 +368,10 @@ export default function ProfilePage() {
                       <div className="text-right space-y-1">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10px] ${report.statusColor}`}>
                           {report.isCritical && <Flame className="w-3 h-3 text-red-600 fill-red-600" />}
-                          <span>{report.status}</span>
+                          <span>{t(report.status)}</span>
                         </span>
                         <div className="text-[10px] text-slate-400 font-sans">
-                          {report.time}
+                          {t(report.time)}
                         </div>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />
@@ -383,7 +383,7 @@ export default function ProfilePage() {
                     {/* Step 1: রিপোর্ট */}
                     <div className="flex items-center gap-1 text-emerald-700 font-bold">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 flex items-center justify-center text-[7px] text-white">✓</span>
-                      <span>রিপোর্ট</span>
+                      <span>{t('Report', 'রিপোর্ট')}</span>
                     </div>
 
                     <div className={`h-0.5 flex-1 mx-2 ${report.currentStep >= 2 ? 'bg-emerald-500' : 'bg-slate-200'}`} />
@@ -391,7 +391,7 @@ export default function ProfilePage() {
                     {/* Step 2: যাচাই */}
                     <div className={`flex items-center gap-1 ${report.currentStep >= 2 ? 'text-emerald-700 font-bold' : ''}`}>
                       <span className={`w-2.5 h-2.5 rounded-full ${report.currentStep >= 2 ? (report.currentStep === 2 ? 'bg-amber-500' : 'bg-emerald-500') : 'bg-slate-300'}`} />
-                      <span>যাচাই</span>
+                      <span>{t('Verifying', 'যাচাই')}</span>
                     </div>
 
                     <div className={`h-0.5 flex-1 mx-2 ${report.currentStep >= 3 ? 'bg-emerald-500' : 'bg-slate-200'}`} />
@@ -399,7 +399,7 @@ export default function ProfilePage() {
                     {/* Step 3: সমাধানাধীন */}
                     <div className={`flex items-center gap-1 ${report.currentStep >= 3 ? 'text-emerald-700 font-bold' : ''}`}>
                       <span className={`w-2.5 h-2.5 rounded-full ${report.currentStep >= 3 ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-                      <span>সমাধানাধীন</span>
+                      <span>{t('In Progress', 'সমাধানাধীন')}</span>
                     </div>
 
                     <div className={`h-0.5 flex-1 mx-2 ${report.currentStep >= 4 ? 'bg-emerald-500' : 'bg-slate-200'}`} />
@@ -407,7 +407,7 @@ export default function ProfilePage() {
                     {/* Step 4: সমাধান */}
                     <div className={`flex items-center gap-1 ${report.currentStep >= 4 ? 'text-emerald-700 font-bold' : ''}`}>
                       <span className={`w-2.5 h-2.5 rounded-full ${report.currentStep >= 4 ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-                      <span>সমাধান</span>
+                      <span>{t('Resolved', 'সমাধান')}</span>
                     </div>
                   </div>
                 </Link>
@@ -424,10 +424,10 @@ export default function ProfilePage() {
                   <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
                     🏆
                   </div>
-                  <h3 className="font-black text-sm text-slate-900">আমার অর্জন</h3>
+                  <h3 className="font-black text-sm text-slate-900">{t('My Achievements', 'আমার অর্জন')}</h3>
                 </div>
                 <button className="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
-                  <span>সব দেখুন</span>
+                  <span>{t('View All', 'সব দেখুন')}</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -440,8 +440,8 @@ export default function ProfilePage() {
                     <Shield className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-black text-slate-900 leading-tight">সচেতন নাগরিক</h4>
-                    <span className="text-[10px] text-slate-500 font-sans">১০+ রিপোর্ট</span>
+                    <h4 className="text-xs font-black text-slate-900 leading-tight">{t('Active Citizen', 'সচেতন নাগরিক')}</h4>
+                    <span className="text-[10px] text-slate-500 font-sans">{formatNumber('10+')}{' '}{t('Reports', 'রিপোর্ট')}</span>
                   </div>
                 </div>
 
@@ -451,8 +451,8 @@ export default function ProfilePage() {
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-black text-slate-900 leading-tight">কমিউনিটি হিরো</h4>
-                    <span className="text-[10px] text-slate-500 font-sans">৫+ যাচাই</span>
+                    <h4 className="text-xs font-black text-slate-900 leading-tight">{t('Community Hero', 'কমিউনিটি হিরো')}</h4>
+                    <span className="text-[10px] text-slate-500 font-sans">{formatNumber('5+')}{' '}{t('Verifications', 'যাচাই')}</span>
                   </div>
                 </div>
 
@@ -462,8 +462,8 @@ export default function ProfilePage() {
                     <Star className="w-4 h-4 fill-white" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-black text-slate-900 leading-tight">পরিবর্তনের কণ্ঠস্বর</h4>
-                    <span className="text-[10px] text-slate-500 font-sans">৩+ সমাধান</span>
+                    <h4 className="text-xs font-black text-slate-900 leading-tight">{t('Voice of Change', 'পরিবর্তনের কণ্ঠস্বর')}</h4>
+                    <span className="text-[10px] text-slate-500 font-sans">{formatNumber('3+')}{' '}{t('Resolutions', 'সমাধান')}</span>
                   </div>
                 </div>
 
@@ -473,8 +473,8 @@ export default function ProfilePage() {
                     <Award className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-black text-slate-900 leading-tight">নাগরিক অংশগ্রহণকারী</h4>
-                    <span className="text-[10px] text-slate-500 font-sans">১০+ কমেন্ট</span>
+                    <h4 className="text-xs font-black text-slate-900 leading-tight">{t('Civic Contributor', 'নাগরিক অংশগ্রহণকারী')}</h4>
+                    <span className="text-[10px] text-slate-500 font-sans">{formatNumber('10+')}{' '}{t('Comments', 'কমেন্ট')}</span>
                   </div>
                 </div>
               </div>
@@ -485,11 +485,11 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-primary" />
-                  <h3 className="font-black text-sm text-slate-900">আমার কার্যক্রমের এলাকা</h3>
+                  <h3 className="font-black text-sm text-slate-900">{t('My Activity Area', 'আমার কার্যক্রমের এলাকা')}</h3>
                 </div>
 
                 <div className="flex items-center gap-1 text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl">
-                  <span>{selectedArea}</span>
+                  <span>{t(selectedArea)}</span>
                   <ChevronDown className="w-3 h-3 text-slate-400" />
                 </div>
               </div>
@@ -519,20 +519,20 @@ export default function ProfilePage() {
               {/* 4 Mini Stats Under Map */}
               <div className="grid grid-cols-4 gap-2 text-center text-xs font-sans pt-1">
                 <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="text-[10px] text-slate-400 font-bangla block">এই এলাকায় রিপোর্ট</span>
-                  <span className="text-sm font-black text-slate-900">5</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('Area Reports', 'এই এলাকায় রিপোর্ট')}</span>
+                  <span className="text-sm font-black text-slate-900">{formatNumber(5)}</span>
                 </div>
                 <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="text-[10px] text-slate-400 font-bangla block">সমাধান হয়েছে</span>
-                  <span className="text-sm font-black text-emerald-600">3</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('Resolved', 'সমাধান হয়েছে')}</span>
+                  <span className="text-sm font-black text-emerald-600">{formatNumber(3)}</span>
                 </div>
                 <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="text-[10px] text-slate-400 font-bangla block">সমাধানাধীন</span>
-                  <span className="text-sm font-black text-amber-600">1</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('In Progress', 'সমাধানাধীন')}</span>
+                  <span className="text-sm font-black text-amber-600">{formatNumber(1)}</span>
                 </div>
                 <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="text-[10px] text-slate-400 font-bangla block">যাচাই চলছে</span>
-                  <span className="text-sm font-black text-purple-600">1</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('Verifying', 'যাচাই চলছে')}</span>
+                  <span className="text-sm font-black text-purple-600">{formatNumber(1)}</span>
                 </div>
               </div>
             </div>
@@ -545,14 +545,14 @@ export default function ProfilePage() {
                 </div>
                 <div>
                   <h3 className="font-black text-sm text-white leading-snug">
-                    আরও ভালো শহর গড়তে
-                    <span className="block">আপনার মতামত গুরুত্বপূর্ণ</span>
+                    {t('To build a better city', 'আরও ভালো শহর গড়তে')}
+                    <span className="block">{t('Your voice matters', 'আপনার মতামত গুরুত্বপূর্ণ')}</span>
                   </h3>
                 </div>
               </div>
 
               <p className="text-xs text-slate-300 leading-relaxed z-10 relative">
-                নতুন কোনো সমস্যা দেখছেন? রিপোর্ট করুন, এবং পরিবর্তনের অংশ হন।
+                {t('Noticed any civic problem? Report it and be a catalyst for change.', 'নতুন কোনো সমস্যা দেখছেন? রিপোর্ট করুন, এবং পরিবর্তনের অংশ হন।')}
               </p>
 
               <div className="pt-1 z-10 relative">
@@ -560,7 +560,7 @@ export default function ProfilePage() {
                   href="/report"
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-accent hover:bg-accent-400 text-slate-950 text-xs font-black shadow-md transition"
                 >
-                  <span>রিপোর্ট করুন</span>
+                  <span>{t('Report an Issue', 'রিপোর্ট করুন')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

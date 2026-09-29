@@ -51,21 +51,25 @@ export const getSeverityBadge = (severity: IssueSeverity) => {
     case 'CRITICAL':
       return {
         label: 'CRITICAL',
+        labelBn: 'জরুরি',
         className: 'bg-red-100 text-red-700 border-red-200 font-bold',
       };
     case 'HIGH':
       return {
         label: 'HIGH',
+        labelBn: 'উচ্চ',
         className: 'bg-orange-50 text-orange-700 border-orange-200 font-semibold',
       };
     case 'MEDIUM':
       return {
         label: 'MEDIUM',
+        labelBn: 'মাঝারি',
         className: 'bg-yellow-50 text-yellow-700 border-yellow-200 font-medium',
       };
     case 'LOW':
       return {
         label: 'LOW',
+        labelBn: 'সাধারণ',
         className: 'bg-slate-100 text-slate-600 border-slate-200 font-normal',
       };
   }
@@ -73,10 +77,28 @@ export const getSeverityBadge = (severity: IssueSeverity) => {
 
 export const IssueCard: React.FC<IssueCardProps> = ({ issue, compact = false }) => {
   const { confirmIssue } = useIssues();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
   const statusBadge = getStatusBadgeStyle(issue.status);
   const severityBadge = getSeverityBadge(issue.severity);
   const isCritical = issue.severity === 'CRITICAL' && issue.status !== 'CLOSED';
+
+  const getStatusText = (status: IssueStatus) => {
+    if (language === 'bn') {
+      switch (status) {
+        case 'SUBMITTED': return 'রিপোর্টকৃত';
+        case 'UNDER_REVIEW': return 'পর্যালোচনাধীন';
+        case 'VERIFIED': return 'যাচাইকৃত';
+        case 'ASSIGNED': return 'বরাদ্দকৃত';
+        case 'IN_PROGRESS': return 'চলমান';
+        case 'RESOLVED': return 'সমাধান হয়েছে';
+        case 'CITIZEN_VERIFICATION': return 'যাচাই অপেক্ষমাণ';
+        case 'CLOSED': return 'নিষ্পত্তিকৃত';
+        case 'REOPENED': return 'পুনরায় খোলা';
+        default: return status;
+      }
+    }
+    return status.replace('_', ' ');
+  };
 
   const thumbnailUrl =
     issue.media?.[0]?.url ||
@@ -102,16 +124,16 @@ export const IssueCard: React.FC<IssueCardProps> = ({ issue, compact = false }) 
           {/* Top Badges */}
           <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
             <span
-              className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border shadow-sm ${statusBadge}`}
+              className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border shadow-sm font-bold ${statusBadge}`}
             >
-              {issue.status.replace('_', ' ')}
+              {getStatusText(issue.status)}
             </span>
 
             <span
               className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border shadow-sm ${severityBadge.className} flex items-center gap-1`}
             >
               {isCritical && <Flame className="w-3 h-3 text-red-600 animate-pulse" />}
-              {severityBadge.label}
+              {language === 'bn' ? severityBadge.labelBn : severityBadge.label}
             </span>
           </div>
 
@@ -119,20 +141,23 @@ export const IssueCard: React.FC<IssueCardProps> = ({ issue, compact = false }) 
           <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs">
             <span className="flex items-center gap-1 font-semibold truncate drop-shadow-md">
               <MapPin className="w-3.5 h-3.5 text-accent shrink-0" />
-              <span>{issue.location.area}, {issue.location.ward}</span>
+              <span>
+                {language === 'bn' ? (issue.location.areaBn || issue.location.area) : issue.location.area},{' '}
+                {language === 'bn' ? (issue.location.wardBn || issue.location.ward) : issue.location.ward}
+              </span>
             </span>
             <span className="text-[11px] px-2 py-0.5 rounded bg-black/40 backdrop-blur-sm text-slate-200">
-              {issue.categoryName}
+              {language === 'bn' && issue.categoryNameBn ? issue.categoryNameBn : issue.categoryName}
             </span>
           </div>
         </div>
 
         {/* Card Body */}
-        <div className="p-4 space-y-2.5">
+        <div className="p-4 space-y-2.5 font-bangla">
           <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
             <span>#{issue.trackingNumber}</span>
             <span>
-              {new Date(issue.createdAt).toLocaleDateString('en-GB', {
+              {new Date(issue.createdAt).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-GB', {
                 day: 'numeric',
                 month: 'short',
               })}
@@ -155,14 +180,16 @@ export const IssueCard: React.FC<IssueCardProps> = ({ issue, compact = false }) 
           {issue.assignedDepartment && (
             <div className="flex items-center gap-1.5 text-[11px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
               <Building className="w-3.5 h-3.5 text-primary shrink-0" />
-              <span className="truncate">{issue.assignedDepartment}</span>
+              <span className="truncate">
+                {language === 'bn' ? (issue.assignedDepartmentBn || issue.assignedDepartment) : issue.assignedDepartment}
+              </span>
             </div>
           )}
         </div>
       </div>
 
       {/* Card Footer: Upvote & View CTA */}
-      <div className="px-4 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between gap-2">
+      <div className="px-4 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between gap-2 font-bangla">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -173,10 +200,10 @@ export const IssueCard: React.FC<IssueCardProps> = ({ issue, compact = false }) 
               ? 'bg-primary-100 text-primary-900 font-bold border border-primary-200'
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
           }`}
-          title="Confirm you have seen this issue"
+          title={t('Confirm you have seen this issue', 'সমস্যাটি প্রত্যক্ষ করেছেন নিশ্চিত করুন')}
         >
           <ThumbsUp className={`w-3.5 h-3.5 ${issue.userConfirmed ? 'fill-primary text-primary' : ''}`} />
-          <span>{issue.communityConfirmations}</span>
+          <span>{formatNumber(issue.communityConfirmations)}</span>
           <span className="hidden sm:inline text-[10px] text-slate-500">
             {t('Confirmed', 'নিশ্চিত')}
           </span>

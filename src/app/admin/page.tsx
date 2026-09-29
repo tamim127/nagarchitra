@@ -22,7 +22,7 @@ import Link from 'next/link';
 export default function AdminPage() {
   const { issues, updateIssueStatus } = useIssues();
   const { role, setRole, currentUser } = useAuthRole();
-  const { t } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
 
   const [activeTab, setActiveTab] = useState<'issues' | 'users' | 'categories' | 'audit'>('issues');
 
@@ -48,10 +48,10 @@ export default function AdminPage() {
             </span>
           </div>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">
-            Platform Moderation & System Controls
+            {t('Platform Moderation & System Controls', 'প্ল্যাটফর্ম মডারেশন ও সিস্টেম নিয়ন্ত্রণ')}
           </h1>
           <p className="text-xs text-slate-500">
-            Moderate public submissions, audit role permissions, and maintain data integrity.
+            {t('Moderate public submissions, audit role permissions, and maintain data integrity.', 'নাগরিক রিপোর্ট মডারেশন, রোল পারমিশন অডিট এবং তথ্যের সত্যতা নিশ্চিতকরণ।')}
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export default function AdminPage() {
             onClick={() => setRole('ADMIN')}
             className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition shadow"
           >
-            Switch to Admin Persona
+            {t('Switch to Admin Persona', 'অ্যাডমিন মোডে যান')}
           </button>
         )}
       </div>
@@ -68,10 +68,10 @@ export default function AdminPage() {
       {/* Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
         {[
-          { id: 'issues', label: 'Issue Moderation', icon: FileCheck },
-          { id: 'users', label: 'User & Authority Roles', icon: Users },
-          { id: 'categories', label: 'Categories & SLAs', icon: Layers },
-          { id: 'audit', label: 'Master Audit Log', icon: Shield },
+          { id: 'issues', label: t('Issue Moderation', 'ইস্যু মডারেশন'), icon: FileCheck },
+          { id: 'users', label: t('User & Authority Roles', 'ব্যবহারকারী ও রোল'), icon: Users },
+          { id: 'categories', label: t('Categories & SLAs', 'ক্যাটাগরি ও এসএলএ'), icon: Layers },
+          { id: 'audit', label: t('Master Audit Log', 'মাস্টার অডিট লগ'), icon: Shield },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -97,21 +97,21 @@ export default function AdminPage() {
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden space-y-4 p-6">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold text-base text-slate-900">
-              Active Moderation Queue ({issues.length} Issues)
+              {t('Active Moderation Queue', 'সক্রিয় মডারেশন কিউ')} ({issues.length} {t('Issues', 'ইস্যু')})
             </h3>
-            <span className="text-xs text-slate-500">Review for abuse, spam or duplication</span>
+            <span className="text-xs text-slate-500">{t('Review for abuse, spam or duplication', 'অপব্যবহার, স্প্যাম বা ডুপ্লিকেট যাচাই')}</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 border-y border-slate-200 text-slate-500 font-bold uppercase">
                 <tr>
-                  <th className="px-4 py-3">Tracking ID</th>
-                  <th className="px-4 py-3">Issue Title</th>
-                  <th className="px-4 py-3">Reported By</th>
-                  <th className="px-4 py-3">Severity</th>
-                  <th className="px-4 py-3">Current Status</th>
-                  <th className="px-4 py-3 text-right">Moderation Actions</th>
+                  <th className="px-4 py-3">{t('Tracking ID', 'ট্র্যাকিং আইডি')}</th>
+                  <th className="px-4 py-3">{t('Issue Title', 'সমস্যার শিরোনাম')}</th>
+                  <th className="px-4 py-3">{t('Reported By', 'রিপোর্টার')}</th>
+                  <th className="px-4 py-3">{t('Severity', 'গুরুত্ব')}</th>
+                  <th className="px-4 py-3">{t('Current Status', 'বর্তমান অবস্থা')}</th>
+                  <th className="px-4 py-3 text-right">{t('Moderation Actions', 'মডারেশন অ্যাকশন')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">

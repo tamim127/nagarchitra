@@ -30,7 +30,7 @@ import {
 
 export default function HomePage() {
   const { issues, getStats } = useIssues();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
   const stats = getStats();
 
   // Search in hero
@@ -56,7 +56,7 @@ export default function HomePage() {
         <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
           <img
             src="/images/dhaka_civic_hero.jpg"
-            alt="নগরচিত্র বাংলাদেশ - স্মার্ট সিটি ও নাগরিক সমাধান প্ল্যাটফর্ম"
+            alt="NagarChitra Bangladesh - Smart City & Civic Action Platform"
             className="w-full h-full object-cover object-center filter brightness-[0.72] contrast-[1.12]"
           />
 
@@ -77,23 +77,23 @@ export default function HomePage() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
                 <span className="text-[11px] font-bold tracking-wider uppercase text-accent font-sans">
-                  A CIVIC INTELLIGENCE PLATFORM FOR BANGLADESH
+                  {t('hero.badge')}
                 </span>
               </div>
 
               {/* Main Headline */}
               <div className="space-y-1">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-bangla tracking-tight leading-[1.15] text-white drop-shadow-md">
-                  আপনার শহরকে
+                  {t('hero.titleLine1')}
                 </h1>
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-bangla tracking-tight leading-[1.15] text-accent drop-shadow-md">
-                  আরও বাসযোগ্য করুন
+                  {t('hero.titleLine2')}
                 </h1>
               </div>
 
               {/* Subtitle */}
               <p className="font-bangla text-slate-200 text-sm sm:text-base leading-relaxed max-w-xl drop-shadow">
-                সমস্যা দেখুন, রিপোর্ট করুন, পরিবর্তনকে অনুসরণ করুন। একসাথে আমরা গড়ে তুলতে পারি একটি পরিচ্ছন্ন, নিরাপদ ও বাসযোগ্য বাংলাদেশ।
+                {t('hero.subtitle')}
               </p>
 
               {/* Action Buttons */}
@@ -103,7 +103,7 @@ export default function HomePage() {
                   className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-accent text-slate-950 font-bangla font-black text-sm hover:bg-accent-hover transition shadow-lg shadow-accent/25 hover:shadow-accent/40 group active:scale-95"
                 >
                   <Zap className="w-4 h-4 fill-slate-950 text-slate-950" />
-                  <span>সমস্যা রিপোর্ট করুন</span>
+                  <span>{t('hero.reportCta')}</span>
                 </Link>
 
                 <Link
@@ -111,7 +111,7 @@ export default function HomePage() {
                   className="flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bangla font-bold text-sm border border-white/25 backdrop-blur-md transition group active:scale-95"
                 >
                   <MapPin className="w-4 h-4 text-accent" />
-                  <span>ম্যাপ দেখুন</span>
+                  <span>{t('hero.mapCta')}</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
@@ -120,20 +120,20 @@ export default function HomePage() {
               <div className="flex flex-wrap items-center gap-3 pt-4 text-xs font-bangla text-slate-200">
                 <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-sm">
                   <Users className="w-3.5 h-3.5 text-accent" />
-                  <span>জনগণের অংশগ্রহণ</span>
+                  <span>{t('hero.tag1')}</span>
                 </span>
                 <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-sm">
                   <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-                  <span>স্বচ্ছতা ও জবাবদিহিতা</span>
+                  <span>{t('hero.tag2')}</span>
                 </span>
                 <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/15 shadow-sm">
                   <Building className="w-3.5 h-3.5 text-accent" />
-                  <span>স্মার্ট সিটি, স্মার্ট বাংলাদেশ</span>
+                  <span>{t('hero.tag3')}</span>
                 </span>
               </div>
             </div>
 
-            {/* Right Card: আপনার এলাকা খুঁজুন */}
+            {/* Right Card: Find Your Area */}
             <div className="lg:col-span-5 flex flex-col items-end space-y-4">
               <div className="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-7 shadow-2xl border border-white/40 text-slate-900 space-y-5">
                 <div className="flex items-center justify-between">
@@ -143,15 +143,15 @@ export default function HomePage() {
                     </div>
                     <div>
                       <h3 className="font-bangla font-black text-base text-slate-900 leading-tight">
-                        আপনার এলাকা খুঁজুন
+                        {t('hero.findAreaTitle')}
                       </h3>
                       <p className="text-[11px] font-bangla text-slate-500">
-                        ওয়ার্ড বা এলাকার নাগরিক রিপোর্ট দেখুন
+                        {t('hero.findAreaSubtitle')}
                       </p>
                     </div>
                   </div>
                   <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    লাইভ
+                    {t('hero.liveBadge')}
                   </span>
                 </div>
 
@@ -169,13 +169,13 @@ export default function HomePage() {
                     type="text"
                     value={heroSearch}
                     onChange={(e) => setHeroSearch(e.target.value)}
-                    placeholder="জেলা, উপজেলা বা এলাকা লিখুন (যেমন: মিরপুর ১০)"
+                    placeholder={t('hero.searchPlaceholder')}
                     className="w-full pl-4 pr-11 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bangla focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-800 transition"
                   />
                   <button
                     type="submit"
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center hover:bg-primary/90 transition shadow-sm"
-                    title="খুঁজুন"
+                    title={t('Search', 'খুঁজুন')}
                   >
                     <Search className="w-4 h-4" />
                   </button>
@@ -184,23 +184,23 @@ export default function HomePage() {
                 {/* Quick Area Pills */}
                 <div>
                   <span className="block text-[11px] font-bangla font-semibold text-slate-400 mb-2">
-                    জনপ্রিয় এলাকা ও শহর:
+                    {t('hero.popularAreas')}
                   </span>
                   <div className="flex flex-wrap gap-1.5 font-bangla">
                     {[
-                      { name: 'ঢাকা', slug: 'mirpur' },
-                      { name: 'মিরপুর', slug: 'mirpur' },
-                      { name: 'ধানমন্ডি', slug: 'dhanmondi' },
-                      { name: 'উত্তরা', slug: 'uttara' },
-                      { name: 'চট্টগ্রাম', slug: 'chattogram' },
-                      { name: 'সিলেট', slug: 'sylhet' },
+                      { name: 'ঢাকা', nameEn: 'Dhaka', slug: 'mirpur' },
+                      { name: 'মিরপুর', nameEn: 'Mirpur', slug: 'mirpur' },
+                      { name: 'ধানমন্ডি', nameEn: 'Dhanmondi', slug: 'dhanmondi' },
+                      { name: 'উত্তরা', nameEn: 'Uttara', slug: 'uttara' },
+                      { name: 'চট্টগ্রাম', nameEn: 'Chattogram', slug: 'chattogram' },
+                      { name: 'সিলেট', nameEn: 'Sylhet', slug: 'sylhet' },
                     ].map((city) => (
                       <Link
                         key={city.name}
                         href={`/explore?q=${encodeURIComponent(city.name)}`}
                         className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-primary hover:text-white transition text-xs font-semibold text-slate-700 shadow-xs"
                       >
-                        {city.name}
+                        {language === 'bn' ? city.name : city.nameEn}
                       </Link>
                     ))}
                   </div>
@@ -210,16 +210,16 @@ export default function HomePage() {
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bangla text-slate-500">
                   <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    ২৪/৭ নাগরিক নজরদারি
+                    {t('hero.trustBadge')}
                   </span>
-                  <span className="text-slate-400">৮টি বিভাগে সক্রিয়</span>
+                  <span className="text-slate-400">{t('hero.divisions')}</span>
                 </div>
               </div>
 
-              {/* Handwritten style Bangla slogan */}
+              {/* Slogan */}
               <div className="pr-4 text-right">
                 <span className="font-bangla text-accent/90 text-sm tracking-wide italic font-medium drop-shadow">
-                  একসাথে আরও ভালো বাংলাদেশ ✨
+                  {t('hero.sloganHandwritten')}
                 </span>
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. FLOATING LIVE STATS BAR ("সর্বশেষ আপডেট") */}
+      {/* 2. FLOATING LIVE STATS BAR */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-30">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-civic p-4 sm:p-5 flex flex-wrap lg:flex-nowrap items-center justify-between gap-4">
           {/* Header Tag */}
@@ -237,15 +237,15 @@ export default function HomePage() {
             </div>
             <div>
               <span className="font-bangla font-black text-sm text-slate-900 block leading-tight">
-                সর্বশেষ আপডেট
+                {t('stats.latestUpdate')}
               </span>
               <span className="font-bangla text-[11px] text-slate-400 block">
-                আজ পর্যন্ত সারসংক্ষেপ মোট রিপোর্ট
+                {t('stats.summarySubtitle')}
               </span>
             </div>
           </div>
 
-          {/* Metric 1: মোট রিপোর্ট */}
+          {/* Metric 1: Total Reports */}
           <div className="flex items-center gap-3 px-3">
             <div className="w-9 h-9 rounded-full bg-primary-50 flex items-center justify-center text-primary shrink-0">
               <Clock className="w-4 h-4" />
@@ -253,19 +253,19 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black text-slate-900 leading-none">
-                  {stats.total.toLocaleString()}
+                  {formatNumber(stats.total)}
                 </span>
                 <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1 rounded">
                   ↑ 12%
                 </span>
               </div>
               <span className="font-bangla text-xs text-slate-500 font-semibold block mt-0.5">
-                মোট রিপোর্ট
+                {t('stats.totalReports')}
               </span>
             </div>
           </div>
 
-          {/* Metric 2: সমাধান হয়েছে */}
+          {/* Metric 2: Resolved */}
           <div className="flex items-center gap-3 px-3">
             <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0">
               <CheckCircle2 className="w-4 h-4" />
@@ -273,19 +273,19 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black text-slate-900 leading-none">
-                  327
+                  {formatNumber(327)}
                 </span>
                 <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1 rounded">
                   ↑ 8%
                 </span>
               </div>
               <span className="font-bangla text-xs text-slate-500 font-semibold block mt-0.5">
-                সমাধান হয়েছে
+                {t('stats.resolved')}
               </span>
             </div>
           </div>
 
-          {/* Metric 3: চলমান */}
+          {/* Metric 3: In Progress */}
           <div className="flex items-center gap-3 px-3">
             <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 shrink-0">
               <PhoneCall className="w-4 h-4" />
@@ -293,19 +293,19 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black text-slate-900 leading-none">
-                  214
+                  {formatNumber(214)}
                 </span>
                 <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1 rounded">
                   ↑ 5%
                 </span>
               </div>
               <span className="font-bangla text-xs text-slate-500 font-semibold block mt-0.5">
-                চলমান
+                {t('stats.inProgress')}
               </span>
             </div>
           </div>
 
-          {/* Metric 4: জরুরি */}
+          {/* Metric 4: Critical */}
           <div className="flex items-center gap-3 px-3">
             <div className="w-9 h-9 rounded-full bg-red-50 flex items-center justify-center text-red-600 shrink-0">
               <Flame className="w-4 h-4" />
@@ -313,14 +313,14 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xl font-black text-slate-900 leading-none">
-                  86
+                  {formatNumber(86)}
                 </span>
                 <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1 rounded">
                   ↑ 2%
                 </span>
               </div>
               <span className="font-bangla text-xs text-slate-500 font-semibold block mt-0.5">
-                জরুরি
+                {t('stats.critical')}
               </span>
             </div>
           </div>
@@ -337,10 +337,13 @@ export default function HomePage() {
             />
             <div>
               <span className="text-[10px] font-bangla text-slate-500 font-bold block uppercase">
-                আজকের হটস্পট
+                {t('stats.hotspot')}
               </span>
               <span className="font-bangla font-black text-xs text-slate-900 group-hover:text-primary transition">
-                মিরপুর ১০ <span className="text-[10px] text-slate-500 font-normal">(সর্বাধিক রিপোর্ট)</span>
+                {language === 'bn' ? 'মিরপুর ১০' : 'Mirpur 10'}{' '}
+                <span className="text-[10px] text-slate-500 font-normal">
+                  ({t('stats.hotspotMost')})
+                </span>
               </span>
             </div>
             <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-primary group-hover:translate-x-0.5 transition" />
@@ -348,7 +351,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. LIVE CITY MAP (3-COLUMN LAYOUT MATCHING MOCKUP) */}
+      {/* 3. LIVE CITY MAP (3-COLUMN LAYOUT) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         {/* Section Header with Map/Satellite and Fullscreen toggle */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -358,10 +361,10 @@ export default function HomePage() {
             </div>
             <div>
               <h2 className="text-xl font-bangla font-black text-slate-900 tracking-tight">
-                লাইভ সিটি ম্যাপ
+                {t('map.liveCityMap')}
               </h2>
               <p className="text-xs font-bangla text-slate-500">
-                ঢাকা শহরের বিভিন্ন এলাকার সমস্যাগুলোর মানচিত্রে দেখুন
+                {t('map.subtitle')}
               </p>
             </div>
           </div>
@@ -376,7 +379,7 @@ export default function HomePage() {
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                ম্যাপ
+                {t('map.mapView')}
               </button>
               <button
                 onClick={() => setMapMode('satellite')}
@@ -386,7 +389,7 @@ export default function HomePage() {
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                স্যাটেলাইট
+                {t('map.satelliteView')}
               </button>
             </div>
 
@@ -402,10 +405,10 @@ export default function HomePage() {
 
         {/* 3-Column Container */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Left Column: Filter Panel (~220px / 3 cols) */}
+          {/* Left Column: Filter Panel */}
           <div className="lg:col-span-3 bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-4 font-bangla text-xs">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-              <span className="font-black text-slate-900 text-sm">ফিল্টার করুন</span>
+              <span className="font-black text-slate-900 text-sm">{t('map.filterTitle')}</span>
               <button
                 onClick={() => {
                   setSelectedType(['roads']);
@@ -415,22 +418,22 @@ export default function HomePage() {
                 className="text-[11px] text-slate-500 hover:text-primary flex items-center gap-1"
               >
                 <RotateCcw className="w-3 h-3" />
-                <span>রিসেট</span>
+                <span>{t('map.reset')}</span>
               </button>
             </div>
 
-            {/* সমস্যার ধরন */}
+            {/* Issue Type */}
             <div className="space-y-1.5">
-              <span className="font-bold text-slate-700 block mb-1">সমস্যার ধরন</span>
+              <span className="font-bold text-slate-700 block mb-1">{t('map.issueType')}</span>
               {[
-                { id: 'roads', label: 'রোডস' },
-                { id: 'drainage', label: 'ড্রেনেজ/জলাবদ্ধতা' },
-                { id: 'waste', label: 'আবর্জনা/ময়লা' },
-                { id: 'light', label: 'স্ট্রিট লাইট' },
-                { id: 'manhole', label: 'খোলা ম্যানহোল' },
-                { id: 'wire', label: 'বিদ্যুৎ লাইন' },
-                { id: 'traffic', label: 'ট্রাফিক সিগন্যাল' },
-                { id: 'other', label: 'অন্যান্য' },
+                { id: 'roads', labelKey: 'map.roads' },
+                { id: 'drainage', labelKey: 'map.drainage' },
+                { id: 'waste', labelKey: 'map.waste' },
+                { id: 'light', labelKey: 'map.light' },
+                { id: 'manhole', labelKey: 'map.manhole' },
+                { id: 'wire', labelKey: 'map.wire' },
+                { id: 'traffic', labelKey: 'map.traffic' },
+                { id: 'other', labelKey: 'map.other' },
               ].map((item) => (
                 <label
                   key={item.id}
@@ -442,75 +445,75 @@ export default function HomePage() {
                     onChange={() => toggleType(item.id)}
                     className="rounded text-primary focus:ring-primary w-3.5 h-3.5"
                   />
-                  <span>{item.label}</span>
+                  <span>{t(item.labelKey)}</span>
                 </label>
               ))}
             </div>
 
-            {/* অবস্থা */}
+            {/* Status */}
             <div className="space-y-1.5 pt-2 border-t border-slate-200">
-              <span className="font-bold text-slate-700 block mb-1">অবস্থা</span>
+              <span className="font-bold text-slate-700 block mb-1">{t('map.status')}</span>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-600" />
-                  <span>রিপোর্টেড</span>
+                  <span>{t('map.reported')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
-                  <span>যাচাই চলছে</span>
+                  <span>{t('map.verifying')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                  <span>চলমান</span>
+                  <span>{t('map.inProgress')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-                  <span>সমাধান হয়েছে</span>
+                  <span>{t('map.resolved')}</span>
                 </div>
               </div>
             </div>
 
-            {/* গুরুত্বের মাত্রা */}
+            {/* Severity */}
             <div className="space-y-1.5 pt-2 border-t border-slate-200">
-              <span className="font-bold text-slate-700 block mb-1">গুরুত্বের মাত্রা</span>
+              <span className="font-bold text-slate-700 block mb-1">{t('map.severity')}</span>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-600" />
-                  <span>জরুরি</span>
+                  <span>{t('map.critical')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                  <span>উচ্চ</span>
+                  <span>{t('map.high')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
-                  <span>মধ্যম</span>
+                  <span>{t('map.medium')}</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                  <span>নিম্ন</span>
+                  <span>{t('map.low')}</span>
                 </div>
               </div>
             </div>
 
             <button
-              onClick={() => alert('ফিল্টার প্রয়োগ করা হয়েছে!')}
+              onClick={() => alert(language === 'bn' ? 'ফিল্টার প্রয়োগ করা হয়েছে!' : 'Filters applied successfully!')}
               className="w-full py-2 bg-primary text-white rounded-xl font-black text-xs hover:bg-primary-light transition shadow-sm"
             >
-              ফিল্টার প্রয়োগ করুন
+              {t('map.applyFilter')}
             </button>
           </div>
 
-          {/* Center Column: Interactive Map (6 cols) */}
+          {/* Center Column: Interactive Map */}
           <div className="lg:col-span-6 h-[460px] rounded-2xl overflow-hidden border border-slate-200 relative">
             <CivicMap issues={issues} height="100%" />
           </div>
 
-          {/* Right Column: কাছাকাছি সমস্যা (Nearby Issues List) (3 cols) */}
+          {/* Right Column: Nearby Issues List */}
           <div className="lg:col-span-3 bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between font-bangla space-y-3">
             <div>
               <div className="flex items-center justify-between pb-2 border-b border-slate-200 mb-3">
-                <span className="font-black text-slate-900 text-sm">কাছাকাছি সমস্যা</span>
+                <span className="font-black text-slate-900 text-sm">{t('map.nearbyIssues')}</span>
                 <span className="text-[11px] text-slate-400 font-sans">Dhaka</span>
               </div>
 
@@ -519,41 +522,41 @@ export default function HomePage() {
                 {[
                   {
                     id: 'waterlogging-farmgate-bijoy-1e82',
-                    title: 'Waterlogging',
-                    area: 'Mirpur 10 • 220 m',
-                    badge: 'জরুরি',
+                    title: language === 'bn' ? 'জলাবদ্ধতা' : 'Waterlogging',
+                    area: language === 'bn' ? 'মিরপুর ১০ • ২২০ মিটার' : 'Mirpur 10 • 220 m',
+                    badge: t('map.critical'),
                     badgeColor: 'bg-red-100 text-red-700',
                     img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=100&q=80',
                   },
                   {
                     id: 'waste-dumping-dhanmondi-27-3b44',
-                    title: 'Waste Dumping',
-                    area: 'Mirpur 11 • 450 m',
-                    badge: 'উচ্চ',
+                    title: language === 'bn' ? 'আবর্জনা অপসারণ' : 'Waste Dumping',
+                    area: language === 'bn' ? 'মিরপুর ১১ • ৪৫০ মিটার' : 'Mirpur 11 • 450 m',
+                    badge: t('map.high'),
                     badgeColor: 'bg-orange-100 text-orange-700',
                     img: 'https://images.unsplash.com/photo-1605600659908-0ef719419d41?auto=format&fit=crop&w=100&q=80',
                   },
                   {
                     id: 'street-light-gulshan-1-6d20',
-                    title: 'Street Light',
-                    area: 'Mirpur 12 • 680 m',
-                    badge: 'মধ্যম',
+                    title: language === 'bn' ? 'স্ট্রিট লাইট' : 'Street Light',
+                    area: language === 'bn' ? 'মিরপুর ১২ • ৬৮০ মিটার' : 'Mirpur 12 • 680 m',
+                    badge: t('map.medium'),
                     badgeColor: 'bg-yellow-100 text-yellow-800',
                     img: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=100&q=80',
                   },
                   {
                     id: 'road-damage-mirpur-10-8f92',
-                    title: 'Road Damage',
-                    area: 'Mirpur 10 • 900 m',
-                    badge: 'চলমান',
+                    title: language === 'bn' ? 'রোড ড্যামেজ' : 'Road Damage',
+                    area: language === 'bn' ? 'মিরপুর ১০ • ৯০০ মিটার' : 'Mirpur 10 • 900 m',
+                    badge: t('map.inProgress'),
                     badgeColor: 'bg-blue-100 text-blue-700',
                     img: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=100&q=80',
                   },
                   {
                     id: 'open-manhole-mohammadpur-9a11',
-                    title: 'Open Manhole',
-                    area: 'Mirpur 1 • 1.2 km',
-                    badge: 'যাচাই চলছে',
+                    title: language === 'bn' ? 'খোলা ম্যানহোল' : 'Open Manhole',
+                    area: language === 'bn' ? 'মিরপুর ১ • ১.২ কিমি' : 'Mirpur 1 • 1.2 km',
+                    badge: t('map.verifying'),
                     badgeColor: 'bg-cyan-100 text-cyan-800',
                     img: 'https://images.unsplash.com/photo-1541888946425-d0fbb186156f?auto=format&fit=crop&w=100&q=80',
                   },
@@ -570,7 +573,7 @@ export default function HomePage() {
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
-                        <span className="font-bold text-xs text-slate-900 group-hover:text-primary transition truncate font-sans">
+                        <span className="font-bold text-xs text-slate-900 group-hover:text-primary transition truncate">
                           {item.title}
                         </span>
                         <span className={`text-[9px] font-black px-1.5 py-0.2 rounded shrink-0 ${item.badgeColor}`}>
@@ -590,26 +593,26 @@ export default function HomePage() {
               href="/explore"
               className="text-center font-bold text-xs text-primary hover:underline flex items-center justify-center gap-1 pt-1"
             >
-              <span>সব দেখুন</span>
+              <span>{t('map.viewAll')}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 4. RECENT REPORTS ("সাম্প্রতিক রিপোর্ট") + AREA PULSE ("এলাকা পালস - মিরপুর") */}
+      {/* 4. RECENT REPORTS + AREA PULSE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: সাম্প্রতিক রিপোর্ট (8 cols) */}
+          {/* Left Column: Recent Reports */}
           <div className="lg:col-span-8 space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bangla font-black text-slate-900 tracking-tight flex items-center gap-2">
                   <span>📄</span>
-                  <span>সাম্প্রতিক রিপোর্ট</span>
+                  <span>{t('recent.title')}</span>
                 </h2>
                 <p className="text-xs font-bangla text-slate-500">
-                  সর্বশেষ যুক্ত হওয়া সমস্যাগুলো দেখুন
+                  {t('recent.subtitle')}
                 </p>
               </div>
 
@@ -617,146 +620,146 @@ export default function HomePage() {
                 href="/explore"
                 className="text-xs font-bangla font-bold text-primary hover:underline flex items-center gap-1"
               >
-                <span>সব দেখুন</span>
+                <span>{t('recent.viewAll')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
 
             {/* 4 Grid Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Card 1: রোড ড্যামেজ */}
+              {/* Card 1 */}
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-civic transition flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] bg-slate-100">
                     <img
                       src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80"
-                      alt="রোড ড্যামেজ"
+                      alt={t('recent.roadDamage')}
                       className="w-full h-full object-cover"
                     />
                     <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-red-600 text-white font-bangla font-black text-[10px]">
-                      জরুরি
+                      {t('map.critical')}
                     </span>
                   </div>
                   <div className="p-4 space-y-1.5 font-bangla">
-                    <h3 className="font-black text-sm text-slate-900">রোড ড্যামেজ</h3>
+                    <h3 className="font-black text-sm text-slate-900">{t('recent.roadDamage')}</h3>
                     <p className="text-xs text-slate-500 flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-primary" />
-                      <span>মিরপুর ১০, ঢাকা</span>
+                      <span>{language === 'bn' ? 'মিরপুর ১০, ঢাকা' : 'Mirpur 10, Dhaka'}</span>
                     </p>
-                    <p className="text-[11px] text-slate-400">🕒 ২ ঘণ্টা আগে • 💬 12</p>
+                    <p className="text-[11px] text-slate-400">🕒 {t('recent.twoHoursAgo')} • 💬 {formatNumber(12)}</p>
                   </div>
                 </div>
                 <div className="p-4 pt-0">
                   <span className="inline-block text-[11px] font-bangla font-bold px-2.5 py-1 rounded bg-amber-50 text-amber-800 border border-amber-200">
-                    যাচাই চলছে
+                    {t('recent.verifying')}
                   </span>
                 </div>
               </div>
 
-              {/* Card 2: জলাবদ্ধতা */}
+              {/* Card 2 */}
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-civic transition flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] bg-slate-100">
                     <img
                       src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80"
-                      alt="জলাবদ্ধতা"
+                      alt={t('recent.waterlogging')}
                       className="w-full h-full object-cover"
                     />
                     <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-blue-600 text-white font-bangla font-black text-[10px]">
-                      চলমান
+                      {t('map.inProgress')}
                     </span>
                   </div>
                   <div className="p-4 space-y-1.5 font-bangla">
-                    <h3 className="font-black text-sm text-slate-900">জলাবদ্ধতা</h3>
+                    <h3 className="font-black text-sm text-slate-900">{t('recent.waterlogging')}</h3>
                     <p className="text-xs text-slate-500 flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-primary" />
-                      <span>ধানমন্ডি ২৭, ঢাকা</span>
+                      <span>{language === 'bn' ? 'ধানমন্ডি ২৭, ঢাকা' : 'Dhanmondi 27, Dhaka'}</span>
                     </p>
-                    <p className="text-[11px] text-slate-400">🕒 ৩ ঘণ্টা আগে • 💬 8</p>
+                    <p className="text-[11px] text-slate-400">🕒 {t('recent.threeHoursAgo')} • 💬 {formatNumber(8)}</p>
                   </div>
                 </div>
                 <div className="p-4 pt-0">
                   <span className="inline-block text-[11px] font-bangla font-bold px-2.5 py-1 rounded bg-blue-50 text-blue-800 border border-blue-200">
-                    চলমান
+                    {t('map.inProgress')}
                   </span>
                 </div>
               </div>
 
-              {/* Card 3: স্ট্রিট লাইট (সমাধান হয়েছে) */}
+              {/* Card 3 */}
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-civic transition flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] bg-slate-100">
                     <img
                       src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80"
-                      alt="স্ট্রিট লাইট"
+                      alt={t('recent.streetLight')}
                       className="w-full h-full object-cover"
                     />
                     <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-emerald-600 text-white font-bangla font-black text-[10px]">
-                      সমাধান হয়েছে
+                      {t('map.resolved')}
                     </span>
                   </div>
                   <div className="p-4 space-y-1.5 font-bangla">
-                    <h3 className="font-black text-sm text-slate-900">স্ট্রিট লাইট</h3>
+                    <h3 className="font-black text-sm text-slate-900">{t('recent.streetLight')}</h3>
                     <p className="text-xs text-slate-500 flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-primary" />
-                      <span>উত্তরা সেক্টর ৩, ঢাকা</span>
+                      <span>{language === 'bn' ? 'উত্তরা সেক্টর ৩, ঢাকা' : 'Uttara Sector 3, Dhaka'}</span>
                     </p>
-                    <p className="text-[11px] text-slate-400">🕒 ১ দিন আগে • 💬 15</p>
+                    <p className="text-[11px] text-slate-400">🕒 {t('recent.oneDayAgo')} • 💬 {formatNumber(15)}</p>
                   </div>
                 </div>
                 <div className="p-4 pt-0">
                   <span className="inline-block text-[11px] font-bangla font-bold px-2.5 py-1 rounded bg-cyan-50 text-cyan-800 border border-cyan-200">
-                    নাগরিক ভেরিফিকেশন অপেক্ষমাণ
+                    {t('recent.waitingVerification')}
                   </span>
                 </div>
               </div>
 
-              {/* Card 4: আবর্জনা */}
+              {/* Card 4 */}
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-civic transition flex flex-col justify-between">
                 <div>
                   <div className="relative aspect-[16/10] bg-slate-100">
                     <img
                       src="https://images.unsplash.com/photo-1605600659908-0ef719419d41?auto=format&fit=crop&w=600&q=80"
-                      alt="আবর্জনা"
+                      alt={t('recent.waste')}
                       className="w-full h-full object-cover"
                     />
                     <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-orange-600 text-white font-bangla font-black text-[10px]">
-                      উচ্চ
+                      {t('map.high')}
                     </span>
                   </div>
                   <div className="p-4 space-y-1.5 font-bangla">
-                    <h3 className="font-black text-sm text-slate-900">আবর্জনা</h3>
+                    <h3 className="font-black text-sm text-slate-900">{t('recent.waste')}</h3>
                     <p className="text-xs text-slate-500 flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-primary" />
-                      <span>মোহাম্মদপুর রিং রোড, ঢাকা</span>
+                      <span>{language === 'bn' ? 'মোহাম্মদপুর রিং রোড, ঢাকা' : 'Mohammadpur Ring Road, Dhaka'}</span>
                     </p>
-                    <p className="text-[11px] text-slate-400">🕒 ১ দিন আগে • 💬 9</p>
+                    <p className="text-[11px] text-slate-400">🕒 {t('recent.oneDayAgo')} • 💬 {formatNumber(9)}</p>
                   </div>
                 </div>
                 <div className="p-4 pt-0">
                   <span className="inline-block text-[11px] font-bangla font-bold px-2.5 py-1 rounded bg-slate-100 text-slate-700 border border-slate-200">
-                    বিস্তারিত
+                    {t('recent.details')}
                   </span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: এলাকা পালস - মিরপুর (4 cols) */}
+          {/* Right Column: Area Pulse */}
           <div className="lg:col-span-4 bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-5 font-bangla">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <span className="text-primary text-base">📍</span>
                 <div>
-                  <h3 className="font-black text-slate-900 text-base">এলাকা পালস</h3>
-                  <span className="font-bold text-primary text-sm">মিরপুর</span>
+                  <h3 className="font-black text-slate-900 text-base">{t('pulse.title')}</h3>
+                  <span className="font-bold text-primary text-sm">{t('pulse.mirpur')}</span>
                 </div>
               </div>
               <Link
                 href="/nagar/mirpur"
                 className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
               >
-                <span>বিস্তারিত</span>
+                <span>{t('pulse.details')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -786,8 +789,8 @@ export default function HomePage() {
                   />
                 </svg>
                 <div className="absolute flex flex-col items-center text-center">
-                  <span className="text-[10px] text-slate-400 font-bold uppercase">মোট রিপোর্ট</span>
-                  <span className="text-xl font-black text-slate-900 font-sans">184</span>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase">{t('pulse.totalReports')}</span>
+                  <span className="text-xl font-black text-slate-900 font-sans">{formatNumber(184)}</span>
                   <span className="text-[10px] text-emerald-600 font-bold font-sans">↑ 18%</span>
                 </div>
               </div>
@@ -798,9 +801,9 @@ export default function HomePage() {
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-slate-700">
                   <span className="w-2 h-2 rounded-full bg-primary" />
-                  <span>রোড</span>
+                  <span>{t('pulse.road')}</span>
                 </span>
-                <span className="text-slate-500 font-sans">48</span>
+                <span className="text-slate-500 font-sans">{formatNumber(48)}</span>
               </div>
               <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div className="h-full bg-primary rounded-full w-[48%]" />
@@ -809,9 +812,9 @@ export default function HomePage() {
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-slate-700">
                   <span className="w-2 h-2 rounded-full bg-blue-500" />
-                  <span>ড্রেনেজ</span>
+                  <span>{t('pulse.drainage')}</span>
                 </span>
-                <span className="text-slate-500 font-sans">32</span>
+                <span className="text-slate-500 font-sans">{formatNumber(32)}</span>
               </div>
               <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div className="h-full bg-blue-500 rounded-full w-[32%]" />
@@ -820,9 +823,9 @@ export default function HomePage() {
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-slate-700">
                   <span className="w-2 h-2 rounded-full bg-amber-500" />
-                  <span>আবর্জনা</span>
+                  <span>{t('pulse.waste')}</span>
                 </span>
-                <span className="text-slate-500 font-sans">28</span>
+                <span className="text-slate-500 font-sans">{formatNumber(28)}</span>
               </div>
               <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div className="h-full bg-amber-500 rounded-full w-[28%]" />
@@ -831,9 +834,9 @@ export default function HomePage() {
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-slate-700">
                   <span className="w-2 h-2 rounded-full bg-yellow-500" />
-                  <span>স্ট্রিট লাইট</span>
+                  <span>{t('pulse.streetLight')}</span>
                 </span>
-                <span className="text-slate-500 font-sans">21</span>
+                <span className="text-slate-500 font-sans">{formatNumber(21)}</span>
               </div>
               <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div className="h-full bg-yellow-500 rounded-full w-[21%]" />
@@ -842,9 +845,9 @@ export default function HomePage() {
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-slate-700">
                   <span className="w-2 h-2 rounded-full bg-slate-400" />
-                  <span>অন্যান্য</span>
+                  <span>{t('pulse.other')}</span>
                 </span>
-                <span className="text-slate-500 font-sans">55</span>
+                <span className="text-slate-500 font-sans">{formatNumber(55)}</span>
               </div>
               <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div className="h-full bg-slate-400 rounded-full w-[55%]" />
@@ -854,7 +857,7 @@ export default function HomePage() {
             {/* Bottom Success Banner */}
             <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-900 text-[11px] font-bold flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>এই এলাকার সমাধান হয়েছে ৭২ টি সমস্যা এই মাসে</span>
+              <span>{t('pulse.resolvedBanner')}</span>
             </div>
           </div>
         </div>
@@ -863,31 +866,31 @@ export default function HomePage() {
       {/* 5. MOBILE APP PROMOTION BANNER + 4 FEATURE PILLARS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          {/* Mobile App Banner (5 cols) */}
+          {/* Mobile App Banner */}
           <div className="lg:col-span-5 bg-gradient-to-br from-emerald-100 via-teal-50 to-emerald-200/50 rounded-3xl p-6 sm:p-7 border border-emerald-200/60 shadow-sm flex flex-col justify-between relative overflow-hidden font-bangla">
             <div className="space-y-2 z-10">
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
-                মোবাইলে সহজেই রিপোর্ট করুন
+                {t('app.title')}
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                অ্যান্ড্রয়েড ও আইওএস অ্যাপ খুব শিগগিরই আসছে, ততদিন ওয়েবই ব্যবহার করুন।
+                {t('app.subtitle')}
               </p>
             </div>
 
             {/* App Store Buttons */}
             <div className="flex items-center gap-3 pt-4 z-10">
               <button
-                onClick={() => alert('অ্যান্ড্রয়েড অ্যাপ শিগগিরই প্লে-স্টোরে আসছে!')}
+                onClick={() => alert(language === 'bn' ? 'অ্যান্ড্রয়েড অ্যাপ শিগগিরই প্লে-স্টোরে আসছে!' : 'Android app coming soon to Google Play!')}
                 className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 text-white text-[11px] font-sans font-bold hover:bg-black transition shadow"
               >
-                <span>Google Play</span>
+                <span>{t('app.playStore')}</span>
               </button>
 
               <button
-                onClick={() => alert('আইওএস অ্যাপ শিগগিরই অ্যাপ স্টোরে আসছে!')}
+                onClick={() => alert(language === 'bn' ? 'আইওএস অ্যাপ শিগগিরই অ্যাপ স্টোরে আসছে!' : 'iOS app coming soon to App Store!')}
                 className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 text-white text-[11px] font-sans font-bold hover:bg-black transition shadow"
               >
-                <span>App Store</span>
+                <span>{t('app.appStore')}</span>
               </button>
             </div>
 
@@ -901,7 +904,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* 4 Feature Pillars (7 cols) */}
+          {/* 4 Feature Pillars */}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-3.5 items-stretch">
             {/* Pillar 1 */}
             <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between space-y-2 font-bangla">
@@ -909,8 +912,8 @@ export default function HomePage() {
                 <Zap className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-black text-xs sm:text-sm text-slate-900">দ্রুত রিপোর্ট</h4>
-                <p className="text-[11px] text-slate-500 mt-1">কয়েক সেকেন্ডে রিপোর্ট করুন</p>
+                <h4 className="font-black text-xs sm:text-sm text-slate-900">{t('app.pillar1Title')}</h4>
+                <p className="text-[11px] text-slate-500 mt-1">{t('app.pillar1Sub')}</p>
               </div>
             </div>
 
@@ -920,8 +923,8 @@ export default function HomePage() {
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-black text-xs sm:text-sm text-slate-900">রিয়েল-টাইম আপডেট</h4>
-                <p className="text-[11px] text-slate-500 mt-1">আপনার রিপোর্টের অগ্রগতি দেখুন</p>
+                <h4 className="font-black text-xs sm:text-sm text-slate-900">{t('app.pillar2Title')}</h4>
+                <p className="text-[11px] text-slate-500 mt-1">{t('app.pillar2Sub')}</p>
               </div>
             </div>
 
@@ -931,8 +934,8 @@ export default function HomePage() {
                 <Users className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-black text-xs sm:text-sm text-slate-900">কমিউনিটি ভেরিফিকেশন</h4>
-                <p className="text-[11px] text-slate-500 mt-1">ভুয়া রোধে, একসাথে নিশ্চিত করুন</p>
+                <h4 className="font-black text-xs sm:text-sm text-slate-900">{t('app.pillar3Title')}</h4>
+                <p className="text-[11px] text-slate-500 mt-1">{t('app.pillar3Sub')}</p>
               </div>
             </div>
 
@@ -942,8 +945,8 @@ export default function HomePage() {
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-black text-xs sm:text-sm text-slate-900">স্বচ্ছতা ও জবাবদিহিতা</h4>
-                <p className="text-[11px] text-slate-500 mt-1">প্রতিটি কাজের ইতিহাস দেখুন</p>
+                <h4 className="font-black text-xs sm:text-sm text-slate-900">{t('app.pillar4Title')}</h4>
+                <p className="text-[11px] text-slate-500 mt-1">{t('app.pillar4Sub')}</p>
               </div>
             </div>
           </div>

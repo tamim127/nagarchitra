@@ -37,7 +37,7 @@ import {
 
 export default function StatisticsPage() {
   const { issues } = useIssues();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
 
   // Active Sidebar Item
   const [activeSidebar, setActiveSidebar] = useState('dashboard');
@@ -67,21 +67,21 @@ export default function StatisticsPage() {
                 }`}
               >
                 <Home className="w-4 h-4 text-primary" />
-                <span>ড্যাশবোর্ড</span>
+                <span>{t('Dashboard', 'ড্যাশবোর্ড')}</span>
               </button>
 
               {/* Section 1: মুখ্য প্যানেল */}
               <div className="space-y-1">
                 <span className="text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider block">
-                  মুখ্য প্যানেল
+                  {t('Main Panel', 'মুখ্য প্যানেল')}
                 </span>
 
                 {[
-                  { id: 'all_issues', label: 'সমস্ত সমস্যা', icon: '🚨' },
-                  { id: 'category_analysis', label: 'দলভিত্তিক বিশ্লেষণ', icon: '🔀' },
-                  { id: 'area_reports', label: 'এলাকা ভিত্তিক রিপোর্ট', icon: '🏛️' },
-                  { id: 'resolution_rate', label: 'সমাধানের হার', icon: '🛠️' },
-                  { id: 'time_analysis', label: 'সময়ের বিশ্লেষণ', icon: '⏱️' },
+                  { id: 'all_issues', label: t('All Issues', 'সমস্ত সমস্যা'), icon: '🚨' },
+                  { id: 'category_analysis', label: t('Category Analysis', 'দলভিত্তিক বিশ্লেষণ'), icon: '🔀' },
+                  { id: 'area_reports', label: t('Area Reports', 'এলাকা ভিত্তিক রিপোর্ট'), icon: '🏛️' },
+                  { id: 'resolution_rate', label: t('Resolution Rate', 'সমাধানের হার'), icon: '🛠️' },
+                  { id: 'time_analysis', label: t('Time Analysis', 'সময়ের বিশ্লেষণ'), icon: '⏱️' },
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -101,7 +101,7 @@ export default function StatisticsPage() {
               {/* Section 2: ডাটা ও রিপোর্ট */}
               <div className="space-y-1 pt-2 border-t border-slate-100">
                 <span className="text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider block">
-                  ডাটা ও রিপোর্ট
+                  {t('Data & Reports', 'ডাটা ও রিপোর্ট')}
                 </span>
 
                 <Link
@@ -109,7 +109,7 @@ export default function StatisticsPage() {
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition"
                 >
                   <FileText className="w-3.5 h-3.5 text-slate-500" />
-                  <span>রিপোর্ট এক্সপোর্ট</span>
+                  <span>{t('Export Report', 'রিপোর্ট এক্সপোর্ট')}</span>
                 </Link>
 
                 <Link
@@ -117,21 +117,21 @@ export default function StatisticsPage() {
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition"
                 >
                   <Database className="w-3.5 h-3.5 text-slate-500" />
-                  <span>ওপেন ডাটা (পরীক্ষামূলক)</span>
+                  <span>{t('Open Data (Beta)', 'ওপেন ডাটা (পরীক্ষামূলক)')}</span>
                 </Link>
               </div>
 
               {/* Section 3: সেটিংস */}
               <div className="space-y-1 pt-2 border-t border-slate-100">
                 <span className="text-[10px] font-bold text-slate-400 px-3 uppercase tracking-wider block">
-                  সেটিংস
+                  {t('Settings', 'সেটিংস')}
                 </span>
 
                 {[
-                  { id: 'cat_manage', label: 'ক্যাটাগরি ম্যানেজমেন্ট', icon: <Sliders className="w-3.5 h-3.5 text-slate-400" /> },
-                  { id: 'area_manage', label: 'এলাকা ম্যানেজমেন্ট', icon: <MapPin className="w-3.5 h-3.5 text-slate-400" /> },
-                  { id: 'user_manage', label: 'ব্যবহারকারী ব্যবস্থাপনা', icon: <Users className="w-3.5 h-3.5 text-slate-400" /> },
-                  { id: 'system_settings', label: 'সিস্টেম সেটিংস', icon: <Settings className="w-3.5 h-3.5 text-slate-400" /> },
+                  { id: 'cat_manage', label: t('Category Management', 'ক্যাটাগরি ম্যানেজমেন্ট'), icon: <Sliders className="w-3.5 h-3.5 text-slate-400" /> },
+                  { id: 'area_manage', label: t('Area Management', 'এলাকা ম্যানেজমেন্ট'), icon: <MapPin className="w-3.5 h-3.5 text-slate-400" /> },
+                  { id: 'user_manage', label: t('User Management', 'ব্যবহারকারী ব্যবস্থাপনা'), icon: <Users className="w-3.5 h-3.5 text-slate-400" /> },
+                  { id: 'system_settings', label: t('System Settings', 'সিস্টেম সেটিংস'), icon: <Settings className="w-3.5 h-3.5 text-slate-400" /> },
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -186,13 +186,13 @@ export default function StatisticsPage() {
                   href="/statistics"
                   className="text-[11px] font-bold text-slate-400 hover:text-primary transition inline-flex items-center gap-1"
                 >
-                  &lt; পরিসংখ্যান ড্যাশবোর্ড
+                  &lt; {t('Statistics Dashboard', 'পরিসংখ্যান ড্যাশবোর্ড')}
                 </Link>
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                  নগরচিত্র - সিটিজেন ইনসাইটস
+                  {t('NagarChitra - Citizen Insights', 'নগরচিত্র - সিটিজেন ইনসাইটস')}
                 </h1>
                 <p className="text-xs text-slate-500 font-medium">
-                  বিভিন্ন এলাকায় সমস্যা, সমাধান ও নাগরিক অংশগ্রহণের সারসংক্ষেপ
+                  {t('Summary of civic issues, resolutions and community engagement across areas', 'বিভিন্ন এলাকায় সমস্যা, সমাধান ও নাগরিক অংশগ্রহণের সারসংক্ষেপ')}
                 </p>
               </div>
 
@@ -205,15 +205,15 @@ export default function StatisticsPage() {
 
                 <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 shadow-2xs">
                   <MapPin className="w-3.5 h-3.5 text-primary" />
-                  <span>{selectedArea}</span>
+                  <span>{t('Dhaka Metropolitan (All Areas)', selectedArea)}</span>
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </div>
 
                 {/* Right Green Info Card with Bangladesh outline & Skyline */}
                 <div className="hidden xl:flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-[#E8F5F1] border border-emerald-200/80 text-emerald-950 relative overflow-hidden min-w-[230px]">
                   <div className="relative z-10 space-y-0.5">
-                    <strong className="block text-xs font-bold text-[#0D3833]">তথ্যভিত্তিক নাগরিক অংশগ্রহণ</strong>
-                    <span className="text-[10px] text-emerald-800 font-medium">গড়ে তোলে উন্নত নগর</span>
+                    <strong className="block text-xs font-bold text-[#0D3833]">{t('Data-driven Civic Engagement', 'তথ্যভিত্তিক নাগরিক অংশগ্রহণ')}</strong>
+                    <span className="text-[10px] text-emerald-800 font-medium">{t('Builds a better city', 'গড়ে তোলে উন্নত নগর')}</span>
                   </div>
                   {/* Silhouette Skyline Graphic */}
                   <div className="relative w-16 h-10 shrink-0 opacity-40">
@@ -237,9 +237,9 @@ export default function StatisticsPage() {
                   🚨
                 </div>
                 <div className="space-y-0.5">
-                  <span className="text-xs text-slate-500 font-semibold block">মোট রিপোর্ট</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">1,248</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 12% গত ৩০ দিনে</span>
+                  <span className="text-xs text-slate-500 font-semibold block">{t('Total Reports', 'মোট রিপোর্ট')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('1,248')}</div>
+                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 12% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
                 </div>
               </div>
 
@@ -249,9 +249,9 @@ export default function StatisticsPage() {
                   ✓
                 </div>
                 <div className="space-y-0.5">
-                  <span className="text-xs text-slate-500 font-semibold block">সমাধান হয়েছে</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">327</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 18% গত ৩০ দিনে</span>
+                  <span className="text-xs text-slate-500 font-semibold block">{t('Resolved', 'সমাধান হয়েছে')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('327')}</div>
+                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 18% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
                 </div>
               </div>
 
@@ -261,9 +261,9 @@ export default function StatisticsPage() {
                   ⏱️
                 </div>
                 <div className="space-y-0.5">
-                  <span className="text-xs text-slate-500 font-semibold block">চলমান</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">214</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 5% গত ৩০ দিনে</span>
+                  <span className="text-xs text-slate-500 font-semibold block">{t('In Progress', 'চলমান')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('214')}</div>
+                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 5% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
                 </div>
               </div>
 
@@ -273,9 +273,9 @@ export default function StatisticsPage() {
                   🔔
                 </div>
                 <div className="space-y-0.5">
-                  <span className="text-xs text-slate-500 font-semibold block">গুরুতর (Critical)</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">86</div>
-                  <span className="text-[10px] font-bold text-red-600 block">↑ 3% গত ৩০ দিনে</span>
+                  <span className="text-xs text-slate-500 font-semibold block">{t('Critical', 'গুরুতর (Critical)')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('86')}</div>
+                  <span className="text-[10px] font-bold text-red-600 block">↑ 3% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
                 </div>
               </div>
 
@@ -285,9 +285,9 @@ export default function StatisticsPage() {
                   👥
                 </div>
                 <div className="space-y-0.5">
-                  <span className="text-xs text-slate-500 font-semibold block">নাগরিক যাচাই সম্পন্ন</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">142</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 20% গত ৩০ দিনে</span>
+                  <span className="text-xs text-slate-500 font-semibold block">{t('Citizen Verified', 'নাগরিক যাচাই সম্পন্ন')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('142')}</div>
+                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 20% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
                 </div>
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function StatisticsPage() {
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-black text-slate-900">
-                      সমস্যার প্রবণতা <span className="text-xs text-slate-400 font-normal">(গত ৩০ দিন)</span>
+                      {t('Issue Trends', 'সমস্যার প্রবণতা')} <span className="text-xs text-slate-400 font-normal">{t('(Last 30 Days)', '(গত ৩০ দিন)')}</span>
                     </span>
                   </div>
 
@@ -311,7 +311,7 @@ export default function StatisticsPage() {
                         trendTab === 'reports' ? 'bg-[#08221E] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      মোট রিপোর্ট
+                      {t('Total Reports', 'মোট রিপোর্ট')}
                     </button>
                     <button
                       onClick={() => setTrendTab('resolution')}
@@ -319,7 +319,7 @@ export default function StatisticsPage() {
                         trendTab === 'resolution' ? 'bg-[#08221E] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      সমাধান হার
+                      {t('Resolution Rate', 'সমাধান হার')}
                     </button>
                     <button
                       onClick={() => setTrendTab('time')}
@@ -327,7 +327,7 @@ export default function StatisticsPage() {
                         trendTab === 'time' ? 'bg-[#08221E] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
-                      গড় সময়
+                      {t('Avg. Time', 'গড় সময়')}
                     </button>
                   </div>
                 </div>
@@ -418,23 +418,23 @@ export default function StatisticsPage() {
                   <div className="md:col-span-3 space-y-2.5 text-xs font-semibold pl-2">
                     <div className="flex items-center gap-2 text-slate-700">
                       <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-2xs" />
-                      <span>রাস্তা ও অবকাঠামো</span>
+                      <span>{t('Roads & Infrastructure', 'রাস্তা ও অবকাঠামো')}</span>
                     </div>
                     <div className="flex items-center gap-2 text-slate-700">
                       <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shadow-2xs" />
-                      <span>পানি ও ড্রেনেজ</span>
+                      <span>{t('Water & Drainage', 'পানি ও ড্রেনেজ')}</span>
                     </div>
                     <div className="flex items-center gap-2 text-slate-700">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-2xs" />
-                      <span>বর্জ্য ও পরিবেশ</span>
+                      <span>{t('Waste & Environment', 'বর্জ্য ও পরিবেশ')}</span>
                     </div>
                     <div className="flex items-center gap-2 text-slate-700">
                       <span className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-2xs" />
-                      <span>স্ট্রিট লাইট</span>
+                      <span>{t('Street Light', 'স্ট্রিট লাইট')}</span>
                     </div>
                     <div className="flex items-center gap-2 text-slate-700">
                       <span className="w-2.5 h-2.5 rounded-full bg-slate-400 shadow-2xs" />
-                      <span>অন্যান্য</span>
+                      <span>{t('Other', 'অন্যান্য')}</span>
                     </div>
                   </div>
                 </div>
@@ -443,7 +443,7 @@ export default function StatisticsPage() {
               {/* Right Chart (4 cols): সমস্যার ধরন (Donut + Breakdown) */}
               <div className="lg:col-span-4 bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-xs flex flex-col justify-between space-y-4">
                 <h3 className="font-black text-sm text-slate-900 border-b border-slate-100 pb-3">
-                  সমস্যার ধরন
+                  {t('Issue Type', 'সমস্যার ধরন')}
                 </h3>
 
                 <div className="flex items-center gap-4">
@@ -458,8 +458,8 @@ export default function StatisticsPage() {
                       <circle cx="50" cy="50" r="38" stroke="#94A3B8" strokeWidth="12" strokeDasharray="238.7" strokeDashoffset="225" fill="transparent" />
                     </svg>
                     <div className="absolute flex flex-col items-center">
-                      <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">মোট রিপোর্ট</span>
-                      <span className="text-lg font-black text-slate-900 font-sans leading-none mt-0.5">1,248</span>
+                      <span className="text-[9px] uppercase tracking-wider text-slate-400 font-bold">{t('Total Reports', 'মোট রিপোর্ট')}</span>
+                      <span className="text-lg font-black text-slate-900 font-sans leading-none mt-0.5">{formatNumber('1,248')}</span>
                     </div>
                   </div>
 
@@ -468,49 +468,49 @@ export default function StatisticsPage() {
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-slate-700">
                         <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                        <span>রাস্তা ও অবকাঠামো</span>
+                        <span>{t('Roads & Infrastructure', 'রাস্তা ও অবকাঠামো')}</span>
                       </span>
-                      <span className="font-sans font-bold text-slate-900">428 <span className="text-[10px] text-slate-400 font-normal">34%</span></span>
+                      <span className="font-sans font-bold text-slate-900">{formatNumber('428')} <span className="text-[10px] text-slate-400 font-normal">34%</span></span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-slate-700">
                         <span className="w-2.5 h-2.5 rounded-full bg-sky-500" />
-                        <span>পানি ও ড্রেনেজ</span>
+                        <span>{t('Water & Drainage', 'পানি ও ড্রেনেজ')}</span>
                       </span>
-                      <span className="font-sans font-bold text-slate-900">276 <span className="text-[10px] text-slate-400 font-normal">22%</span></span>
+                      <span className="font-sans font-bold text-slate-900">{formatNumber('276')} <span className="text-[10px] text-slate-400 font-normal">22%</span></span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-slate-700">
                         <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                        <span>বর্জ্য ও পরিবেশ</span>
+                        <span>{t('Waste & Environment', 'বর্জ্য ও পরিবেশ')}</span>
                       </span>
-                      <span className="font-sans font-bold text-slate-900">198 <span className="text-[10px] text-slate-400 font-normal">16%</span></span>
+                      <span className="font-sans font-bold text-slate-900">{formatNumber('198')} <span className="text-[10px] text-slate-400 font-normal">16%</span></span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-slate-700">
                         <span className="w-2.5 h-2.5 rounded-full bg-purple-500" />
-                        <span>স্ট্রিট লাইট</span>
+                        <span>{t('Street Light', 'স্ট্রিট লাইট')}</span>
                       </span>
-                      <span className="font-sans font-bold text-slate-900">156 <span className="text-[10px] text-slate-400 font-normal">12%</span></span>
+                      <span className="font-sans font-bold text-slate-900">{formatNumber('156')} <span className="text-[10px] text-slate-400 font-normal">12%</span></span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-slate-700">
                         <span className="w-2.5 h-2.5 rounded-full bg-pink-500" />
-                        <span>নিরাপত্তা</span>
+                        <span>{t('Public Safety', 'নিরাপত্তা')}</span>
                       </span>
-                      <span className="font-sans font-bold text-slate-900">102 <span className="text-[10px] text-slate-400 font-normal">8%</span></span>
+                      <span className="font-sans font-bold text-slate-900">{formatNumber('102')} <span className="text-[10px] text-slate-400 font-normal">8%</span></span>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-slate-700">
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
-                        <span>অন্যান্য</span>
+                        <span>{t('Other', 'অন্যান্য')}</span>
                       </span>
-                      <span className="font-sans font-bold text-slate-900">88 <span className="text-[10px] text-slate-400 font-normal">7%</span></span>
+                      <span className="font-sans font-bold text-slate-900">{formatNumber('88')} <span className="text-[10px] text-slate-400 font-normal">7%</span></span>
                     </div>
                   </div>
                 </div>
@@ -523,7 +523,7 @@ export default function StatisticsPage() {
               <div className="lg:col-span-8 bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                   <h3 className="font-black text-sm text-slate-900">
-                    সাম্প্রতিক রিপোর্টসমূহ
+                    {t('Recent Reports', 'সাম্প্রতিক রিপোর্টসমূহ')}
                   </h3>
 
                   <div className="flex items-center gap-2">
@@ -533,14 +533,14 @@ export default function StatisticsPage() {
                         type="text"
                         value={tableSearch}
                         onChange={(e) => setTableSearch(e.target.value)}
-                        placeholder="সমস্যা আইডি, এলাকা বা কীওয়ার্ড দিয়ে খুঁজুন..."
+                        placeholder={t('Search by ID, area or keywords...', 'সমস্যা আইডি, এলাকা বা কীওয়ার্ড দিয়ে খুঁজুন...')}
                         className="pl-8 pr-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bangla focus:outline-none focus:ring-1 focus:ring-primary w-52 sm:w-64"
                       />
                     </div>
 
                     <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition shadow-2xs">
                       <Filter className="w-3 h-3 text-slate-500" />
-                      <span>ফিল্টার</span>
+                      <span>{t('Filter', 'ফিল্টার')}</span>
                     </button>
                   </div>
                 </div>
@@ -550,13 +550,13 @@ export default function StatisticsPage() {
                   <table className="w-full text-left text-xs">
                     <thead className="bg-slate-50/80 text-slate-500 font-bold uppercase tracking-wider text-[11px] border-b border-slate-200">
                       <tr>
-                        <th className="px-3 py-2.5">সমস্যা আইডি</th>
-                        <th className="px-3 py-2.5">সমস্যার ধরন</th>
-                        <th className="px-3 py-2.5">স্থান / এলাকা</th>
-                        <th className="px-3 py-2.5">গুরুতরতা</th>
-                        <th className="px-3 py-2.5">স্ট্যাটাস</th>
-                        <th className="px-3 py-2.5">রিপোর্টের সময়</th>
-                        <th className="px-3 py-2.5 text-right">অ্যাকশন</th>
+                        <th className="px-3 py-2.5">{t('Issue ID', 'সমস্যা আইডি')}</th>
+                        <th className="px-3 py-2.5">{t('Issue Type', 'সমস্যার ধরন')}</th>
+                        <th className="px-3 py-2.5">{t('Location / Area', 'স্থান / এলাকা')}</th>
+                        <th className="px-3 py-2.5">{t('Severity', 'গুরুতরতা')}</th>
+                        <th className="px-3 py-2.5">{t('Status', 'স্ট্যাটাস')}</th>
+                        <th className="px-3 py-2.5">{t('Report Time', 'রিপোর্টের সময়')}</th>
+                        <th className="px-3 py-2.5 text-right">{t('Action', 'অ্যাকশন')}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
@@ -627,27 +627,27 @@ export default function StatisticsPage() {
                             <img src={row.img} alt={row.title} className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-200" />
                             <span>{row.id}</span>
                           </td>
-                          <td className="px-3 py-2.5 font-bold text-slate-900">{row.title}</td>
-                          <td className="px-3 py-2.5 text-slate-600">{row.area}</td>
+                          <td className="px-3 py-2.5 font-bold text-slate-900">{t(row.title)}</td>
+                          <td className="px-3 py-2.5 text-slate-600">{t(row.area)}</td>
                           <td className="px-3 py-2.5">
                             <span className={`px-2 py-0.5 rounded-full border text-[10px] ${row.sevColor}`}>
-                              {row.severity}
+                              {t(row.severity)}
                             </span>
                           </td>
                           <td className="px-3 py-2.5">
                             <span className={`px-2 py-0.5 rounded-full border text-[10px] ${row.statusColor}`}>
-                              {row.status}
+                              {t(row.status)}
                             </span>
                           </td>
                           <td className="px-3 py-2.5 text-slate-500 font-bangla text-[11px] whitespace-nowrap">
-                            {row.time}
+                            {t(row.time)}
                           </td>
                           <td className="px-3 py-2.5 text-right whitespace-nowrap">
                             <Link
                               href={row.link}
                               className="px-3 py-1 rounded-lg bg-[#0B3D3A] text-white font-bold text-[11px] hover:bg-[#145955] transition inline-flex items-center gap-1 shadow-2xs"
                             >
-                              <span>বিস্তারিত</span>
+                              <span>{t('Details', 'বিস্তারিত')}</span>
                               <ChevronRight className="w-3 h-3" />
                             </Link>
                           </td>
@@ -661,9 +661,9 @@ export default function StatisticsPage() {
               {/* Right (4 cols): হটস্পট এলাকা (ম্যাপ) */}
               <div className="lg:col-span-4 bg-white rounded-3xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <h3 className="font-black text-sm text-slate-900">হটস্পট এলাকা</h3>
+                  <h3 className="font-black text-sm text-slate-900">{t('Hotspot Areas', 'হটস্পট এলাকা')}</h3>
                   <Link href="/explore" className="text-xs text-primary font-bold hover:underline flex items-center gap-0.5">
-                    <span>সম্পূর্ণ দেখুন</span>
+                    <span>{t('View All', 'সম্পূর্ণ দেখুন')}</span>
                     <ChevronRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -682,7 +682,7 @@ export default function StatisticsPage() {
                           <span className="w-1.5 h-1.5 rounded-full bg-white" />
                         </div>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">উত্তরা</span>
+                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">{t('Uttara', 'উত্তরা')}</span>
                     </div>
 
                     {/* গুলশান Hotspot */}
@@ -693,7 +693,7 @@ export default function StatisticsPage() {
                           <span className="w-1.5 h-1.5 rounded-full bg-white" />
                         </div>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">গুলশান</span>
+                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">{t('Gulshan', 'গুলশান')}</span>
                     </div>
 
                     {/* মিরপুর Hotspot */}
@@ -704,7 +704,7 @@ export default function StatisticsPage() {
                           <span className="w-1.5 h-1.5 rounded-full bg-white" />
                         </div>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">মিরপুর</span>
+                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">{t('Mirpur', 'মিরপুর')}</span>
                     </div>
 
                     {/* ধানমন্ডি Hotspot */}
@@ -715,7 +715,7 @@ export default function StatisticsPage() {
                           <span className="w-1.5 h-1.5 rounded-full bg-white" />
                         </div>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">ধানমন্ডি</span>
+                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">{t('Dhanmondi', 'ধানমন্ডি')}</span>
                     </div>
 
                     {/* মোহাম্মদপুর Hotspot */}
@@ -726,7 +726,7 @@ export default function StatisticsPage() {
                           <span className="w-1.5 h-1.5 rounded-full bg-white" />
                         </div>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">মোহাম্মদপুর</span>
+                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">{t('Mohammadpur', 'মোহাম্মদপুর')}</span>
                     </div>
 
                     {/* ফার্মগেট Hotspot */}
@@ -737,7 +737,7 @@ export default function StatisticsPage() {
                           <span className="w-1 h-1 rounded-full bg-white" />
                         </div>
                       </div>
-                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">ফার্মগেট</span>
+                      <span className="text-[11px] font-bold text-slate-900 bg-white/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs">{t('Farmgate', 'ফার্মগেট')}</span>
                     </div>
                   </div>
 
@@ -754,10 +754,10 @@ export default function StatisticsPage() {
 
                 {/* Bottom Heatmap Intensity Legend matching mockup */}
                 <div className="flex items-center justify-between text-[11px] text-slate-600 px-2 pt-1 font-semibold">
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> কম</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-yellow-400" /> মাঝারি</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-orange-500" /> বেশি</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-600" /> খুব বেশি</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> {t('Low', 'কম')}</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-yellow-400" /> {t('Medium', 'মাঝারি')}</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-orange-500" /> {t('High', 'বেশি')}</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-red-600" /> {t('Very High', 'খুব বেশি')}</span>
                 </div>
               </div>
             </div>
@@ -771,17 +771,20 @@ export default function StatisticsPage() {
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-lg font-black text-white leading-snug">
-                    আপনার এলাকার সারসংক্ষেপ
+                    {t('Your Area Summary', 'আপনার এলাকার সারসংক্ষেপ')}
                   </h3>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    মিরপুর এলাকায় গত ৩০ দিনে সবচেয়ে বেশি রিপোর্ট হয়েছে রাস্তা ক্ষতিগ্রস্ত (৩২%), তারপর জলাবদ্ধতা (২১%) এবং বর্জ্য (১৫%) সম্পর্কিত।
+                    {t(
+                      'In Mirpur area over the last 30 days, most reported issues are road damage (32%), followed by waterlogging (21%) and waste (15%).',
+                      'মিরপুর এলাকায় গত ৩০ দিনে সবচেয়ে বেশি রিপোর্ট হয়েছে রাস্তা ক্ষতিগ্রস্ত (৩২%), তারপর জলাবদ্ধতা (২১%) এবং বর্জ্য (১৫%) সম্পর্কিত।'
+                    )}
                   </p>
                   <div className="pt-2">
                     <Link
                       href="/nagar/mirpur"
                       className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-accent text-xs font-bold border border-accent/30 transition shadow-2xs"
                     >
-                      <span>এলাকা বিস্তারিত দেখুন</span>
+                      <span>{t('View Area Details', 'এলাকা বিস্তারিত দেখুন')}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -804,35 +807,35 @@ export default function StatisticsPage() {
                 <div className="p-3 bg-[#0A332E] border border-emerald-500/30 rounded-2xl text-center shrink-0 min-w-[130px]">
                   <div className="flex items-center justify-center gap-1 text-emerald-400 mb-0.5">
                     <MapPin className="w-3.5 h-3.5" />
-                    <span className="font-black text-sm text-white">মিরপুর</span>
+                    <span className="font-black text-sm text-white">{t('Mirpur', 'মিরপুর')}</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 block font-semibold">ঢাকা মহানগরী</span>
+                  <span className="text-[10px] text-slate-400 block font-semibold">{t('Dhaka Metropolitan', 'ঢাকা মহানগরী')}</span>
                 </div>
               </div>
 
               {/* Right 4 Stat Pills */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 z-10 w-full lg:w-auto text-center font-sans">
                 <div className="p-3 rounded-2xl bg-black/35 border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-slate-400 font-bangla block">মোট রিপোর্ট</span>
-                  <span className="text-lg font-black text-white block mt-0.5">184</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('Total Reports', 'মোট রিপোর্ট')}</span>
+                  <span className="text-lg font-black text-white block mt-0.5">{formatNumber('184')}</span>
                   <span className="text-[10px] text-emerald-400 font-bold block">↑ 12%</span>
                 </div>
 
                 <div className="p-3 rounded-2xl bg-black/35 border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-slate-400 font-bangla block">সমাধানের হার</span>
-                  <span className="text-lg font-black text-white block mt-0.5">52</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('Resolution Rate', 'সমাধানের হার')}</span>
+                  <span className="text-lg font-black text-white block mt-0.5">{formatNumber('52%')}</span>
                   <span className="text-[10px] text-emerald-400 font-bold block">↑ 20%</span>
                 </div>
 
                 <div className="p-3 rounded-2xl bg-black/35 border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-slate-400 font-bangla block">চলমান</span>
-                  <span className="text-lg font-black text-white block mt-0.5">96</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('In Progress', 'চলমান')}</span>
+                  <span className="text-lg font-black text-white block mt-0.5">{formatNumber('96')}</span>
                   <span className="text-[10px] text-emerald-400 font-bold block">↑ 8%</span>
                 </div>
 
                 <div className="p-3 rounded-2xl bg-black/35 border border-white/10 backdrop-blur-xs">
-                  <span className="text-[10px] text-slate-400 font-bangla block">গুরুতর</span>
-                  <span className="text-lg font-black text-white block mt-0.5">36</span>
+                  <span className="text-[10px] text-slate-400 font-bangla block">{t('Critical', 'গুরুতর')}</span>
+                  <span className="text-lg font-black text-white block mt-0.5">{formatNumber('36')}</span>
                   <span className="text-[10px] text-emerald-400 font-bold block">↑ 5%</span>
                 </div>
               </div>

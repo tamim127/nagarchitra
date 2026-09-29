@@ -25,7 +25,7 @@ import { IssueCard } from '@/components/IssueCard';
 
 export default function ExplorePage() {
   const { issues } = useIssues();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
 
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
@@ -138,7 +138,7 @@ export default function ExplorePage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t('Search issues, areas, roads, tracking IDs...', 'সমস্যা, এলাকা, রাস্তা বা ট্র্যাকিং আইডি খুঁজুন...')}
-              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
+              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-slate-800"
             />
             {searchQuery && (
               <button
@@ -159,7 +159,7 @@ export default function ExplorePage() {
             <option value="ALL">{t('All Dhaka Areas', 'ঢাকার সব এলাকা')}</option>
             {DHAKA_AREAS.map((a) => (
               <option key={a.slug} value={a.name}>
-                {language === 'bn' ? a.nameBn : a.name}
+                {language === 'bn' ? (a.nameBn || a.name) : a.name}
               </option>
             ))}
           </select>
@@ -212,7 +212,7 @@ export default function ExplorePage() {
           )}
 
           <span className="text-xs text-slate-500 font-mono hidden sm:inline">
-            {filteredIssues.length} {t('issues found', 'টি সমস্যা')}
+            {formatNumber(filteredIssues.length)} {t('issues found', 'টি সমস্যা')}
           </span>
         </div>
       </div>
@@ -244,13 +244,13 @@ export default function ExplorePage() {
             </label>
             <div className="grid grid-cols-2 gap-1.5">
               {[
-                { id: 'SUBMITTED', label: 'Reported' },
-                { id: 'VERIFIED', label: 'Verified' },
-                { id: 'IN_PROGRESS', label: 'In Progress' },
-                { id: 'RESOLVED', label: 'Resolved' },
-                { id: 'CITIZEN_VERIFICATION', label: 'In Review' },
-                { id: 'CLOSED', label: 'Closed' },
-                { id: 'REOPENED', label: 'Reopened' },
+                { id: 'SUBMITTED', label: t('Reported', 'রিপোর্টেড') },
+                { id: 'VERIFIED', label: t('Verified', 'যাচাইকৃত') },
+                { id: 'IN_PROGRESS', label: t('In Progress', 'চলমান') },
+                { id: 'RESOLVED', label: t('Resolved', 'সমাধান হয়েছে') },
+                { id: 'CITIZEN_VERIFICATION', label: t('In Review', 'পর্যালোচনাধীন') },
+                { id: 'CLOSED', label: t('Closed', 'নিষ্পত্তিকৃত') },
+                { id: 'REOPENED', label: t('Reopened', 'পুনরায় খোলা') },
               ].map((s) => {
                 const active = selectedStatuses.includes(s.id);
                 return (
@@ -277,10 +277,10 @@ export default function ExplorePage() {
             </label>
             <div className="flex flex-wrap gap-1.5">
               {[
-                { id: 'CRITICAL', label: 'Critical', color: 'text-red-700 bg-red-50 border-red-200' },
-                { id: 'HIGH', label: 'High', color: 'text-orange-700 bg-orange-50 border-orange-200' },
-                { id: 'MEDIUM', label: 'Medium', color: 'text-yellow-700 bg-yellow-50 border-yellow-200' },
-                { id: 'LOW', label: 'Low', color: 'text-slate-600 bg-slate-50 border-slate-200' },
+                { id: 'CRITICAL', label: t('Critical', 'জরুরি'), color: 'text-red-700 bg-red-50 border-red-200' },
+                { id: 'HIGH', label: t('High', 'উচ্চ'), color: 'text-orange-700 bg-orange-50 border-orange-200' },
+                { id: 'MEDIUM', label: t('Medium', 'মাঝারি'), color: 'text-yellow-700 bg-yellow-50 border-yellow-200' },
+                { id: 'LOW', label: t('Low', 'সাধারণ'), color: 'text-slate-600 bg-slate-50 border-slate-200' },
               ].map((sev) => {
                 const active = selectedSeverities.includes(sev.id);
                 return (
@@ -346,7 +346,7 @@ export default function ExplorePage() {
             }`}
           >
             <span className="text-xs font-bold text-slate-500">
-              Showing {filteredIssues.length} issues in Dhaka
+              {t('Showing', 'প্রদর্শিত')} {formatNumber(filteredIssues.length)} {t('issues in Dhaka', 'টি সমস্যা')}
             </span>
             <div className="grid grid-cols-1 gap-4">
               {filteredIssues.map((issue) => (
@@ -355,7 +355,7 @@ export default function ExplorePage() {
             </div>
           </div>
 
-          {/* Bottom Floating Issue Preview Drawer (When a marker is clicked on the map) */}
+          {/* Bottom Floating Issue Preview Drawer */}
           {activeIssue && (
             <div className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-96 bg-white rounded-2xl p-4 shadow-2xl border border-slate-200 z-[400] animate-scale-up space-y-3">
               <div className="flex items-start justify-between gap-2">
@@ -364,11 +364,11 @@ export default function ExplorePage() {
                     {activeIssue.status.replace('_', ' ')}
                   </span>
                   <h4 className="font-bold text-sm text-slate-900 mt-1 line-clamp-1">
-                    {activeIssue.title}
+                    {language === 'bn' && activeIssue.titleBn ? activeIssue.titleBn : activeIssue.title}
                   </h4>
                   <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                     <MapPin className="w-3.5 h-3.5 text-primary" />
-                    <span>{activeIssue.location.address}</span>
+                    <span>{language === 'bn' && activeIssue.location.addressBn ? activeIssue.location.addressBn : activeIssue.location.address}</span>
                   </p>
                 </div>
                 <button
@@ -382,7 +382,7 @@ export default function ExplorePage() {
               <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
                 <span className="flex items-center gap-1 font-semibold text-slate-600">
                   <ThumbsUp className="w-3.5 h-3.5 text-primary" />
-                  <span>{activeIssue.communityConfirmations} confirmed</span>
+                  <span>{formatNumber(activeIssue.communityConfirmations)} {t('confirmed', 'জন নিশ্চিত')}</span>
                 </span>
 
                 <Link

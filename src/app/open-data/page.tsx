@@ -253,12 +253,15 @@ export default function OpenDataPage() {
 
               {/* Title */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-bangla tracking-tight leading-tight">
-                মুক্ত নাগরিক তথ্য ভাণ্ডার
+                {t('Open Civic Data Portal', 'মুক্ত নাগরিক তথ্য ভাণ্ডার')}
               </h1>
 
               {/* Subtitle */}
               <p className="text-xs sm:text-sm text-slate-300 font-bangla leading-relaxed max-w-xl">
-                নগরচিত্রের উন্মুক্ত তথ্যভাণ্ডার থেকে ডাউনলোড করুন ঢাকা শহরের নাগরিক সমস্যা, সমাধান, ভৌগোলিক তথ্য এবং ত্রিবিধ পরিসংখ্যান।
+                {t(
+                  "Download civic issues, resolutions, geospatial data, and statistics for Dhaka city from NagarChitra's open repository.",
+                  'নগরচিত্রের উন্মুক্ত তথ্যভাণ্ডার থেকে ডাউনলোড করুন ঢাকা শহরের নাগরিক সমস্যা, সমাধান, ভৌগোলিক তথ্য এবং ত্রিবিধ পরিসংখ্যান।'
+                )}
               </p>
 
               {/* Download Buttons */}
@@ -268,7 +271,7 @@ export default function OpenDataPage() {
                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-accent/20 transition hover:scale-102 active:scale-98 font-bangla"
                 >
                   <Download className="w-4 h-4 text-slate-950" />
-                  <span>CSV ডাউনলোড</span>
+                  <span>{t('Download CSV', 'CSV ডাউনলোড')}</span>
                 </button>
 
                 <button
@@ -276,14 +279,14 @@ export default function OpenDataPage() {
                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs sm:text-sm backdrop-blur-xs transition hover:scale-102 active:scale-98 font-bangla"
                 >
                   <Code2 className="w-4 h-4 text-emerald-400" />
-                  <span>JSON ডাউনলোড</span>
+                  <span>{t('Download JSON', 'JSON ডাউনলোড')}</span>
                 </button>
               </div>
 
               {/* Sub-banner pill */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/70 border border-emerald-500/30 text-[11px] text-emerald-200 font-bangla">
                 <span>🍃</span>
-                <span>সবার জন্য উন্মুক্ত - গবেষণা, সাংবাদিকতা ও উদ্ভাবনের জন্য</span>
+                <span>{t('Open for everyone - for research, journalism and public innovation', 'সবার জন্য উন্মুক্ত - গবেষণা, সাংবাদিকতা ও উদ্ভাবনের জন্য')}</span>
               </div>
             </div>
 

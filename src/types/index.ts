@@ -38,9 +38,13 @@ export interface IssueLocation {
   area: string; // e.g. Mirpur, Dhanmondi, Uttara, Mohammadpur
   areaBn?: string;
   ward: string; // e.g. Ward 10, Ward 27
+  wardBn?: string;
   city: string; // Dhaka
+  cityBn?: string;
   district: string;
+  districtBn?: string;
   division: string;
+  divisionBn?: string;
 }
 
 export interface StatusHistoryEntry {
@@ -83,6 +87,7 @@ export interface Issue {
   descriptionBn?: string;
   categoryId: string;
   categoryName: string;
+  categoryNameBn?: string;
   categoryGroup: IssueCategoryGroup;
   severity: IssueSeverity;
   status: IssueStatus;
@@ -97,7 +102,9 @@ export interface Issue {
   
   // Authority assignment
   assignedAuthority?: string; // e.g. "Dhaka North City Corporation (DNCC)"
+  assignedAuthorityBn?: string;
   assignedDepartment?: string; // e.g. "Civil Infrastructure & Road Repair"
+  assignedDepartmentBn?: string;
   assignedOfficer?: string; // e.g. "Engr. Zahid Hasan"
   targetResolutionDate?: string;
   slaDays: number;

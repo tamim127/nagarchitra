@@ -40,7 +40,7 @@ export default function IssueDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { getIssueById, confirmIssue, followIssue, updateIssueStatus } = useIssues();
-  const { t, language } = useLanguage();
+  const { t, language, formatNumber } = useLanguage();
   const { role, currentUser } = useAuthRole();
 
   const issueId = params?.id as string;
@@ -66,15 +66,17 @@ export default function IssueDetailPage() {
   if (!issue) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-20 text-center space-y-4 font-bangla">
-        <h2 className="text-2xl font-black text-slate-800">ইস্যু খুঁজে পাওয়া যায়নি</h2>
+        <h2 className="text-2xl font-black text-slate-800">
+          {t('Issue Not Found', 'ইস্যু খুঁজে পাওয়া যায়নি')}
+        </h2>
         <p className="text-xs text-slate-500">
-          অনুরোধকৃত রিপোর্ট (#{issueId}) সিস্টেমে নেই অথবা মুছে ফেলা হয়েছে।
+          {t('The requested issue report does not exist or has been removed.', 'অনুরোধকৃত রিপোর্ট সিস্টেমে নেই অথবা মুছে ফেলা হয়েছে।')} (#{issueId})
         </p>
         <Link
           href="/explore"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-800 text-white text-xs font-bold shadow"
         >
-          <span>ম্যাপে ফিরে যান</span>
+          <span>{t('Return to Map', 'ম্যাপে ফিরে যান')}</span>
         </Link>
       </div>
     );
@@ -85,29 +87,29 @@ export default function IssueDetailPage() {
     {
       id: 'g1',
       url: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=1200&q=80',
-      caption: 'প্রধান ছবি - গভীর গর্ত ও জলাবদ্ধতা',
+      caption: language === 'bn' ? 'প্রধান ছবি - গভীর গর্ত ও জলাবদ্ধতা' : 'Main Photo - Pothole and waterlogging',
     },
     {
       id: 'g2',
       url: 'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&fit=crop&w=800&q=80',
-      caption: 'ভাঙা অ্যাসফল্টের ধার ও খানাখন্দ',
+      caption: language === 'bn' ? 'ভাঙা অ্যাসফল্টের ধার ও খানাখন্দ' : 'Broken asphalt and road erosion',
     },
     {
       id: 'g3',
       url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-      caption: 'রাস্তার সম্পূর্ণ দৃশ্য ও যানজট',
+      caption: language === 'bn' ? 'রাস্তার সম্পূর্ণ দৃশ্য ও যানজট' : 'Wide view showing traffic congestion',
     },
     {
       id: 'g4',
       url: 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&w=800&q=80',
-      caption: 'পানির গভীরতা পরিমাপ ও ঝুঁকি',
+      caption: language === 'bn' ? 'পানির গভীরতা পরিমাপ ও ঝুঁকি' : 'Water depth and hazard check',
     },
   ];
 
   const gallery = (issue.media && issue.media.length > 0) ? issue.media : defaultGallery;
 
   const handleCopyAddress = () => {
-    const textToCopy = `${issue.location.addressBn || issue.location.address} (জিপিএস: ${issue.location.latitude.toFixed(4)}, ${issue.location.longitude.toFixed(4)})`;
+    const textToCopy = `${language === 'bn' ? (issue.location.addressBn || issue.location.address) : issue.location.address} (GPS: ${issue.location.latitude.toFixed(4)}, ${issue.location.longitude.toFixed(4)})`;
     navigator.clipboard.writeText(textToCopy);
     setCopiedAddress(true);
     setTimeout(() => setCopiedAddress(false), 2000);
@@ -120,17 +122,11 @@ export default function IssueDetailPage() {
       authorityStatus,
       authorityNote.trim() || `Status updated to ${authorityStatus} by ${currentUser.name}`,
       authorityStatus === 'RESOLVED' ? authorityProofUrl : undefined,
-      currentUser.role === 'AUTHORITY' ? 'সড়ক ও জনপথ বিভাগ' : undefined,
+      currentUser.role === 'AUTHORITY' ? (language === 'bn' ? 'সড়ক ও জনপথ বিভাগ' : 'Roads & Highways Department') : undefined,
       currentUser.name
     );
     setShowAuthorityModal(false);
     setAuthorityNote('');
-  };
-
-  // Convert numbers to Bengali
-  const toBn = (num: number | string) => {
-    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return String(num).replace(/[0-9]/g, (w) => bnDigits[+w]);
   };
 
   return (
@@ -140,20 +136,20 @@ export default function IssueDetailPage() {
         <div className="flex items-center gap-1.5 flex-wrap">
           <Link href="/" className="flex items-center gap-1 text-slate-600 hover:text-slate-900 transition font-medium">
             <Home className="w-3.5 h-3.5" />
-            <span>হোম</span>
+            <span>{t('nav.home')}</span>
           </Link>
           <span className="text-slate-400">›</span>
           <Link href="/explore" className="text-slate-600 hover:text-slate-900 transition font-medium">
-            ইস্যুসমূহ
+            {t('Issues', 'ইস্যুসমূহ')}
           </Link>
           <span className="text-slate-400">›</span>
-          <span className="text-slate-500 font-medium">
-            রিপোর্ট #{issue.trackingNumber}
+          <span className="text-slate-500 font-medium font-mono">
+            #{issue.trackingNumber}
           </span>
         </div>
 
         <div className="text-[#0d6e5a] font-medium text-xs hidden sm:block">
-          একটি পরিচ্ছন্ন, নিরাপদ, বাসযোগ্য নগরী
+          {t('A cleaner, safer, more livable city', 'একটি পরিচ্ছন্ন, নিরাপদ, বাসযোগ্য নগরী')}
         </div>
       </div>
 
@@ -162,34 +158,43 @@ export default function IssueDetailPage() {
         {/* Status Pill */}
         <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#0d6e5a] text-white text-xs font-bold">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-300"></span>
-          <span>রিপোর্টেড</span>
+          <span>
+            {issue.status === 'SUBMITTED' ? t('Reported', 'রিপোর্টেড') : issue.status.replace('_', ' ')}
+          </span>
         </div>
 
         {/* Title */}
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
-          {issue.titleBn || issue.title}
+          {language === 'bn' && issue.titleBn ? issue.titleBn : issue.title}
         </h1>
 
         {/* Citizen Description */}
         <p className="text-xs sm:text-sm text-slate-600 max-w-4xl leading-relaxed">
-          {issue.descriptionBn || issue.description}
+          {language === 'bn' && issue.descriptionBn ? issue.descriptionBn : issue.description}
         </p>
 
         {/* Metadata Tags */}
         <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200/60">
             <Route className="w-3.5 h-3.5 text-slate-600" />
-            <span>রাস্তা</span>
+            <span>{language === 'bn' && issue.categoryNameBn ? issue.categoryNameBn : issue.categoryName}</span>
           </span>
 
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200/60">
             <MapPin className="w-3.5 h-3.5 text-slate-600" />
-            <span>{issue.location.addressBn || issue.location.address}</span>
+            <span>{language === 'bn' && issue.location.addressBn ? issue.location.addressBn : issue.location.address}</span>
           </span>
 
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200/60">
             <Calendar className="w-3.5 h-3.5 text-slate-600" />
-            <span>রিপোর্ট করেছেন: ১২ মার্চ ২০২৬, ০৯:৪৫ পূর্বাহ্ণ</span>
+            <span>
+              {t('Reported:', 'রিপোর্ট করেছেন:')}{' '}
+              {new Date(issue.createdAt).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}
+            </span>
           </span>
 
           {(role === 'AUTHORITY' || role === 'ADMIN') && (
@@ -198,7 +203,7 @@ export default function IssueDetailPage() {
               className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500 text-slate-950 font-bold hover:bg-amber-600 transition"
             >
               <Shield className="w-3.5 h-3.5" />
-              <span>স্ট্যাটাস পরিবর্তন করুন</span>
+              <span>{t('Change Status', 'স্ট্যাটাস পরিবর্তন করুন')}</span>
             </button>
           )}
         </div>
@@ -206,12 +211,12 @@ export default function IssueDetailPage() {
 
       {/* 3. Main Two-Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* LEFT COLUMN: Gallery, Community Reaction, Timeline, Resolution & Feedback */}
+        {/* LEFT COLUMN */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Card: সমস্যার ছবি ও প্রমাণ */}
+          {/* Card: Photos & Evidence */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
             <h3 className="font-extrabold text-base text-slate-900">
-              সমস্যার ছবি ও প্রমাণ
+              {t('Photos & Evidence of Issue', 'সমস্যার ছবি ও প্রমাণ')}
             </h3>
 
             <div className="flex flex-col sm:flex-row gap-3 items-stretch">
@@ -225,12 +230,12 @@ export default function IssueDetailPage() {
 
                 {/* Top-left pill */}
                 <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-white text-[11px] font-medium flex items-center gap-1 z-10">
-                  <span>প্রধান ছবি</span>
+                  <span>{t('Main Photo', 'প্রধান ছবি')}</span>
                 </div>
 
                 {/* Bottom-right counter */}
                 <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-sm text-white text-[11px] font-mono z-10">
-                  {activeImageIdx + 1} / {gallery.length}
+                  {formatNumber(activeImageIdx + 1)} / {formatNumber(gallery.length)}
                 </div>
 
                 {/* Navigation arrows */}
@@ -277,11 +282,10 @@ export default function IssueDetailPage() {
                         className="w-full h-full object-cover"
                       />
 
-                      {/* 3rd thumbnail overlay: আরও ছবি (৪টি) */}
                       {isLastSlot && (
                         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-white text-[11px] font-semibold p-1 text-center">
                           <Camera className="w-4 h-4 mb-0.5" />
-                          <span>আরও ছবি (৪টি)</span>
+                          <span>{t('More Photos (4)', 'আরও ছবি (৪টি)')}</span>
                         </div>
                       )}
                     </div>
@@ -291,14 +295,13 @@ export default function IssueDetailPage() {
             </div>
           </div>
 
-          {/* Card: ইস্যুতে কমিউনিটি প্রতিক্রিয়া */}
+          {/* Card: Community Reactions */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
             <h3 className="font-extrabold text-base text-slate-900">
-              ইস্যুতে কমিউনিটি প্রতিক্রিয়া
+              {t('Community Reactions on Issue', 'ইস্যুতে কমিউনিটি প্রতিক্রিয়া')}
             </h3>
 
             <div className="bg-[#f0f9f6] border border-teal-100 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              {/* Left citizen info */}
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#0c4a45] text-white flex items-center justify-center shrink-0">
                   <User className="w-5 h-5" />
@@ -308,12 +311,11 @@ export default function IssueDetailPage() {
                     I See This Too
                   </h4>
                   <p className="text-xs text-slate-600 mt-0.5">
-                    এই সমস্যাটি আরও ২৪ জন বাসিন্দা দেখেছেন
+                    {t('24 other residents have seen this issue', 'এই সমস্যাটি আরও ২৪ জন বাসিন্দা দেখেছেন')}
                   </p>
                 </div>
               </div>
 
-              {/* Right CTA button & avatar stack */}
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -321,10 +323,9 @@ export default function IssueDetailPage() {
                   className="bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-bold px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition shrink-0"
                 >
                   <Eye className="w-4 h-4 text-emerald-300" />
-                  <span>আমি-ও দেখেছি</span>
+                  <span>{t('I see this too', 'আমি-ও দেখেছি')}</span>
                 </button>
 
-                {/* Overlapping avatars */}
                 <div className="flex items-center -space-x-2 overflow-hidden shrink-0">
                   <img
                     className="inline-block w-7 h-7 rounded-full ring-2 ring-white object-cover"
@@ -341,37 +342,32 @@ export default function IssueDetailPage() {
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80"
                     alt="Citizen 3"
                   />
-                  <img
-                    className="inline-block w-7 h-7 rounded-full ring-2 ring-white object-cover"
-                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80"
-                    alt="Citizen 4"
-                  />
                   <div className="w-7 h-7 rounded-full bg-slate-200 ring-2 ring-white flex items-center justify-center text-[10px] font-bold text-slate-700">
-                    +১৯
+                    +{formatNumber(19)}
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Card: রিপোর্টের আপডেট ও টাইমলাইন */}
+          {/* Card: Report Updates & Timeline */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="font-extrabold text-base text-slate-900">
-                রিপোর্টের আপডেট ও টাইমলাইন
+                {t('Report Updates & Timeline', 'রিপোর্টের আপডেট ও টাইমলাইন')}
               </h3>
               <button
                 type="button"
                 className="text-xs text-[#0d6e5a] font-bold hover:underline flex items-center gap-1"
               >
-                <span>সব আপডেট দেখুন</span>
+                <span>{t('View All Updates', 'সব আপডেট দেখুন')}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
             {/* Vertical timeline items */}
             <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
-              {/* Step 1: রিপোর্ট জমা দেওয়া হয়েছে */}
+              {/* Step 1: Report Submitted */}
               <div className="relative flex items-start gap-3">
                 <span className="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center ring-4 ring-white shadow-sm">
                   <Send className="w-2.5 h-2.5" />
@@ -379,25 +375,25 @@ export default function IssueDetailPage() {
                 <div className="space-y-1 flex-1">
                   <div className="flex items-center justify-between flex-wrap gap-1">
                     <h4 className="font-bold text-xs sm:text-sm text-slate-900">
-                      রিপোর্ট জমা দেওয়া হয়েছে
+                      {t('Report Submitted', 'রিপোর্ট জমা দেওয়া হয়েছে')}
                     </h4>
                     <span className="text-[11px] text-slate-400 font-medium">
-                      ১২ মার্চ ২০২৬, ০৯:৪৫ পূর্বাহ্ণ
+                      12 Mar 2026, 09:45 AM
                     </span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    আপনার রিপোর্ট সফলভাবে জমা নেওয়া হয়েছে। ইস্যু আইডি: NC-2026-0412
+                    {t('Issue successfully registered in NagarChitra civic platform.', 'আপনার রিপোর্ট সফলভাবে জমা নেওয়া হয়েছে।')}
                   </p>
                   <div className="pt-0.5">
                     <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
                       <User className="w-3 h-3 text-slate-500" />
-                      <span>Tuhin Rahman (নাগরিক)</span>
+                      <span>{issue.reportedBy.name} ({t('Citizen', 'নাগরিক')})</span>
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Step 2: কমিউনিটি ভেরিফিকেশন */}
+              {/* Step 2: Community Verification */}
               <div className="relative flex items-start gap-3">
                 <span className="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center ring-4 ring-white shadow-sm">
                   <Users className="w-2.5 h-2.5" />
@@ -405,25 +401,19 @@ export default function IssueDetailPage() {
                 <div className="space-y-1 flex-1">
                   <div className="flex items-center justify-between flex-wrap gap-1">
                     <h4 className="font-bold text-xs sm:text-sm text-slate-900">
-                      কমিউনিটি ভেরিফিকেশন
+                      {t('Community Verification', 'কমিউনিটি ভেরিফিকেশন')}
                     </h4>
                     <span className="text-[11px] text-slate-400 font-medium">
-                      ১২ মার্চ ২০২৬, ১১:২০ পূর্বাহ্ণ
+                      12 Mar 2026, 11:20 AM
                     </span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    ১০ জন বাসিন্দা এই সমস্যাটি নিশ্চিত করেছেন।
+                    {formatNumber(10)} {t('residents confirmed this problem in neighborhood.', 'জন বাসিন্দা এই সমস্যাটি নিশ্চিত করেছেন।')}
                   </p>
-                  <div className="pt-0.5">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
-                      <Users className="w-3 h-3 text-blue-600" />
-                      <span>কমিউনিটি</span>
-                    </span>
-                  </div>
                 </div>
               </div>
 
-              {/* Step 3: যাচাই চলছে */}
+              {/* Step 3: Verifying */}
               <div className="relative flex items-start gap-3">
                 <span className="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center ring-4 ring-white shadow-sm">
                   <Clock className="w-2.5 h-2.5" />
@@ -431,125 +421,64 @@ export default function IssueDetailPage() {
                 <div className="space-y-1 flex-1">
                   <div className="flex items-center justify-between flex-wrap gap-1">
                     <h4 className="font-bold text-xs sm:text-sm text-slate-900">
-                      যাচাই চলছে
+                      {t('Under Authority Review', 'যাচাই চলছে')}
                     </h4>
                     <span className="text-[11px] text-slate-400 font-medium">
-                      ১২ মার্চ ২০২৬, ০২:১০ অপরাহ্ন
+                      12 Mar 2026, 02:10 PM
                     </span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    কর্তৃপক্ষ বিষয়টি পর্যালোচনা করছেন।
+                    {t('Zonal authorities are reviewing the report.', 'কর্তৃপক্ষ বিষয়টি পর্যালোচনা করছেন।')}
                   </p>
-                  <div className="pt-0.5">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-700 bg-slate-100 px-2 py-0.5 rounded-full">
-                      <Building className="w-3 h-3 text-slate-500" />
-                      <span>সিটি কর্পোরেশন</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 4: অ্যাসাইনমেন্ট */}
-              <div className="relative flex items-start gap-3">
-                <span className="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center ring-4 ring-white shadow-sm">
-                  <FileCheck className="w-2.5 h-2.5" />
-                </span>
-                <div className="space-y-1 flex-1">
-                  <div className="flex items-center justify-between flex-wrap gap-1">
-                    <h4 className="font-bold text-xs sm:text-sm text-slate-900">
-                      অ্যাসাইনমেন্ট
-                    </h4>
-                    <span className="text-[11px] text-slate-400 font-medium">
-                      ১৩ মার্চ ২০২৬, ১০:১৫ পূর্বাহ্ণ
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-500">
-                    সমস্যাটি সড়ক ও জনপথ বিভাগ-এ পাঠানো হয়েছে।
-                  </p>
-                  <div className="pt-0.5">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full">
-                      <Building className="w-3 h-3 text-purple-600" />
-                      <span>সিটি কর্পোরেশন</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 5: সমাধান হয়েছে */}
-              <div className="relative flex items-start gap-3">
-                <span className="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-[#134e4a] text-white flex items-center justify-center ring-4 ring-white shadow-sm">
-                  <Wrench className="w-2.5 h-2.5" />
-                </span>
-                <div className="space-y-1 flex-1">
-                  <div className="flex items-center justify-between flex-wrap gap-1">
-                    <h4 className="font-bold text-xs sm:text-sm text-slate-900">
-                      সমাধান হয়েছে
-                    </h4>
-                    <span className="text-[11px] text-slate-400 font-medium">
-                      ১৫ মার্চ ২০২৬, ০১:৩০ অপরাহ্ন
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-500">
-                    গর্তটি মেরামত করা হয়েছে। দয়া করে আগে-পরের ছবি দেখুন।
-                  </p>
-                  <div className="pt-0.5">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full">
-                      <Building className="w-3 h-3 text-teal-700" />
-                      <span>সড়ক ও জনপথ বিভাগ</span>
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Card: আগে এবং পরে (Before / After) & আপনার মতামত */}
+          {/* Card: Before / After & Citizen Feedback Form */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Left: Before / After comparison */}
               <div className="space-y-3">
                 <h4 className="font-extrabold text-sm text-slate-900">
-                  আগে এবং পরে (Before / After)
+                  {t('Before & After', 'আগে এবং পরে (Before / After)')}
                 </h4>
                 <div className="grid grid-cols-2 gap-2.5">
-                  {/* Before Image */}
                   <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
                     <img
                       src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80"
-                      alt="Before Repair"
+                      alt="Before"
                       className="w-full h-full object-cover"
                     />
                     <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold">
-                      আগে
+                      {t('Before', 'আগে')}
                     </span>
                   </div>
 
-                  {/* After Image */}
                   <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
                     <img
                       src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&fit=crop&w=800&q=80"
-                      alt="After Repair"
+                      alt="After"
                       className="w-full h-full object-cover"
                     />
                     <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-bold">
-                      পরে
+                      {t('After', 'পরে')}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Right: Citizen Resolution Feedback Form */}
+              {/* Right: Citizen Feedback */}
               <div className="space-y-2.5">
                 <div>
                   <h4 className="font-extrabold text-sm text-slate-900 leading-tight">
-                    আপনার মতামত
+                    {t('Your Feedback', 'আপনার মতামত')}
                   </h4>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    সমস্যাটি সমাধান হয়েছে কি?
+                    {t('Has this issue been resolved?', 'সমস্যাটি সমাধান হয়েছে কি?')}
                   </p>
                 </div>
 
-                {/* 2x2 grid of options */}
                 <div className="grid grid-cols-2 gap-1.5 text-[11px]">
                   <button
                     type="button"
@@ -560,7 +489,7 @@ export default function IssueDetailPage() {
                         : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
-                    হ্যাঁ, সম্পূর্ণ সমাধান হয়েছে
+                    {t('Yes, fully resolved', 'হ্যাঁ, সম্পূর্ণ সমাধান হয়েছে')}
                   </button>
 
                   <button
@@ -572,7 +501,7 @@ export default function IssueDetailPage() {
                         : 'bg-amber-50/50 border-amber-200 text-amber-800 hover:bg-amber-100'
                     }`}
                   >
-                    সংশোধিত সমাধান হয়েছে
+                    {t('Revised resolution completed', 'সংশোধিত সমাধান হয়েছে')}
                   </button>
 
                   <button
@@ -584,7 +513,7 @@ export default function IssueDetailPage() {
                         : 'bg-orange-50/50 border-orange-200 text-orange-800 hover:bg-orange-100'
                     }`}
                   >
-                    আংশিক সমাধান হয়েছে
+                    {t('Partially resolved', 'আংশিক সমাধান হয়েছে')}
                   </button>
 
                   <button
@@ -596,7 +525,7 @@ export default function IssueDetailPage() {
                         : 'bg-rose-50/50 border-rose-200 text-rose-800 hover:bg-rose-100'
                     }`}
                   >
-                    না, এখনও সমস্যা রয়েছে
+                    {t('No, problem persists', 'না, এখনও সমস্যা রয়েছে')}
                   </button>
                 </div>
 
@@ -606,14 +535,16 @@ export default function IssueDetailPage() {
                     rows={2}
                     value={feedbackComment}
                     onChange={(e) => setFeedbackComment(e.target.value)}
-                    placeholder="মন্তব্য (ঐচ্ছিক)"
+                    placeholder={t('Comments (optional)', 'মন্তব্য (ঐচ্ছিক)')}
                     maxLength={250}
                     className="w-full text-xs p-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-700 text-slate-700"
                   />
                   <div className="flex items-center justify-between text-[10px] text-slate-400">
-                    <span>{toBn(feedbackComment.length)}/২৫০</span>
+                    <span>{formatNumber(feedbackComment.length)}/{formatNumber(250)}</span>
                     {feedbackSubmitted && (
-                      <span className="text-emerald-600 font-bold">✓ মতামত জমা হয়েছে!</span>
+                      <span className="text-emerald-600 font-bold">
+                        {t('Feedback submitted!', '✓ মতামত জমা হয়েছে!')}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -627,16 +558,16 @@ export default function IssueDetailPage() {
                   }}
                   className="w-full bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-bold py-2 rounded-xl transition shadow-sm"
                 >
-                  মতামত জমা দিন
+                  {t('Submit Feedback', 'মতামত জমা দিন')}
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Status, Map, Details, Privacy, Area Summary, Related Issues */}
+        {/* RIGHT COLUMN */}
         <div className="lg:col-span-5 space-y-6">
-          {/* Card 1: বর্তমান অবস্থা */}
+          {/* Card 1: Status */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-4">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
@@ -644,53 +575,57 @@ export default function IssueDetailPage() {
               </div>
               <div className="space-y-0.5">
                 <span className="text-[11px] text-slate-400 font-semibold block">
-                  বর্তমান অবস্থা
+                  {t('Current Status', 'বর্তমান অবস্থা')}
                 </span>
                 <h3 className="text-xl font-black text-slate-900 leading-tight">
-                  রিপোর্টেড
+                  {issue.status === 'SUBMITTED' ? t('Reported', 'রিপোর্টেড') : issue.status.replace('_', ' ')}
                 </h3>
                 <p className="text-xs text-slate-500">
-                  সমস্যাটি যাচাইয়ের জন্য অপেক্ষায় আছে
+                  {t('Awaiting inspection and authority assignment', 'সমস্যাটি যাচাইয়ের জন্য অপেক্ষায় আছে')}
                 </p>
               </div>
             </div>
 
-            {/* Horizontal Stepper Progress */}
+            {/* Stepper Progress */}
             <div className="pt-2">
               <div className="relative flex items-center justify-between text-center">
-                {/* Horizontal line */}
                 <div className="absolute top-2 left-3 right-3 h-0.5 bg-slate-200 -z-0" />
                 
-                {/* Step 1: রিপোর্টেড (Active) */}
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="w-4 h-4 rounded-full bg-amber-400 ring-4 ring-amber-100 flex items-center justify-center">
                     <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
                   </div>
-                  <span className="text-[10px] font-bold text-amber-700 mt-1.5">রিপোর্টেড</span>
+                  <span className="text-[10px] font-bold text-amber-700 mt-1.5">
+                    {t('Reported', 'রিপোর্টেড')}
+                  </span>
                 </div>
 
-                {/* Step 2: যাচাই */}
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="w-3.5 h-3.5 rounded-full bg-slate-300"></div>
-                  <span className="text-[10px] text-slate-400 mt-1.5">যাচাই</span>
+                  <span className="text-[10px] text-slate-400 mt-1.5">
+                    {t('Verify', 'যাচাই')}
+                  </span>
                 </div>
 
-                {/* Step 3: অ্যাসাইন */}
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="w-3.5 h-3.5 rounded-full bg-slate-300"></div>
-                  <span className="text-[10px] text-slate-400 mt-1.5">অ্যাসাইন</span>
+                  <span className="text-[10px] text-slate-400 mt-1.5">
+                    {t('Assign', 'অ্যাসাইন')}
+                  </span>
                 </div>
 
-                {/* Step 4: সমাধান */}
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="w-3.5 h-3.5 rounded-full bg-slate-300"></div>
-                  <span className="text-[10px] text-slate-400 mt-1.5">সমাধান</span>
+                  <span className="text-[10px] text-slate-400 mt-1.5">
+                    {t('Resolve', 'সমাধান')}
+                  </span>
                 </div>
 
-                {/* Step 5: ভেরিফায়েড */}
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="w-3.5 h-3.5 rounded-full bg-slate-300"></div>
-                  <span className="text-[10px] text-slate-400 mt-1.5">ভেরিফায়েড</span>
+                  <span className="text-[10px] text-slate-400 mt-1.5">
+                    {t('Verified', 'ভেরিফায়েড')}
+                  </span>
                 </div>
               </div>
             </div>
@@ -707,7 +642,7 @@ export default function IssueDetailPage() {
                 }`}
               >
                 <Bookmark className="w-3.5 h-3.5 fill-slate-950" />
-                <span>ফলো করুন</span>
+                <span>{t('Follow Issue', 'ফলো করুন')}</span>
               </button>
 
               <button
@@ -717,28 +652,29 @@ export default function IssueDetailPage() {
                     navigator.share({ title: issue.title, url: window.location.href });
                   } else {
                     navigator.clipboard.writeText(window.location.href);
-                    alert('রিপোর্ট লিঙ্ক কপি করা হয়েছে!');
+                    alert(language === 'bn' ? 'রিপোর্ট লিঙ্ক কপি করা হয়েছে!' : 'Report link copied!');
                   }
                 }}
                 className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span>শেয়ার</span>
+                <span>{t('Share', 'শেয়ার')}</span>
               </button>
             </div>
           </div>
 
-          {/* Card 2: ঘটনার অবস্থান & Map */}
+          {/* Card 2: Incident Location & Map */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
-                <span>( ঘটনার অবস্থান</span>
+                <MapPin className="w-4 h-4 text-[#0d6e5a]" />
+                <span>{t('Incident Location', 'ঘটনার অবস্থান')}</span>
               </h3>
               <Link
                 href="/explore"
                 className="text-xs text-[#0d6e5a] font-bold hover:underline flex items-center gap-0.5"
               >
-                <span>বড় মানচিত্রে দেখুন</span>
+                <span>{t('View on large map', 'বড় মানচিত্রে দেখুন')}</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
@@ -759,15 +695,15 @@ export default function IssueDetailPage() {
             <div className="flex items-center justify-between text-[11px] text-slate-500 px-1 pt-0.5">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span>রিপোর্টের স্থান</span>
+                <span>{t('Report Location', 'রিপোর্টের স্থান')}</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                <span>বাফার এলাকা</span>
+                <span>{t('Buffer Zone', 'বাফার এলাকা')}</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span>ফল্ট এরিয়া</span>
+                <span>{t('Fault Area', 'ফল্ট এরিয়া')}</span>
               </span>
             </div>
 
@@ -775,7 +711,7 @@ export default function IssueDetailPage() {
             <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
               <div className="flex items-center gap-1 font-mono text-[11px] text-slate-600 font-semibold">
                 <Compass className="w-3.5 h-3.5 text-slate-400" />
-                <span>২৩.৮০৬১° N, ৯০.৩৬১৫° E</span>
+                <span>{issue.location.latitude.toFixed(4)}° N, {issue.location.longitude.toFixed(4)}° E</span>
               </div>
 
               <button
@@ -784,62 +720,62 @@ export default function IssueDetailPage() {
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-[11px] font-medium transition"
               >
                 <Copy className="w-3 h-3" />
-                <span>{copiedAddress ? 'কপি হয়েছে!' : 'ঠিকানা কপি করুন'}</span>
+                <span>{copiedAddress ? t('Copied!', 'কপি হয়েছে!') : t('Copy Address', 'ঠিকানা কপি করুন')}</span>
               </button>
             </div>
           </div>
 
-          {/* Card 3: ইস্যু বিবরণ */}
+          {/* Card 3: Issue Details Table */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
             <h3 className="font-extrabold text-sm text-slate-900 pb-2 border-b border-slate-100">
-              ইস্যু বিবরণ
+              {t('Issue Details', 'ইস্যু বিবরণ')}
             </h3>
 
             <div className="space-y-2 text-xs">
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">ইস্যু আইডি</span>
+                <span className="text-slate-500">{t('Issue ID', 'ইস্যু আইডি')}</span>
                 <span className="font-bold text-slate-900 font-mono">
                   {issue.trackingNumber}
                 </span>
               </div>
 
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">বিভাগ</span>
+                <span className="text-slate-500">{t('Department', 'বিভাগ')}</span>
                 <span className="font-bold text-slate-900">
-                  {issue.assignedDepartment || 'সড়ক ও জনপথ বিভাগ'}
+                  {issue.assignedDepartment || (language === 'bn' ? 'সড়ক ও জনপথ বিভাগ' : 'Roads & Highways Department')}
                 </span>
               </div>
 
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">অবস্থান</span>
+                <span className="text-slate-500">{t('Location', 'অবস্থান')}</span>
                 <span className="font-bold text-slate-900">
-                  {issue.location.addressBn || issue.location.address}
+                  {language === 'bn' && issue.location.addressBn ? issue.location.addressBn : issue.location.address}
                 </span>
               </div>
 
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">শ্রেণি</span>
+                <span className="text-slate-500">{t('Category', 'শ্রেণি')}</span>
                 <span className="font-bold text-slate-900">
-                  {issue.categoryName === 'Road Damage' ? 'রাস্তায় গর্ত / ভাঙাচোরা' : issue.categoryName}
+                  {language === 'bn' && issue.categoryNameBn ? issue.categoryNameBn : issue.categoryName}
                 </span>
               </div>
 
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">গুরুত্ব</span>
+                <span className="text-slate-500">{t('Severity', 'গুরুত্ব')}</span>
                 <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold text-[10px]">
-                  উচ্চ
+                  {issue.severity}
                 </span>
               </div>
 
               <div className="flex items-center justify-between py-1 border-b border-slate-50">
-                <span className="text-slate-500">রিপোর্টারের নাম</span>
+                <span className="text-slate-500">{t('Reporter Name', 'রিপোর্টারের নাম')}</span>
                 <span className="font-bold text-slate-900">
                   {issue.reportedBy.name}
                 </span>
               </div>
 
               <div className="flex items-center justify-between py-1">
-                <span className="text-slate-500">যোগাযোগ</span>
+                <span className="text-slate-500">{t('Contact', 'যোগাযোগ')}</span>
                 <span className="font-mono text-slate-700">
                   tuhin@email.com
                 </span>
@@ -847,42 +783,41 @@ export default function IssueDetailPage() {
             </div>
           </div>
 
-          {/* Card 4: গোপনীয়তা ও নিরাপত্তা */}
+          {/* Card 4: Privacy & Protection */}
           <div className="bg-[#f0f9f6] rounded-2xl border border-teal-100/80 p-4 shadow-sm flex items-start gap-3">
             <div className="w-8 h-8 rounded-xl bg-[#0d6e5a] text-white flex items-center justify-center shrink-0">
               <Shield className="w-4 h-4" />
             </div>
             <div className="space-y-1 text-xs">
               <h4 className="font-extrabold text-slate-900 text-xs">
-                গোপনীয়তা ও নিরাপত্তা
+                {t('Privacy & Data Protection', 'গোপনীয়তা ও নিরাপত্তা')}
               </h4>
               <p className="text-[11px] text-slate-600 leading-snug">
-                ব্যক্তিগত ও সংবেদনশীল লোকেশনের ক্ষেত্রে সুনির্দিষ্ট অবস্থান জনসম্মুখে দেখানো হয় না।
+                {t('For sensitive cases, precise coordinates are masked for public safety.', 'ব্যক্তিগত ও সংবেদনশীল লোকেশনের ক্ষেত্রে সুনির্দিষ্ট অবস্থান জনসম্মুখে দেখানো হয় না।')}
               </p>
               <Link
                 href="/privacy"
                 className="text-[11px] text-[#0d6e5a] font-bold hover:underline inline-flex items-center gap-1 mt-0.5"
               >
-                <span>আমাদের গোপনীয়তা নীতি দেখুন</span>
+                <span>{t('View our Privacy Policy', 'আমাদের গোপনীয়তা নীতি দেখুন')}</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
           </div>
 
-          {/* Card 5: এলাকার সারাংশ (Mirpur) */}
+          {/* Card 5: Area Summary */}
           <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
             <h3 className="font-extrabold text-sm text-slate-900">
-              এলাকার সারাংশ (Mirpur)
+              {t('Area Summary', 'এলাকার সারাংশ')} ({issue.location.area})
             </h3>
 
             <div className="grid grid-cols-4 gap-2 text-center pt-1">
-              {/* Stat 1 */}
               <div className="space-y-0.5">
                 <span className="text-[10px] text-slate-400 font-medium block">
-                  মোট সমস্যা
+                  {t('Total Issues', 'মোট সমস্যা')}
                 </span>
                 <span className="text-base font-black text-slate-900 block font-mono">
-                  184
+                  {formatNumber(184)}
                 </span>
                 <span className="text-[10px] font-bold text-emerald-600 flex items-center justify-center gap-0.5 font-mono">
                   <TrendingUp className="w-2.5 h-2.5" />
@@ -890,13 +825,12 @@ export default function IssueDetailPage() {
                 </span>
               </div>
 
-              {/* Stat 2 */}
               <div className="space-y-0.5">
                 <span className="text-[10px] text-slate-400 font-medium block">
-                  সমাধান হয়েছে
+                  {t('Resolved', 'সমাধান হয়েছে')}
                 </span>
                 <span className="text-base font-black text-slate-900 block font-mono">
-                  92
+                  {formatNumber(92)}
                 </span>
                 <span className="text-[10px] font-bold text-emerald-600 flex items-center justify-center gap-0.5 font-mono">
                   <TrendingUp className="w-2.5 h-2.5" />
@@ -904,13 +838,12 @@ export default function IssueDetailPage() {
                 </span>
               </div>
 
-              {/* Stat 3 */}
               <div className="space-y-0.5">
                 <span className="text-[10px] text-slate-400 font-medium block">
-                  সক্রিয় সমস্যা
+                  {t('Active Issues', 'সক্রিয় সমস্যা')}
                 </span>
                 <span className="text-base font-black text-slate-900 block font-mono">
-                  37
+                  {formatNumber(37)}
                 </span>
                 <span className="text-[10px] font-bold text-emerald-600 flex items-center justify-center gap-0.5 font-mono">
                   <TrendingUp className="w-2.5 h-2.5" />
@@ -918,13 +851,12 @@ export default function IssueDetailPage() {
                 </span>
               </div>
 
-              {/* Stat 4 */}
               <div className="space-y-0.5">
                 <span className="text-[10px] text-slate-400 font-medium block">
-                  গড় সমাধান
+                  {t('Avg. Resolution', 'গড় সমাধান')}
                 </span>
                 <span className="text-base font-black text-slate-900 block font-mono">
-                  5 দিন
+                  {formatNumber(5)} {t('Days', 'দিন')}
                 </span>
                 <span className="text-[10px] font-bold text-emerald-600 flex items-center justify-center gap-0.5 font-mono">
                   <TrendingDown className="w-2.5 h-2.5" />
@@ -933,108 +865,20 @@ export default function IssueDetailPage() {
               </div>
             </div>
           </div>
-
-          {/* Card 6: সংশ্লিষ্ট ইস্যু */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm space-y-3">
-            <h3 className="font-extrabold text-sm text-slate-900">
-              সংশ্লিষ্ট ইস্যু
-            </h3>
-
-            <div className="space-y-3">
-              {/* Item 1 */}
-              <Link
-                href="/issues/water-logging-kazipara-4c81"
-                className="flex items-center gap-2.5 group hover:bg-slate-50 p-1.5 rounded-xl transition"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=120&q=80"
-                  alt="Water Logging"
-                  className="w-11 h-11 rounded-lg object-cover border border-slate-200 shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-xs text-slate-900 group-hover:text-[#0d6e5a] transition truncate">
-                    মিরপুর ১০ - জলাবদ্ধতা সমস্যা
-                  </h4>
-                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                    NC-2026-0287 • ৪ দিন আগে
-                  </p>
-                </div>
-                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold shrink-0">
-                  রিপোর্টেড
-                </span>
-              </Link>
-
-              {/* Item 2 */}
-              <Link
-                href="/issues/broken-footpath-shewrapara-5d19"
-                className="flex items-center gap-2.5 group hover:bg-slate-50 p-1.5 rounded-xl transition"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=120&q=80"
-                  alt="Broken Footpath"
-                  className="w-11 h-11 rounded-lg object-cover border border-slate-200 shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-xs text-slate-900 group-hover:text-[#0d6e5a] transition truncate">
-                    মিরপুর ১০ - ভাঙা ফুটপাত
-                  </h4>
-                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                    NC-2026-0365 • ৩ দিন আগে
-                  </p>
-                </div>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold shrink-0">
-                  সমাধান হয়েছে
-                </span>
-              </Link>
-
-              {/* Item 3 */}
-              <Link
-                href="/issues/drainage-blockage-mirpur-11-2a09"
-                className="flex items-center gap-2.5 group hover:bg-slate-50 p-1.5 rounded-xl transition"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1584463699042-308f237bf309?auto=format&fit=crop&w=120&q=80"
-                  alt="Drainage Blockage"
-                  className="w-11 h-11 rounded-lg object-cover border border-slate-200 shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-bold text-xs text-slate-900 group-hover:text-[#0d6e5a] transition truncate">
-                    মিরপুর ১১ - ড্রেনেজ সমস্যা
-                  </h4>
-                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                    NC-2026-0221 • ৬ দিন আগে
-                  </p>
-                </div>
-                <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold shrink-0">
-                  অ্যাসাইন্ড
-                </span>
-              </Link>
-            </div>
-
-            <div className="pt-2 border-t border-slate-100 text-center">
-              <Link
-                href="/explore"
-                className="text-xs text-[#0d6e5a] font-bold hover:underline inline-flex items-center gap-1"
-              >
-                <span>সব ইস্যু দেখুন</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Authority Quick-Action Modal (for AUTHORITY/ADMIN role) */}
+      {/* Authority Quick-Action Modal */}
       {showAuthorityModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in font-bangla">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <h3 className="font-extrabold text-base text-slate-900">
-                  কর্তৃপক্ষ স্ট্যাটাস পরিবর্তন
+                  {t('Authority Status Update', 'কর্তৃপক্ষ স্ট্যাটাস পরিবর্তন')}
                 </h3>
                 <p className="text-xs text-slate-500">
-                  লগইন আছেন: {currentUser.name} ({currentUser.role})
+                  {t('Logged in:', 'লগইন আছেন:')} {currentUser.name} ({currentUser.role})
                 </p>
               </div>
               <button
@@ -1048,26 +892,26 @@ export default function IssueDetailPage() {
             <form onSubmit={handleAuthorityUpdate} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-700 block">
-                  নতুন স্ট্যাটাস নির্বাচন করুন:
+                  {t('Select New Status:', 'নতুন স্ট্যাটাস নির্বাচন করুন:')}
                 </label>
                 <select
                   value={authorityStatus}
                   onChange={(e) => setAuthorityStatus(e.target.value as IssueStatus)}
                   className="w-full text-xs p-2.5 rounded-lg border border-slate-300 font-semibold"
                 >
-                  <option value="UNDER_REVIEW">UNDER_REVIEW (যাচাই চলছে)</option>
-                  <option value="VERIFIED">VERIFIED (যাচাইকৃত)</option>
-                  <option value="ASSIGNED">ASSIGNED (অ্যাসাইন্ড)</option>
-                  <option value="IN_PROGRESS">IN_PROGRESS (কাজ চলছে)</option>
-                  <option value="RESOLVED">RESOLVED (সমাধান হয়েছে)</option>
-                  <option value="CLOSED">CLOSED (নিষ্পত্তিকৃত)</option>
+                  <option value="UNDER_REVIEW">UNDER_REVIEW ({t('Under Review', 'যাচাই চলছে')})</option>
+                  <option value="VERIFIED">VERIFIED ({t('Verified', 'যাচাইকৃত')})</option>
+                  <option value="ASSIGNED">ASSIGNED ({t('Assigned', 'অ্যাসাইন্ড')})</option>
+                  <option value="IN_PROGRESS">IN_PROGRESS ({t('In Progress', 'কাজ চলছে')})</option>
+                  <option value="RESOLVED">RESOLVED ({t('Resolved', 'সমাধান হয়েছে')})</option>
+                  <option value="CLOSED">CLOSED ({t('Closed', 'নিষ্পত্তিকৃত')})</option>
                 </select>
               </div>
 
               {authorityStatus === 'RESOLVED' && (
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-700 block">
-                    সমাধানের প্রমাণ ফটো (পরে - After Image URL):
+                    {t('Resolution Proof Photo URL:', 'সমাধানের প্রমাণ ফটো (পরে - After Image URL):')}
                   </label>
                   <input
                     type="text"
@@ -1080,14 +924,14 @@ export default function IssueDetailPage() {
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-700 block">
-                  অফিসিয়াল অডিট নোট:
+                  {t('Official Audit Note:', 'অফিসিয়াল অডিট নোট:')}
                 </label>
                 <textarea
                   rows={3}
                   required
                   value={authorityNote}
                   onChange={(e) => setAuthorityNote(e.target.value)}
-                  placeholder="যেমন: গর্তটি মেরামত ও পিচ ঢালাই সম্পন্ন হয়েছে।"
+                  placeholder={t('e.g., Road repaired and macadam sealed.', 'যেমন: গর্তটি মেরামত ও পিচ ঢালাই সম্পন্ন হয়েছে।')}
                   className="w-full text-xs p-2.5 rounded-lg border border-slate-300"
                 />
               </div>
@@ -1098,13 +942,13 @@ export default function IssueDetailPage() {
                   onClick={() => setShowAuthorityModal(false)}
                   className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100"
                 >
-                  বাতিল
+                  {t('Cancel', 'বাতিল')}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2.5 rounded-xl bg-teal-800 text-white text-xs font-bold hover:bg-teal-900 shadow"
                 >
-                  স্ট্যাটাস সেভ করুন
+                  {t('Save Status', 'স্ট্যাটাস সেভ করুন')}
                 </button>
               </div>
             </form>
