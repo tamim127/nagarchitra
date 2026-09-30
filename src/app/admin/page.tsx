@@ -21,10 +21,11 @@ import {
   Search,
 } from 'lucide-react';
 import Link from 'next/link';
+import { AccessDeniedCard } from '@/components/AccessDeniedCard';
 
 export default function AdminPage() {
   const { issues, updateIssueStatus } = useIssues();
-  const { role, setRole, currentUser } = useAuthRole();
+  const { role, currentUser } = useAuthRole();
   const { t, language, formatNumber } = useLanguage();
   const { isConnected, onlineCount } = useSocket();
 
@@ -50,6 +51,15 @@ export default function AdminPage() {
     }
     return true;
   });
+
+  if (role !== 'ADMIN' && role !== 'SUPER_ADMIN') {
+    return (
+      <AccessDeniedCard
+        requiredRole="ADMIN"
+        portalName={language === 'bn' ? 'অ্যাডমিন মডারেশন কনসোল' : 'Admin Moderation Console'}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#041411] text-slate-100 py-8 px-4 sm:px-6 lg:px-8">

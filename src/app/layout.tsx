@@ -6,7 +6,6 @@ import { AuthRoleProvider } from '@/context/AuthRoleContext';
 import { IssueProvider } from '@/context/IssueContext';
 import { SocketProvider } from '@/context/SocketContext';
 import { RealtimeToast } from '@/components/RealtimeToast';
-import { RoleSwitcherBanner } from '@/components/RoleSwitcherBanner';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 

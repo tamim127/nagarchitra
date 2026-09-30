@@ -7,6 +7,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { useSocket } from '@/context/SocketContext';
 import { Issue, IssueStatus } from '@/types';
 import Link from 'next/link';
+import { AccessDeniedCard } from '@/components/AccessDeniedCard';
 import {
   Building2,
   AlertTriangle,
@@ -26,7 +27,7 @@ import { getStatusBadgeStyle, getSeverityBadge } from '@/components/IssueCard';
 
 export default function AuthorityDashboardPage() {
   const { issues, updateIssueStatus } = useIssues();
-  const { role, setRole, currentUser } = useAuthRole();
+  const { role, currentUser } = useAuthRole();
   const { t, language, formatNumber } = useLanguage();
   const { isConnected, onlineCount } = useSocket();
 
@@ -74,6 +75,15 @@ export default function AuthorityDashboardPage() {
     setSelectedIssueForAction(null);
     setActionNote('');
   };
+
+  if (role !== 'AUTHORITY' && role !== 'ADMIN' && role !== 'SUPER_ADMIN') {
+    return (
+      <AccessDeniedCard
+        requiredRole="AUTHORITY"
+        portalName={language === 'bn' ? 'বিভাগীয় অপারেশন পোর্টাল' : 'Departmental Operations Portal'}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#041411] text-slate-100 py-8 px-4 sm:px-6 lg:px-8">

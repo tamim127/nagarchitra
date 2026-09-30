@@ -1,4 +1,4 @@
-export type UserRole = 'CITIZEN' | 'AUTHORITY' | 'ADMIN' | 'MODERATOR';
+export type UserRole = 'CITIZEN' | 'AUTHORITY' | 'ADMIN' | 'SUPER_ADMIN' | 'MODERATOR';
 
 export type IssueStatus =
   | 'DRAFT'

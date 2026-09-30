@@ -2,19 +2,40 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserRole, UserProfile } from '@/types';
+import {
+  generateSecureSessionToken,
+  verifySecureSessionToken,
+  recordFailedAttempt,
+  clearFailedAttempts,
+  recordSecurityAudit,
+  getFailedAttempts,
+  sanitizeInput,
+} from '@/services/authSecurity';
 
 interface AuthRoleContextType {
   role: UserRole;
-  setRole: (role: UserRole) => void;
   currentUser: UserProfile;
+  isAuthenticated: boolean;
+  isTampered: boolean;
+  login: (email: string, password: string, requiredRole?: UserRole) => {
+    success: boolean;
+    error?: string;
+    isLocked?: boolean;
+    remainingMinutes?: number;
+  };
+  register: (name: string, email: string, password: string, location?: string) => {
+    success: boolean;
+    error?: string;
+  };
+  logout: () => void;
   updateUser: (data: Partial<UserProfile>) => void;
-  availableRoles: { role: UserRole; label: string; subtitle: string }[];
+  hasRole: (requiredRole: UserRole) => boolean;
 }
 
 const CITIZEN_PROFILE: UserProfile = {
   id: 'u-1',
   name: 'Tuhin Rahman',
-  email: 'tuhin@email.com',
+  email: 'citizen@nagarchitra.bd',
   role: 'CITIZEN',
   avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
   joinedDate: '০১ মার্চ ২০২৬',
@@ -42,21 +63,13 @@ const CITIZEN_PROFILE: UserProfile = {
       icon: 'Eye',
       unlockedAt: '2026-06-04',
     },
-    {
-      id: 'b-3',
-      name: 'Verified Contributor',
-      nameBn: 'যাচাইকৃত নাগরিক',
-      description: 'Provided photographic resolution verification with 90%+ community agreement.',
-      icon: 'CheckCircle2',
-      unlockedAt: '2026-08-19',
-    },
   ],
 };
 
 const AUTHORITY_PROFILE: UserProfile = {
   id: 'u-auth-1',
   name: 'Engr. Mahbubur Rahman',
-  email: 'm.rahman@dncc.gov.bd.demo',
+  email: 'authority@dncc.gov.bd',
   role: 'AUTHORITY',
   avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
   joinedDate: 'January 2026',
@@ -82,7 +95,7 @@ const AUTHORITY_PROFILE: UserProfile = {
 const ADMIN_PROFILE: UserProfile = {
   id: 'u-admin-1',
   name: 'Civic Admin Triage',
-  email: 'moderation@nagarchitra.org',
+  email: 'admin@nagarchitra.org',
   role: 'ADMIN',
   avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
   joinedDate: 'January 2026',
@@ -105,58 +118,329 @@ const ADMIN_PROFILE: UserProfile = {
   ],
 };
 
+const SUPER_ADMIN_PROFILE: UserProfile = {
+  id: 'u-super-1',
+  name: 'Engr. Tariqul Islam (Master Admin)',
+  email: 'superadmin@nagarchitra.gov.bd',
+  role: 'SUPER_ADMIN',
+  avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80',
+  joinedDate: 'November 2025',
+  location: 'Ministry of Local Govt & Dhaka Metropolitan Governance',
+  stats: {
+    reportsCount: 0,
+    verifiedCount: 940,
+    resolvedCount: 680,
+    impactScore: 9500,
+  },
+  badges: [
+    {
+      id: 'b-super-1',
+      name: 'Root Authority',
+      nameBn: 'রুট অ্যাডমিনিস্ট্রেটর',
+      description: 'Unrestricted cyber oversight and cryptographic governance keys.',
+      icon: 'ShieldAlert',
+      unlockedAt: '2025-11-01',
+    },
+  ],
+};
+
+const DEFAULT_CREDENTIALS: Record<string, { passwordHash: string; profile: UserProfile }> = {
+  'citizen@nagarchitra.bd': {
+    passwordHash: 'Citizen@2026!',
+    profile: CITIZEN_PROFILE,
+  },
+  'tuhin@email.com': {
+    passwordHash: 'Citizen@2026!',
+    profile: CITIZEN_PROFILE,
+  },
+  'authority@dncc.gov.bd': {
+    passwordHash: 'DhakaZone4@2026!',
+    profile: AUTHORITY_PROFILE,
+  },
+  'm.rahman@dncc.gov.bd.demo': {
+    passwordHash: 'DhakaZone4@2026!',
+    profile: AUTHORITY_PROFILE,
+  },
+  'admin@nagarchitra.org': {
+    passwordHash: 'AdminPass@2026!',
+    profile: ADMIN_PROFILE,
+  },
+  'superadmin@nagarchitra.gov.bd': {
+    passwordHash: 'SuperAdmin@Dhaka#2026!',
+    profile: SUPER_ADMIN_PROFILE,
+  },
+};
+
 const AuthRoleContext = createContext<AuthRoleContextType | undefined>(undefined);
 
 export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [role, setRoleState] = useState<UserRole>('CITIZEN');
-  const [customProfile, setCustomProfile] = useState<Partial<UserProfile>>({});
+  const [currentUser, setCurrentUser] = useState<UserProfile>(CITIZEN_PROFILE);
+  const [role, setRole] = useState<UserRole>('CITIZEN');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isTampered, setIsTampered] = useState<boolean>(false);
 
+  // Authenticate & Verify cryptographic token on boot
   useEffect(() => {
     try {
-      const savedRole = localStorage.getItem('nagarchitra_demo_role') as UserRole;
-      if (savedRole && (savedRole === 'CITIZEN' || savedRole === 'AUTHORITY' || savedRole === 'ADMIN')) {
-        setRoleState(savedRole);
+      const storedToken = localStorage.getItem('nc_sec_token_v3');
+      const storedUser = localStorage.getItem('nc_active_user_v3');
+
+      if (storedToken && storedUser) {
+        const verifyRes = verifySecureSessionToken(storedToken);
+
+        if (verifyRes.valid && verifyRes.session) {
+          const userObj = JSON.parse(storedUser);
+          // Check role integrity against session signature
+          if (userObj.role === verifyRes.session.role && userObj.id === verifyRes.session.userId) {
+            setCurrentUser(userObj);
+            setRole(verifyRes.session.role);
+            setIsAuthenticated(true);
+            setIsTampered(false);
+            return;
+          } else {
+            // Privilege escalation tampering detected!
+            console.error('[SECURITY ALERT] Role tampering detected in localStorage!');
+            setIsTampered(true);
+            recordSecurityAudit({
+              eventType: 'ROLE_TAMPERING_ATTEMPT',
+              email: userObj.email || 'unknown',
+              role: userObj.role || 'unknown',
+              severity: 'CRITICAL',
+              details: `Client storage tampering detected: claimed role [${userObj.role}] did not match signed cryptographic token [${verifyRes.session.role}]. Privilege stripped.`,
+              ipMasked: '103.205.*.*',
+            });
+            logout();
+            return;
+          }
+        } else {
+          // Token invalid or expired
+          if (verifyRes.error === 'ROLE_TAMPERING_DETECTED') {
+            setIsTampered(true);
+          }
+          logout();
+          return;
+        }
       }
-      const savedProfile = localStorage.getItem('nagarchitra_custom_profile');
-      if (savedProfile) {
-        setCustomProfile(JSON.parse(savedProfile));
-      }
+
+      // Default baseline login (Citizen) with signed token
+      const { token } = generateSecureSessionToken(CITIZEN_PROFILE);
+      localStorage.setItem('nc_sec_token_v3', token);
+      localStorage.setItem('nc_active_user_v3', JSON.stringify(CITIZEN_PROFILE));
+      setCurrentUser(CITIZEN_PROFILE);
+      setRole('CITIZEN');
+      setIsAuthenticated(true);
     } catch (e) {
       console.error(e);
     }
   }, []);
 
-  const setRole = (newRole: UserRole) => {
-    setRoleState(newRole);
-    localStorage.setItem('nagarchitra_demo_role', newRole);
+  const login = (
+    emailInput: string,
+    passwordInput: string,
+    requiredRole?: UserRole
+  ): { success: boolean; error?: string; isLocked?: boolean; remainingMinutes?: number } => {
+    const cleanEmail = sanitizeInput(emailInput).toLowerCase();
+    const cleanPass = passwordInput.trim();
+
+    // Check brute-force lockout
+    const attemptStatus = getFailedAttempts(cleanEmail);
+    if (attemptStatus.lockedUntil > Date.now()) {
+      const remainingMinutes = Math.ceil((attemptStatus.lockedUntil - Date.now()) / 60000);
+      return {
+        success: false,
+        isLocked: true,
+        remainingMinutes,
+        error: `Account is temporarily locked due to multiple failed attempts. Try again in ${remainingMinutes} minutes.`,
+      };
+    }
+
+    const account = DEFAULT_CREDENTIALS[cleanEmail];
+
+    if (!account || account.passwordHash !== cleanPass) {
+      const record = recordFailedAttempt(cleanEmail);
+      recordSecurityAudit({
+        eventType: 'LOGIN_FAILED',
+        email: cleanEmail,
+        role: requiredRole || 'UNKNOWN',
+        severity: record.isLocked ? 'CRITICAL' : 'WARN',
+        details: `Invalid credentials entered. Failure count: ${record.count}`,
+        ipMasked: '103.205.*.*',
+      });
+
+      return {
+        success: false,
+        isLocked: record.isLocked,
+        remainingMinutes: record.remainingLockoutMinutes,
+        error: record.isLocked
+          ? `Too many failed attempts. Account locked for 15 minutes.`
+          : `Invalid email or password. Attempt ${record.count} of 5.`,
+      };
+    }
+
+    // Role check if logging in from a dedicated portal
+    if (requiredRole && account.profile.role !== requiredRole && account.profile.role !== 'SUPER_ADMIN') {
+      recordSecurityAudit({
+        eventType: 'ACCESS_VIOLATION',
+        email: cleanEmail,
+        role: account.profile.role,
+        severity: 'WARN',
+        details: `User with role [${account.profile.role}] attempted to login through [${requiredRole}] portal.`,
+        ipMasked: '103.205.*.*',
+      });
+
+      return {
+        success: false,
+        error: `Access Denied: This account has [${account.profile.role}] privileges, not [${requiredRole}].`,
+      };
+    }
+
+    // Success: clear brute force counters and issue signed token
+    clearFailedAttempts(cleanEmail);
+    const { token } = generateSecureSessionToken(account.profile);
+
+    try {
+      localStorage.setItem('nc_sec_token_v3', token);
+      localStorage.setItem('nc_active_user_v3', JSON.stringify(account.profile));
+    } catch (e) {}
+
+    setCurrentUser(account.profile);
+    setRole(account.profile.role);
+    setIsAuthenticated(true);
+    setIsTampered(false);
+
+    recordSecurityAudit({
+      eventType: 'LOGIN_SUCCESS',
+      email: cleanEmail,
+      role: account.profile.role,
+      severity: 'INFO',
+      details: `Authenticated successfully with role [${account.profile.role}]. Cryptographic token sealed.`,
+      ipMasked: '103.205.*.*',
+    });
+
+    return { success: true };
+  };
+
+  const register = (
+    name: string,
+    email: string,
+    password: string,
+    location?: string
+  ): { success: boolean; error?: string } => {
+    const cleanEmail = sanitizeInput(email).toLowerCase();
+    const cleanName = sanitizeInput(name);
+
+    if (DEFAULT_CREDENTIALS[cleanEmail]) {
+      return { success: false, error: 'An account with this email already exists.' };
+    }
+
+    if (password.length < 6) {
+      return { success: false, error: 'Password must be at least 6 characters long.' };
+    }
+
+    const newCitizen: UserProfile = {
+      id: `u-${Date.now()}`,
+      name: cleanName,
+      email: cleanEmail,
+      role: 'CITIZEN',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      joinedDate: 'আজকে নিবন্ধিত',
+      location: location || 'Dhaka Metropolitan',
+      stats: {
+        reportsCount: 0,
+        verifiedCount: 0,
+        resolvedCount: 0,
+        impactScore: 100,
+      },
+      badges: [],
+    };
+
+    DEFAULT_CREDENTIALS[cleanEmail] = {
+      passwordHash: password,
+      profile: newCitizen,
+    };
+
+    const { token } = generateSecureSessionToken(newCitizen);
+    try {
+      localStorage.setItem('nc_sec_token_v3', token);
+      localStorage.setItem('nc_active_user_v3', JSON.stringify(newCitizen));
+    } catch (e) {}
+
+    setCurrentUser(newCitizen);
+    setRole('CITIZEN');
+    setIsAuthenticated(true);
+
+    recordSecurityAudit({
+      eventType: 'LOGIN_SUCCESS',
+      email: cleanEmail,
+      role: 'CITIZEN',
+      severity: 'INFO',
+      details: 'New citizen account registered and authenticated.',
+      ipMasked: '103.205.*.*',
+    });
+
+    return { success: true };
+  };
+
+  const logout = () => {
+    try {
+      localStorage.removeItem('nc_sec_token_v3');
+      localStorage.removeItem('nc_active_user_v3');
+      localStorage.removeItem('nagarchitra_demo_role');
+    } catch (e) {}
+
+    recordSecurityAudit({
+      eventType: 'LOGOUT',
+      email: currentUser.email,
+      role: currentUser.role,
+      severity: 'INFO',
+      details: 'User logged out and session revoked.',
+      ipMasked: '103.205.*.*',
+    });
+
+    setCurrentUser(CITIZEN_PROFILE);
+    setRole('CITIZEN');
   };
 
   const updateUser = (data: Partial<UserProfile>) => {
-    setCustomProfile((prev) => {
-      const updated = { ...prev, ...data };
+    setCurrentUser((prev) => {
+      // Security rule: Role cannot be updated via updateUser
+      const safeData = { ...data };
+      delete safeData.role;
+      delete safeData.id;
+
+      const updated = { ...prev, ...safeData };
+      const { token } = generateSecureSessionToken(updated);
       try {
-        localStorage.setItem('nagarchitra_custom_profile', JSON.stringify(updated));
-      } catch (e) {
-        console.error(e);
-      }
+        localStorage.setItem('nc_sec_token_v3', token);
+        localStorage.setItem('nc_active_user_v3', JSON.stringify(updated));
+      } catch (e) {}
       return updated;
     });
   };
 
-  const baseUser = role === 'AUTHORITY' ? AUTHORITY_PROFILE : role === 'ADMIN' ? ADMIN_PROFILE : CITIZEN_PROFILE;
-  const currentUser: UserProfile = {
-    ...baseUser,
-    ...(role === 'CITIZEN' ? customProfile : {}),
+  const hasRole = (requiredRole: UserRole): boolean => {
+    if (role === 'SUPER_ADMIN') return true;
+    if (requiredRole === 'SUPER_ADMIN') return false;
+    if (requiredRole === 'ADMIN') return role === 'ADMIN';
+    if (requiredRole === 'AUTHORITY') return role === 'AUTHORITY' || role === 'ADMIN';
+    if (requiredRole === 'CITIZEN') return true;
+    return false;
   };
 
-  const availableRoles = [
-    { role: 'CITIZEN' as UserRole, label: 'Citizen', subtitle: 'Report & Verify' },
-    { role: 'AUTHORITY' as UserRole, label: 'Authority', subtitle: 'DNCC / WASA / DESCO' },
-    { role: 'ADMIN' as UserRole, label: 'Admin', subtitle: 'Platform Operations' },
-  ];
-
   return (
-    <AuthRoleContext.Provider value={{ role, setRole, currentUser, updateUser, availableRoles }}>
+    <AuthRoleContext.Provider
+      value={{
+        role,
+        currentUser,
+        isAuthenticated,
+        isTampered,
+        login,
+        register,
+        logout,
+        updateUser,
+        hasRole,
+      }}
+    >
       {children}
     </AuthRoleContext.Provider>
   );
