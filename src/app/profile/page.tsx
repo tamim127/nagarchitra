@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAuthRole } from '@/context/AuthRoleContext';
+import { useIssues } from '@/context/IssueContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { CivicMap } from '@/components/Map';
 import {
@@ -24,85 +25,86 @@ import {
   ArrowRight,
   ChevronDown,
   Sparkles,
+  Camera,
+  X,
+  Check,
+  Upload,
 } from 'lucide-react';
 
 export default function ProfilePage() {
-  const { currentUser, role } = useAuthRole();
+  const { currentUser, role, updateUser } = useAuthRole();
+  const { issues } = useIssues();
   const { t, language, formatNumber } = useLanguage();
 
   // Active filter tab for reports
   const [activeTab, setActiveTab] = useState<'all' | 'submitted' | 'verifying' | 'in_progress' | 'resolved'>('all');
   const [selectedArea, setSelectedArea] = useState('Mirpur 10');
 
-  // Reports data matching mockup
-  const reports = [
-    {
-      id: 'NC-2026-0112',
-      title: 'মিরপুর ১০ - রাস্তায় বড় গর্ত',
-      location: 'Mirpur 10, Dhaka',
-      category: 'রাস্তা ও ফুটপাত',
-      status: 'সমাধানাধীন',
-      statusType: 'in_progress',
-      statusColor: 'bg-amber-50 text-amber-800 border-amber-200',
-      time: '২ দিন আগে',
-      img: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=120&q=80',
-      link: '/issues/road-damage-mirpur-10-8f92',
-      currentStep: 2, // 1: reported, 2: verifying, 3: in_progress, 4: resolved
-    },
-    {
-      id: 'NC-2026-0108',
-      title: 'ধানমন্ডি ২৭ - পানি জমে থাকে',
-      location: 'Dhanmondi, Dhaka',
-      category: 'ড্রেনেজ ও পানি নিষ্কাশন',
-      status: 'সমাধান হয়েছে',
-      statusType: 'resolved',
-      statusColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-      time: '৫ দিন আগে',
-      img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=120&q=80',
-      link: '/issues/waterlogging-farmgate-bijoy-1e82',
-      currentStep: 4,
-    },
-    {
-      id: 'NC-2026-0104',
-      title: 'উত্তরা ৩ - খোলা ম্যানহোল',
-      location: 'Uttara, Dhaka',
-      category: 'নিরাপত্তা',
-      status: 'জরুরি',
-      statusType: 'critical',
-      statusColor: 'bg-red-50 text-red-700 border-red-200 font-bold',
-      isCritical: true,
-      time: '১ সপ্তাহ আগে',
-      img: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=120&q=80',
-      link: '/issues/open-manhole-mohammadpur-9a11',
-      currentStep: 1,
-    },
-    {
-      id: 'NC-2026-0098',
-      title: 'মোহাম্মদপুর - বর্জ্য ফেলা',
-      location: 'Mohammadpur, Dhaka',
-      category: 'বর্জ্য ব্যবস্থাপনা',
-      status: 'সমাধান হয়েছে',
-      statusType: 'resolved',
-      statusColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-      time: '১ সপ্তাহ আগে',
-      img: 'https://images.unsplash.com/photo-1605600659908-0ef719419d41?auto=format&fit=crop&w=120&q=80',
-      link: '/issues/waste-dumping-dhanmondi-27-3b44',
-      currentStep: 4,
-    },
-    {
-      id: 'NC-2026-0087',
-      title: 'গুলশান ১ - উন্মুক্ত বৈদ্যুতিক তার',
-      location: 'Gulshan, Dhaka',
-      category: 'বিদ্যুৎ ও সেবা',
-      status: 'যাচাই চলছে',
-      statusType: 'verifying',
-      statusColor: 'bg-purple-50 text-purple-800 border-purple-200',
-      time: '১০ দিন আগে',
-      img: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=120&q=80',
-      link: '/issues/street-light-gulshan-1-6d20',
-      currentStep: 2,
-    },
-  ];
+  // Edit Profile Modal State
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editName, setEditName] = useState(currentUser.name);
+  const [editLocation, setEditLocation] = useState(currentUser.location || 'Mirpur 10, Dhaka');
+  const [editAvatar, setEditAvatar] = useState(currentUser.avatar);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Dynamic user issues
+  const userReportedIssues = issues.filter(
+    (i) => i.reportedBy.id === currentUser.id || i.reportedBy.name.toLowerCase() === currentUser.name.toLowerCase()
+  );
+  const displaySource = userReportedIssues.length > 0 ? userReportedIssues : issues;
+
+  const reports = displaySource.map((i) => {
+    let statusType: 'submitted' | 'verifying' | 'in_progress' | 'resolved' | 'critical' = 'submitted';
+    let statusColor = 'bg-slate-50 text-slate-700 border-slate-200';
+    let statusLabel = 'জমা হয়েছে';
+    let currentStep = 1;
+
+    if (i.status === 'SUBMITTED' || i.status === 'UNDER_REVIEW') {
+      statusType = 'submitted';
+      statusColor = 'bg-blue-50 text-blue-800 border-blue-200';
+      statusLabel = language === 'bn' ? 'পর্যালোচনাধীন' : 'Submitted';
+      currentStep = 1;
+    } else if (i.status === 'VERIFIED' || i.status === 'CITIZEN_VERIFICATION') {
+      statusType = 'verifying';
+      statusColor = 'bg-purple-50 text-purple-800 border-purple-200';
+      statusLabel = language === 'bn' ? 'যাচাই চলছে' : 'Verifying';
+      currentStep = 2;
+    } else if (i.status === 'IN_PROGRESS' || i.status === 'ASSIGNED') {
+      statusType = 'in_progress';
+      statusColor = 'bg-amber-50 text-amber-800 border-amber-200';
+      statusLabel = language === 'bn' ? 'সমাধানাধীন' : 'In Progress';
+      currentStep = 3;
+    } else if (i.status === 'RESOLVED' || i.status === 'CLOSED') {
+      statusType = 'resolved';
+      statusColor = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+      statusLabel = language === 'bn' ? 'সমাধান হয়েছে' : 'Resolved';
+      currentStep = 4;
+    }
+
+    if (i.severity === 'CRITICAL' && i.status !== 'CLOSED') {
+      statusType = 'critical';
+      statusColor = 'bg-red-50 text-red-700 border-red-200 font-bold';
+    }
+
+    return {
+      id: i.trackingNumber,
+      title: i.title,
+      location: `${i.location.area}, ${i.location.city}`,
+      category: i.categoryName,
+      status: statusLabel,
+      statusType,
+      statusColor,
+      isCritical: i.severity === 'CRITICAL',
+      time: new Date(i.createdAt).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }),
+      img: i.media[0]?.url || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=120&q=80',
+      link: `/issues/${i.id}`,
+      currentStep,
+    };
+  });
 
   const filteredReports = reports.filter((r) => {
     if (activeTab === 'all') return true;
@@ -112,6 +114,20 @@ export default function ProfilePage() {
     if (activeTab === 'resolved') return r.statusType === 'resolved';
     return true;
   });
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateUser({
+      name: editName.trim() || currentUser.name,
+      location: editLocation.trim() || currentUser.location,
+      avatar: editAvatar,
+    });
+    setSaveSuccess(true);
+    setTimeout(() => {
+      setSaveSuccess(false);
+      setShowEditModal(false);
+    }, 1000);
+  };
 
   return (
     <div className="bg-[#F8F9FA] text-slate-900 min-h-screen font-bangla pb-16">
@@ -179,7 +195,16 @@ export default function ProfilePage() {
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>নাগরিক ড্যাশবোর্ড হাব</span>
                   </Link>
-                  <button className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold backdrop-blur-xs transition">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditName(currentUser.name);
+                      setEditLocation(currentUser.location || 'Mirpur 10, Dhaka');
+                      setEditAvatar(currentUser.avatar);
+                      setShowEditModal(true);
+                    }}
+                    className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold backdrop-blur-xs transition"
+                  >
                     <Edit3 className="w-3.5 h-3.5" />
                     <span>প্রোফাইল সম্পাদনা</span>
                   </button>
@@ -586,6 +611,139 @@ export default function ProfilePage() {
           </div>
         </div>
       </section>
+
+      {/* Edit Profile Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-5 relative">
+            <button
+              onClick={() => setShowEditModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-1">
+              <h3 className="text-lg font-black text-slate-900 font-bangla">
+                {language === 'bn' ? 'নাগরিক প্রোফাইল সম্পাদনা' : 'Edit Citizen Profile'}
+              </h3>
+              <p className="text-xs text-slate-500">
+                {language === 'bn' ? 'আপনার তথ্য ও অবতার ছবি পরিবর্তন করুন' : 'Update your personal details and avatar'}
+              </p>
+            </div>
+
+            <form onSubmit={handleSaveProfile} className="space-y-4">
+              {/* Avatar Preview & Upload */}
+              <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                <div className="relative shrink-0">
+                  <img
+                    src={editAvatar}
+                    alt="Preview"
+                    className="w-16 h-16 rounded-full object-cover ring-2 ring-primary"
+                  />
+                  <label className="absolute bottom-0 right-0 p-1.5 rounded-full bg-primary text-white cursor-pointer hover:bg-primary-600 shadow-md">
+                    <Camera className="w-3.5 h-3.5" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            if (event.target?.result) {
+                              setEditAvatar(event.target.result as string);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+                <div className="space-y-1">
+                  <span className="text-xs font-bold text-slate-800 block">
+                    {language === 'bn' ? 'প্রোফাইল ছবি' : 'Profile Picture'}
+                  </span>
+                  <label className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 cursor-pointer hover:bg-slate-50 shadow-xs">
+                    <Upload className="w-3 h-3 text-primary" />
+                    <span>{language === 'bn' ? 'ছবি আপলোড করুন' : 'Upload photo'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            if (event.target?.result) {
+                              setEditAvatar(event.target.result as string);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Name */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
+                  {language === 'bn' ? 'পূর্ণ নাম' : 'Full Name'}
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              {/* Location */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
+                  {language === 'bn' ? 'বাসস্থান / এলাকা' : 'Residential Area'}
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editLocation}
+                  onChange={(e) => setEditLocation(e.target.value)}
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              {saveSuccess && (
+                <div className="p-2.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span>{language === 'bn' ? 'প্রোফাইল সফলভাবে সংরক্ষিত হয়েছে!' : 'Profile saved successfully!'}</span>
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowEditModal(false)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition"
+                >
+                  {language === 'bn' ? 'বাতিল' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl text-xs font-bold bg-[#0c4a45] hover:bg-[#083531] text-white shadow-sm transition"
+                >
+                  {language === 'bn' ? 'সংরক্ষণ করুন' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

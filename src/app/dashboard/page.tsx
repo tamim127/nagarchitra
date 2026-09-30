@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useIssues } from '@/context/IssueContext';
@@ -36,10 +36,12 @@ import {
   BarChart3,
   Calendar,
   Check,
+  Camera,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { getStatusBadgeStyle, getSeverityBadge } from '@/components/IssueCard';
 
-export default function UnifiedRoleDashboardPage() {
+function UnifiedRoleDashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { issues, updateIssueStatus, confirmIssue, voteResolution } = useIssues();
@@ -1038,19 +1040,54 @@ export default function UnifiedRoleDashboardPage() {
 
                 {actionStatus === 'RESOLVED' && (
                   <div className="space-y-2 p-3 rounded-xl bg-[#051e19] border border-emerald-600/60">
-                    <label className="font-bold text-emerald-300 block flex items-center gap-1.5">
-                      <Upload className="w-4 h-4 text-emerald-400" />
-                      <span>সমাধানের প্রমাণ ফটো (AFTER Image URL):</span>
+                    <label className="font-bold text-emerald-300 block flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <Upload className="w-4 h-4 text-emerald-400" />
+                        <span>সমাধানের প্রমাণ ছবি (AFTER Photo):</span>
+                      </span>
+                      <label className="cursor-pointer text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 hover:bg-emerald-500/30 flex items-center gap-1">
+                        <Camera className="w-3 h-3" />
+                        <span>ছবি আপলোড করুন</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                if (event.target?.result) {
+                                  setProofUrl(event.target.result as string);
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
                     </label>
+
                     <input
                       type="text"
                       required
                       value={proofUrl}
                       onChange={(e) => setProofUrl(e.target.value)}
+                      placeholder="ইমেজ URL অথবা উপরের বাটন থেকে ডিভাইস ফাইল সিলেক্ট করুন"
                       className="w-full p-2 rounded-lg bg-[#041a16] border border-emerald-500/50 text-white font-mono text-[11px]"
                     />
+
+                    {proofUrl && (
+                      <div className="relative w-full h-28 rounded-lg overflow-hidden border border-emerald-600/40">
+                        <img src={proofUrl} alt="Resolution Proof" className="w-full h-full object-cover" />
+                        <span className="absolute bottom-1 right-2 text-[9px] bg-black/70 text-emerald-300 px-1.5 py-0.5 rounded font-bold">
+                          প্রমাণ প্রিভিউ
+                        </span>
+                      </div>
+                    )}
+
                     <span className="text-[10px] text-slate-400 block">
-                      এই ছবিটি নাগরিকরা দেখে ভোট দেবে সমাধান সঠিকভাবে হয়েছে কি না।
+                      এই ছবিটি নাগরিকরা দেখে ভোট দেবে সমাধান বাস্তবায়িত হয়েছে কি না।
                     </span>
                   </div>
                 )}
@@ -1088,5 +1125,22 @@ export default function UnifiedRoleDashboardPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function UnifiedRoleDashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#041411] flex items-center justify-center text-slate-300 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>ড্যাশবোর্ড লোড হচ্ছে...</span>
+          </div>
+        </div>
+      }
+    >
+      <UnifiedRoleDashboardContent />
+    </Suspense>
   );
 }

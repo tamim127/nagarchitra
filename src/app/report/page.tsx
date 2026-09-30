@@ -274,6 +274,29 @@ export default function ReportPage() {
   ]);
   const [severity, setSeverity] = useState<IssueSeverity>('HIGH');
   const [pledgeAccepted, setPledgeAccepted] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleFiles = (fileList: FileList | null) => {
+    if (!fileList || fileList.length === 0) return;
+    const remainingSlots = 5 - photos.length;
+    if (remainingSlots <= 0) {
+      alert(language === 'bn' ? 'সর্বোচ্চ ৫টি ছবি আপলোড করা যাবে।' : 'Maximum 5 photos allowed.');
+      return;
+    }
+    const filesToRead = Array.from(fileList).slice(0, remainingSlots);
+    filesToRead.forEach((file) => {
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        if (result) {
+          setPhotos((prev) => (prev.length < 5 ? [...prev, result] : prev));
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
   // Duplicate Check Modal State
   const [duplicateMatches, setDuplicateMatches] = useState<any[]>([]);
@@ -704,12 +727,72 @@ export default function ReportPage() {
                   </p>
                 </div>
 
+                {/* Hidden File Input */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    handleFiles(e.target.files);
+                    if (e.target) e.target.value = '';
+                  }}
+                />
+
+                {/* Upload Drag & Drop Box */}
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                  }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDragging(false);
+                    handleFiles(e.dataTransfer.files);
+                  }}
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center gap-2.5 ${
+                    isDragging
+                      ? 'border-[#0c4a45] bg-[#EBF5F3]'
+                      : 'border-slate-300 hover:border-[#0c4a45] bg-slate-50/70 hover:bg-[#F2F9F7]'
+                  }`}
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-[#0c4a45]">
+                    <UploadCloud className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-extrabold text-slate-800">
+                      {language === 'bn' ? 'ডিভাইস থেকে ছবি আপলোড করুন বা ফাইল টেনে আনুন' : 'Upload photos from device or drag & drop'}
+                    </h4>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      {language === 'bn' ? 'ক্যামেরা বা গ্যালারি থেকে সর্বোচ্চ ৫টি বাস্তব ছবি যুক্ত করুন (PNG, JPG, WebP)' : 'Select up to 5 evidence photos (PNG, JPG, WebP)'}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      fileInputRef.current?.click();
+                    }}
+                    className="mt-1 px-4 py-1.5 rounded-xl bg-[#0c4a45] hover:bg-[#083531] text-white text-xs font-bold shadow-xs flex items-center gap-1.5"
+                  >
+                    <Camera className="w-3.5 h-3.5" />
+                    <span>{language === 'bn' ? 'ছবি নির্বাচন করুন' : 'Browse Files / Camera'}</span>
+                  </button>
+                </div>
+
                 {/* Photo Previews */}
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-700 block">
-                    {t('Photos of the issue (up to 5):', 'সমস্যার ছবি (সর্বোচ্চ ৫টি):')}
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                    <span>{t('Photos of the issue:', 'সংযুক্ত প্রমাণের ছবি:')}</span>
+                    <span className="text-slate-500 font-mono text-[11px]">
+                      {formatNumber(photos.length)} / {formatNumber(5)} {language === 'bn' ? 'টি' : 'uploaded'}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                     {photos.map((photoUrl, idx) => (
                       <div
                         key={idx}
@@ -725,14 +808,14 @@ export default function ReportPage() {
                           <X className="w-3 h-3" />
                         </button>
                         <span className="absolute bottom-1 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/60 text-white">
-                          {t('Photo', 'ছবি')} #{formatNumber(idx + 1)}
+                          #{formatNumber(idx + 1)}
                         </span>
                       </div>
                     ))}
 
                     {photos.length < 5 && (
                       <div
-                        onClick={() => handleAddSamplePhoto(SAMPLE_PRESET_PHOTOS[photos.length % SAMPLE_PRESET_PHOTOS.length])}
+                        onClick={() => fileInputRef.current?.click()}
                         className="border-2 border-dashed border-slate-300 rounded-xl aspect-[4/3] flex flex-col items-center justify-center p-3 text-center hover:border-[#0c4a45] transition cursor-pointer bg-slate-50/50"
                       >
                         <Camera className="w-5 h-5 text-slate-400 mb-1" />
@@ -740,7 +823,7 @@ export default function ReportPage() {
                           {t('Add Photo', 'ছবি যুক্ত করুন')}
                         </span>
                         <span className="text-[10px] text-slate-400">
-                          {t('Click to add sample photo', 'ক্লিক করে নমুনা ছবি দিন')}
+                          {language === 'bn' ? 'ক্লিক করে ফাইল নিন' : 'Choose file'}
                         </span>
                       </div>
                     )}
@@ -750,7 +833,7 @@ export default function ReportPage() {
                 {/* Presets Helper */}
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
                   <span className="text-[11px] font-bold text-slate-600 block">
-                    {t('Click to add demo photos:', 'দ্রুত ডেমো ছবি যোগ করতে ক্লিক করুন:')}
+                    {t('Click to add demo photos:', 'অথবা দ্রুত ডেমো ছবি যোগ করতে ক্লিক করুন:')}
                   </span>
                   <div className="flex gap-2">
                     {SAMPLE_PRESET_PHOTOS.map((url, i) => (
@@ -758,9 +841,11 @@ export default function ReportPage() {
                         key={i}
                         type="button"
                         onClick={() => handleAddSamplePhoto(url)}
-                        className="w-14 h-11 rounded-lg overflow-hidden border-2 border-slate-200 hover:border-[#0c4a45] transition"
+                        className="w-14 h-11 rounded-lg overflow-hidden border-2 border-slate-200 hover:border-[#0c4a45] transition relative group"
+                        title="Click to add this photo"
                       >
                         <img src={url} alt={`Preset ${i}`} className="w-full h-full object-cover" />
+                        <span className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition"></span>
                       </button>
                     ))}
                   </div>

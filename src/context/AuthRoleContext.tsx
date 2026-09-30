@@ -7,6 +7,7 @@ interface AuthRoleContextType {
   role: UserRole;
   setRole: (role: UserRole) => void;
   currentUser: UserProfile;
+  updateUser: (data: Partial<UserProfile>) => void;
   availableRoles: { role: UserRole; label: string; subtitle: string }[];
 }
 
@@ -108,11 +109,20 @@ const AuthRoleContext = createContext<AuthRoleContextType | undefined>(undefined
 
 export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [role, setRoleState] = useState<UserRole>('CITIZEN');
+  const [customProfile, setCustomProfile] = useState<Partial<UserProfile>>({});
 
   useEffect(() => {
-    const savedRole = localStorage.getItem('nagarchitra_demo_role') as UserRole;
-    if (savedRole && (savedRole === 'CITIZEN' || savedRole === 'AUTHORITY' || savedRole === 'ADMIN')) {
-      setRoleState(savedRole);
+    try {
+      const savedRole = localStorage.getItem('nagarchitra_demo_role') as UserRole;
+      if (savedRole && (savedRole === 'CITIZEN' || savedRole === 'AUTHORITY' || savedRole === 'ADMIN')) {
+        setRoleState(savedRole);
+      }
+      const savedProfile = localStorage.getItem('nagarchitra_custom_profile');
+      if (savedProfile) {
+        setCustomProfile(JSON.parse(savedProfile));
+      }
+    } catch (e) {
+      console.error(e);
     }
   }, []);
 
@@ -121,7 +131,23 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('nagarchitra_demo_role', newRole);
   };
 
-  const currentUser = role === 'AUTHORITY' ? AUTHORITY_PROFILE : role === 'ADMIN' ? ADMIN_PROFILE : CITIZEN_PROFILE;
+  const updateUser = (data: Partial<UserProfile>) => {
+    setCustomProfile((prev) => {
+      const updated = { ...prev, ...data };
+      try {
+        localStorage.setItem('nagarchitra_custom_profile', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
+  };
+
+  const baseUser = role === 'AUTHORITY' ? AUTHORITY_PROFILE : role === 'ADMIN' ? ADMIN_PROFILE : CITIZEN_PROFILE;
+  const currentUser: UserProfile = {
+    ...baseUser,
+    ...(role === 'CITIZEN' ? customProfile : {}),
+  };
 
   const availableRoles = [
     { role: 'CITIZEN' as UserRole, label: 'Citizen', subtitle: 'Report & Verify' },
@@ -130,7 +156,7 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   ];
 
   return (
-    <AuthRoleContext.Provider value={{ role, setRole, currentUser, availableRoles }}>
+    <AuthRoleContext.Provider value={{ role, setRole, currentUser, updateUser, availableRoles }}>
       {children}
     </AuthRoleContext.Provider>
   );

@@ -238,8 +238,8 @@ export default function StatisticsPage() {
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-xs text-slate-500 font-semibold block">{t('Total Reports', 'মোট রিপোর্ট')}</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('1,248')}</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 12% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber(issues.length)}</div>
+                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 100% {t('Live Data', 'লাইভ ডেটা')}</span>
                 </div>
               </div>
 
@@ -250,8 +250,15 @@ export default function StatisticsPage() {
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-xs text-slate-500 font-semibold block">{t('Resolved', 'সমাধান হয়েছে')}</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('327')}</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 18% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">
+                    {formatNumber(issues.filter((i) => i.status === 'RESOLVED' || i.status === 'CLOSED').length)}
+                  </div>
+                  <span className="text-[10px] font-bold text-emerald-600 block">
+                    {issues.length > 0
+                      ? `${Math.round((issues.filter((i) => i.status === 'RESOLVED' || i.status === 'CLOSED').length / issues.length) * 100)}%`
+                      : '0%'}{' '}
+                    {t('Resolution rate', 'সমাধান হার')}
+                  </span>
                 </div>
               </div>
 
@@ -262,8 +269,10 @@ export default function StatisticsPage() {
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-xs text-slate-500 font-semibold block">{t('In Progress', 'চলমান')}</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('214')}</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 5% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">
+                    {formatNumber(issues.filter((i) => i.status === 'IN_PROGRESS' || i.status === 'ASSIGNED').length)}
+                  </div>
+                  <span className="text-[10px] font-bold text-amber-600 block">{t('Under operation', 'মাঠপর্যায়ে কাজ চলছে')}</span>
                 </div>
               </div>
 
@@ -274,8 +283,10 @@ export default function StatisticsPage() {
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-xs text-slate-500 font-semibold block">{t('Critical', 'গুরুতর (Critical)')}</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('86')}</div>
-                  <span className="text-[10px] font-bold text-red-600 block">↑ 3% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">
+                    {formatNumber(issues.filter((i) => i.severity === 'CRITICAL' && i.status !== 'CLOSED').length)}
+                  </div>
+                  <span className="text-[10px] font-bold text-red-600 block">{t('High Priority SLA', 'অগ্রাধিকার এসএলএ')}</span>
                 </div>
               </div>
 
@@ -285,9 +296,11 @@ export default function StatisticsPage() {
                   👥
                 </div>
                 <div className="space-y-0.5">
-                  <span className="text-xs text-slate-500 font-semibold block">{t('Citizen Verified', 'নাগরিক যাচাই সম্পন্ন')}</span>
-                  <div className="text-2xl font-black text-slate-900 font-sans">{formatNumber('142')}</div>
-                  <span className="text-[10px] font-bold text-emerald-600 block">↑ 20% {t('in last 30 days', 'গত ৩০ দিনে')}</span>
+                  <span className="text-xs text-slate-500 font-semibold block">{t('Citizen Verified', 'নাগরিক যাচাই')}</span>
+                  <div className="text-2xl font-black text-slate-900 font-sans">
+                    {formatNumber(issues.filter((i) => (i.citizenVerifications?.fixedCount || 0) > 0 || i.userConfirmed).length)}
+                  </div>
+                  <span className="text-[10px] font-bold text-emerald-600 block">✓ {t('Ground Checked', 'মাঠপর্যায়ে পরীক্ষিত')}</span>
                 </div>
               </div>
             </div>
@@ -560,99 +573,77 @@ export default function StatisticsPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {[
-                        {
-                          id: 'NC-2026-0912',
-                          title: 'রাস্তা ক্ষতিগ্রস্ত',
-                          area: 'মিরপুর ১০',
-                          severity: 'উচ্চ',
-                          sevColor: 'bg-red-50 text-red-600 border-red-200',
-                          status: 'চলমান',
-                          statusColor: 'bg-amber-50 text-amber-700 border-amber-200',
-                          time: '২ ঘণ্টা আগে',
-                          img: 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=80&q=80',
-                          link: '/issues/road-damage-mirpur-10-8f92',
-                        },
-                        {
-                          id: 'NC-2026-0911',
-                          title: 'জলাবদ্ধতা',
-                          area: 'ধানমন্ডি ২৭',
-                          severity: 'গুরুতর',
-                          sevColor: 'bg-red-100 text-red-700 border-red-200 font-bold',
-                          status: 'বরাদ্দ',
-                          statusColor: 'bg-purple-50 text-purple-700 border-purple-200',
-                          time: '৪ ঘণ্টা আগে',
-                          img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=80&q=80',
-                          link: '/issues/waterlogging-farmgate-bijoy-1e82',
-                        },
-                        {
-                          id: 'NC-2026-0910',
-                          title: 'বর্জ্য ফেলা',
-                          area: 'উত্তরা সেক্টর ৩',
-                          severity: 'মাঝারি',
-                          sevColor: 'bg-amber-50 text-amber-700 border-amber-200',
-                          status: 'সমাধান হয়েছে',
-                          statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200 font-bold',
-                          time: '৬ ঘণ্টা আগে',
-                          img: 'https://images.unsplash.com/photo-1605600659908-0ef719419d41?auto=format&fit=crop&w=80&q=80',
-                          link: '/issues/waste-dumping-dhanmondi-27-3b44',
-                        },
-                        {
-                          id: 'NC-2026-0909',
-                          title: 'স্ট্রিট লাইট',
-                          area: 'মোহাম্মদপুর',
-                          severity: 'মাঝারি',
-                          sevColor: 'bg-amber-50 text-amber-700 border-amber-200',
-                          status: 'যাচাই চলছে',
-                          statusColor: 'bg-sky-50 text-sky-700 border-sky-200 font-bold',
-                          time: '৮ ঘণ্টা আগে',
-                          img: 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=80&q=80',
-                          link: '/issues/street-light-gulshan-1-6d20',
-                        },
-                        {
-                          id: 'NC-2026-0908',
-                          title: 'খোলা ম্যানহোল',
-                          area: 'ফার্মগেট',
-                          severity: 'উচ্চ',
-                          sevColor: 'bg-red-50 text-red-600 border-red-200',
-                          status: 'সমাধান হয়েছে',
-                          statusColor: 'bg-emerald-50 text-emerald-700 border-emerald-200 font-bold',
-                          time: '১২ ঘণ্টা আগে',
-                          img: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=80&q=80',
-                          link: '/issues/open-manhole-mohammadpur-9a11',
-                        },
-                      ].map((row) => (
-                        <tr key={row.id} className="hover:bg-slate-50 transition">
-                          <td className="px-3 py-2.5 font-sans font-bold text-slate-800 whitespace-nowrap flex items-center gap-2">
-                            <img src={row.img} alt={row.title} className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-200" />
-                            <span>{row.id}</span>
-                          </td>
-                          <td className="px-3 py-2.5 font-bold text-slate-900">{t(row.title)}</td>
-                          <td className="px-3 py-2.5 text-slate-600">{t(row.area)}</td>
-                          <td className="px-3 py-2.5">
-                            <span className={`px-2 py-0.5 rounded-full border text-[10px] ${row.sevColor}`}>
-                              {t(row.severity)}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2.5">
-                            <span className={`px-2 py-0.5 rounded-full border text-[10px] ${row.statusColor}`}>
-                              {t(row.status)}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2.5 text-slate-500 font-bangla text-[11px] whitespace-nowrap">
-                            {t(row.time)}
-                          </td>
-                          <td className="px-3 py-2.5 text-right whitespace-nowrap">
-                            <Link
-                              href={row.link}
-                              className="px-3 py-1 rounded-lg bg-[#0B3D3A] text-white font-bold text-[11px] hover:bg-[#145955] transition inline-flex items-center gap-1 shadow-2xs"
-                            >
-                              <span>{t('Details', 'বিস্তারিত')}</span>
-                              <ChevronRight className="w-3 h-3" />
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
+                      {issues
+                        .filter((i) => {
+                          if (!tableSearch.trim()) return true;
+                          const q = tableSearch.toLowerCase();
+                          return (
+                            i.title.toLowerCase().includes(q) ||
+                            i.trackingNumber.toLowerCase().includes(q) ||
+                            i.location.area.toLowerCase().includes(q) ||
+                            i.categoryName.toLowerCase().includes(q)
+                          );
+                        })
+                        .slice(0, 10)
+                        .map((row) => {
+                          const statusBg =
+                            row.status === 'RESOLVED' || row.status === 'CLOSED'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 font-bold'
+                              : row.status === 'IN_PROGRESS' || row.status === 'ASSIGNED'
+                              ? 'bg-amber-50 text-amber-700 border-amber-200'
+                              : row.status === 'CITIZEN_VERIFICATION' || row.status === 'VERIFIED'
+                              ? 'bg-purple-50 text-purple-700 border-purple-200'
+                              : 'bg-blue-50 text-blue-700 border-blue-200';
+
+                          const sevBg =
+                            row.severity === 'CRITICAL'
+                              ? 'bg-red-100 text-red-700 border-red-200 font-bold'
+                              : row.severity === 'HIGH'
+                              ? 'bg-orange-50 text-orange-700 border-orange-200'
+                              : row.severity === 'MEDIUM'
+                              ? 'bg-amber-50 text-amber-700 border-amber-200'
+                              : 'bg-slate-50 text-slate-600 border-slate-200';
+
+                          return (
+                            <tr key={row.id} className="hover:bg-slate-50 transition">
+                              <td className="px-3 py-2.5 font-sans font-bold text-slate-800 whitespace-nowrap flex items-center gap-2">
+                                <img
+                                  src={row.media[0]?.url || 'https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=80&q=80'}
+                                  alt={row.title}
+                                  className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-200"
+                                />
+                                <span>{row.trackingNumber}</span>
+                              </td>
+                              <td className="px-3 py-2.5 font-bold text-slate-900 line-clamp-1 max-w-[200px]">{row.title}</td>
+                              <td className="px-3 py-2.5 text-slate-600 whitespace-nowrap">{row.location.area}</td>
+                              <td className="px-3 py-2.5 whitespace-nowrap">
+                                <span className={`px-2 py-0.5 rounded-full border text-[10px] ${sevBg}`}>
+                                  {row.severity}
+                                </span>
+                              </td>
+                              <td className="px-3 py-2.5 whitespace-nowrap">
+                                <span className={`px-2 py-0.5 rounded-full border text-[10px] ${statusBg}`}>
+                                  {row.status}
+                                </span>
+                              </td>
+                              <td className="px-3 py-2.5 text-slate-500 font-bangla text-[11px] whitespace-nowrap">
+                                {new Date(row.createdAt).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+                                  day: 'numeric',
+                                  month: 'short',
+                                })}
+                              </td>
+                              <td className="px-3 py-2.5 text-right whitespace-nowrap">
+                                <Link
+                                  href={`/issues/${row.id}`}
+                                  className="px-3 py-1 rounded-lg bg-[#0B3D3A] text-white font-bold text-[11px] hover:bg-[#145955] transition inline-flex items-center gap-1 shadow-2xs"
+                                >
+                                  <span>{t('Details', 'বিস্তারিত')}</span>
+                                  <ArrowRight className="w-3 h-3" />
+                                </Link>
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>

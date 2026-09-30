@@ -208,7 +208,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href="/about/data-methodology"
+                  href="/terms"
                   className="inline-flex items-center gap-1.5 hover:text-[#F2B84B] hover:translate-x-1 transition-all duration-200 focus-visible:outline-none focus-visible:text-[#F2B84B]"
                 >
                   <span className="text-emerald-500 text-xs">›</span>
