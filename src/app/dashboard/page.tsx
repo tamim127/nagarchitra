@@ -38,6 +38,8 @@ import {
   Check,
   Camera,
   Image as ImageIcon,
+  LogIn,
+  LogOut,
 } from 'lucide-react';
 import { getStatusBadgeStyle, getSeverityBadge } from '@/components/IssueCard';
 
@@ -45,7 +47,7 @@ function UnifiedRoleDashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { issues, updateIssueStatus, confirmIssue, voteResolution } = useIssues();
-  const { role, currentUser, isAuthenticated } = useAuthRole();
+  const { role, currentUser, isAuthenticated, logout } = useAuthRole();
   const { t, language, formatNumber } = useLanguage();
   const { isConnected, onlineCount } = useSocket();
 
@@ -130,8 +132,16 @@ function UnifiedRoleDashboardContent() {
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center gap-3 flex-wrap">
+                <Link href="/" className="inline-flex items-center hover:opacity-90 transition-opacity">
+                  <img
+                    src="/images/logo.png"
+                    alt="নগরচিত্র - NagarChitra"
+                    className="h-9 sm:h-11 w-auto object-contain"
+                  />
+                </Link>
+                <div className="h-6 w-px bg-slate-200 hidden sm:block" />
                 <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-extrabold text-xs tracking-wider uppercase flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
                   {t('Role-Based Intelligence Portal', 'রোল-ভিত্তিক ড্যাশবোর্ড পোর্টাল')}
@@ -207,25 +217,68 @@ function UnifiedRoleDashboardContent() {
                 </Link>
               )}
 
-              {/* Current Authenticated Profile Badge */}
-              <div className="flex items-center gap-3 p-2.5 sm:px-4 sm:py-2.5 rounded-2xl bg-slate-50 border border-slate-200/90 shadow-sm">
-                <img
-                  src={currentUser.avatar}
-                  alt={currentUser.name}
-                  className="w-10 h-10 rounded-full object-cover ring-2 ring-emerald-500/30 shrink-0"
-                />
-                <div className="flex flex-col text-left leading-none">
-                  <span className="text-sm font-black text-slate-900">{currentUser.name}</span>
-                  <div className="flex items-center gap-1.5 mt-1">
-                    <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
-                      {role === 'SUPER_ADMIN' ? '👑 SUPER ADMIN' : role === 'ADMIN' ? '🛡️ ADMIN' : role === 'AUTHORITY' ? '🏢 AUTHORITY' : '🇧🇩 CITIZEN'}
-                    </span>
-                    <span className="text-[11px] text-slate-500 font-bangla hidden sm:inline">
-                      {currentUser.location}
-                    </span>
+              {/* Current Authenticated Profile Badge / Actions */}
+              {isAuthenticated ? (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 sm:px-4 sm:py-2.5 rounded-2xl bg-white border border-slate-200/90 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                      className="w-10 h-10 rounded-full object-cover ring-2 ring-emerald-500/30 shrink-0"
+                    />
+                    <div className="flex flex-col text-left leading-none">
+                      <span className="text-sm font-black text-slate-900">{currentUser.name}</span>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          {role === 'SUPER_ADMIN' ? '👑 SUPER ADMIN' : role === 'ADMIN' ? '🛡️ ADMIN' : role === 'AUTHORITY' ? '🏢 AUTHORITY' : '🇧🇩 CITIZEN'}
+                        </span>
+                        <span className="text-[11px] text-slate-500 font-bangla hidden sm:inline">
+                          {currentUser.location}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-2 sm:pt-0 sm:pl-3 sm:border-l border-slate-200 w-full sm:w-auto justify-end">
+                    <Link
+                      href="/login"
+                      className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold font-bangla transition border border-slate-200"
+                      title={language === 'bn' ? 'অন্য অ্যাকাউন্টে লগইন করুন' : 'Switch account / Login'}
+                    >
+                      <LogIn className="w-3.5 h-3.5 text-slate-600" />
+                      <span>{language === 'bn' ? 'রোল লগইন' : 'Switch'}</span>
+                    </Link>
+
+                    <button
+                      onClick={logout}
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold font-bangla transition shadow-sm hover:shadow"
+                      title={language === 'bn' ? 'লগআউট করুন' : 'Logout'}
+                    >
+                      <LogOut className="w-3.5 h-3.5 text-rose-600" />
+                      <span>{language === 'bn' ? 'লগআউট' : 'Logout'}</span>
+                    </button>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="flex items-center gap-2.5 p-2 rounded-2xl bg-white border border-slate-200/90 shadow-sm">
+                  <div className="px-3 py-1 text-xs text-slate-600 font-bangla">
+                    {language === 'bn' ? 'লগআউট অবস্থায় আছেন' : 'Signed Out'}
+                  </div>
+                  <Link
+                    href="/login"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-accent text-slate-950 font-black text-xs hover:bg-accent-400 transition font-bangla shadow-md shadow-accent/20"
+                  >
+                    <LogIn className="w-3.5 h-3.5" />
+                    <span>{language === 'bn' ? 'লগইন করুন' : 'Sign In'}</span>
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition font-bangla"
+                  >
+                    <span>{language === 'bn' ? 'নিবন্ধন' : 'Register'}</span>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

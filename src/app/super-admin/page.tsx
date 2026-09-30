@@ -132,6 +132,13 @@ export default function SuperAdminPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
             <div className="space-y-2">
               <div className="flex items-center gap-3 flex-wrap">
+                <Link href="/" className="inline-flex items-center hover:opacity-90 transition">
+                  <img
+                    src="/images/logo.png"
+                    alt="নগরচিত্র - NagarChitra"
+                    className="h-8 sm:h-9 w-auto object-contain transition-transform hover:scale-105"
+                  />
+                </Link>
                 <span className="px-3.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 font-mono">
                   <Crown className="w-3.5 h-3.5 text-amber-400" />
                   SUPER ADMIN · MASTER ROOT GOVERNANCE

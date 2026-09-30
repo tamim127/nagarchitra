@@ -135,11 +135,13 @@ function LoginContent() {
       <div className="absolute bottom-10 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center space-y-3">
-        {/* Brand Icon */}
-        <Link href="/" className="inline-flex items-center gap-2 group">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#0c4a45] to-accent flex items-center justify-center text-slate-950 font-black shadow-lg shadow-accent/20 group-hover:scale-105 transition">
-            <MapPin className="w-6 h-6 text-slate-900 fill-slate-900" />
-          </div>
+        {/* Brand Logo */}
+        <Link href="/" className="inline-flex items-center justify-center group focus:outline-none">
+          <img
+            src="/images/logo.png"
+            alt="নগরচিত্র - NagarChitra"
+            className="h-14 sm:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+          />
         </Link>
 
         <div>

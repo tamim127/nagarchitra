@@ -222,7 +222,13 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
       }
 
-      // Default baseline login (Citizen) with signed token
+      // If user has explicitly logged out, preserve logged-out state
+      if (localStorage.getItem('nc_logged_out') === 'true') {
+        setIsAuthenticated(false);
+        return;
+      }
+
+      // Default baseline login (Citizen) with signed token for initial onboarding
       const { token } = generateSecureSessionToken(CITIZEN_PROFILE);
       localStorage.setItem('nc_sec_token_v3', token);
       localStorage.setItem('nc_active_user_v3', JSON.stringify(CITIZEN_PROFILE));
@@ -231,6 +237,7 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setIsAuthenticated(true);
     } catch (e) {
       console.error(e);
+      setIsAuthenticated(false);
     }
   }, []);
 
@@ -299,6 +306,7 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const { token } = generateSecureSessionToken(account.profile);
 
     try {
+      localStorage.removeItem('nc_logged_out');
       localStorage.setItem('nc_sec_token_v3', token);
       localStorage.setItem('nc_active_user_v3', JSON.stringify(account.profile));
     } catch (e) {}
@@ -361,6 +369,7 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     const { token } = generateSecureSessionToken(newCitizen);
     try {
+      localStorage.removeItem('nc_logged_out');
       localStorage.setItem('nc_sec_token_v3', token);
       localStorage.setItem('nc_active_user_v3', JSON.stringify(newCitizen));
     } catch (e) {}
@@ -386,6 +395,7 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       localStorage.removeItem('nc_sec_token_v3');
       localStorage.removeItem('nc_active_user_v3');
       localStorage.removeItem('nagarchitra_demo_role');
+      localStorage.setItem('nc_logged_out', 'true');
     } catch (e) {}
 
     recordSecurityAudit({
@@ -397,6 +407,7 @@ export const AuthRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ipMasked: '103.205.*.*',
     });
 
+    setIsAuthenticated(false);
     setCurrentUser(CITIZEN_PROFILE);
     setRole('CITIZEN');
   };

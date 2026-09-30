@@ -60,13 +60,14 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#020F0C] text-slate-100 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-bangla relative overflow-hidden">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
-
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center space-y-3">
-        <Link href="/" className="inline-flex items-center gap-2 group">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#0c4a45] to-accent flex items-center justify-center text-slate-950 font-black shadow-lg shadow-accent/20 group-hover:scale-105 transition">
-            <MapPin className="w-6 h-6 text-slate-900 fill-slate-900" />
-          </div>
+        {/* Brand Logo */}
+        <Link href="/" className="inline-flex items-center justify-center group focus:outline-none">
+          <img
+            src="/images/logo.png"
+            alt="নগরচিত্র - NagarChitra"
+            className="h-14 sm:h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+          />
         </Link>
 
         <div>

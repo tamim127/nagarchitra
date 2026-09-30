@@ -112,18 +112,12 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-accent-600 to-accent flex items-center justify-center text-slate-950 font-black shadow-md shadow-accent/20 group-hover:scale-105 transition-transform">
-              <MapPin className="w-5 h-5 text-slate-900 fill-slate-900" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bangla font-black text-xl leading-none text-white tracking-tight">
-                নগরচিত্র
-              </span>
-              <span className="text-[10px] tracking-widest uppercase font-semibold text-accent/90">
-                NagarChitra
-              </span>
-            </div>
+          <Link href="/" className="flex items-center gap-2 shrink-0 group focus:outline-none">
+            <img
+              src="/images/logo.png"
+              alt="নগরচিত্র - NagarChitra"
+              className="h-9 sm:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+            />
           </Link>
 
           {/* Center Navigation Links */}
@@ -199,7 +193,7 @@ export const Navbar: React.FC = () => {
             </Link>
 
             {isAuthenticated ? (
-              <div className="flex items-center gap-3 pl-2 border-l border-[#13423a]">
+              <div className="flex items-center gap-2.5 pl-2 border-l border-[#13423a]">
                 {/* User Profile Chip */}
                 <Link
                   href={
@@ -211,7 +205,7 @@ export const Navbar: React.FC = () => {
                       ? '/authority'
                       : '/dashboard'
                   }
-                  className="flex items-center gap-2 hover:opacity-90 transition group"
+                  className="flex items-center gap-2 hover:opacity-90 transition group p-1 rounded-xl"
                   title={
                     language === 'bn'
                       ? `${currentUser.name} (${role} পোর্টাল)`
@@ -232,7 +226,7 @@ export const Navbar: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="flex flex-col text-left leading-none">
+                  <div className="hidden sm:flex flex-col text-left leading-none">
                     <span className="text-xs font-bold text-white group-hover:text-accent transition">
                       {currentUser.name}
                     </span>
@@ -248,27 +242,38 @@ export const Navbar: React.FC = () => {
                   </div>
                 </Link>
 
-                {/* Logout Button */}
+                {/* Switch Role Link */}
+                <Link
+                  href="/login"
+                  className="hidden xl:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-300 hover:text-white text-xs font-bold font-bangla transition border border-white/10"
+                  title={language === 'bn' ? 'অন্য রোলে লগইন করুন' : 'Switch account / Login'}
+                >
+                  <LogIn className="w-3.5 h-3.5 text-accent" />
+                  <span>{language === 'bn' ? 'রোল লগইন' : 'Switch Role'}</span>
+                </Link>
+
+                {/* Prominent Visible Logout Button */}
                 <button
                   onClick={logout}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition"
-                  title={language === 'bn' ? 'লগআউট' : 'Logout'}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-rose-500/40 text-xs font-bold font-bangla transition shadow-sm"
+                  title={language === 'bn' ? 'লগআউট করুন' : 'Logout'}
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                  <span>{language === 'bn' ? 'লগআউট' : 'Logout'}</span>
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2 pl-2 border-l border-[#13423a]">
                 <Link
                   href="/login"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent text-slate-950 font-bold text-xs hover:bg-accent-400 transition font-bangla shadow-md shadow-accent/20"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-accent text-slate-950 font-black text-xs hover:bg-accent-400 transition font-bangla shadow-md shadow-accent/25 hover:scale-105"
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   <span>{language === 'bn' ? 'লগইন' : 'Sign In'}</span>
                 </Link>
                 <Link
                   href="/register"
-                  className="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#0e3530] text-slate-200 border border-[#174e44] font-semibold text-xs hover:bg-[#13473f] transition font-bangla"
+                  className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-500/30 font-bold text-xs hover:bg-emerald-900 transition font-bangla"
                 >
                   <span>{language === 'bn' ? 'নিবন্ধন' : 'Register'}</span>
                 </Link>

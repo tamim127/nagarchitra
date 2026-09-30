@@ -54,20 +54,14 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-4 space-y-5">
             <Link
               href="/"
-              className="inline-flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2B84B] rounded-lg"
+              className="inline-flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2B84B]"
               aria-label="NagarChitra Home"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F2B84B] to-[#D49826] flex items-center justify-center text-slate-950 font-black shadow-lg shadow-[#F2B84B]/20 group-hover:scale-105 transition-transform duration-200">
-                <MapPin className="w-5 h-5 fill-slate-950 text-slate-950" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bangla font-black text-2xl leading-none text-white tracking-tight">
-                  {language === 'bn' ? 'নগরচিত্র' : 'NagarChitra'}
-                </span>
-                <span className="text-[10px] tracking-[0.24em] uppercase font-bold text-[#F2B84B] mt-1 font-sans">
-                  NAGARCHITRA
-                </span>
-              </div>
+              <img
+                src="/images/logo.png"
+                alt="নগরচিত্র - NagarChitra"
+                className="h-12 sm:h-14 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+              />
             </Link>
 
             <h3 className="font-bangla font-bold text-base sm:text-lg text-white leading-snug">
