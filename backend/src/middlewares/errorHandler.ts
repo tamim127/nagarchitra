@@ -13,18 +13,21 @@ export function errorHandler(
   next: NextFunction
 ) {
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
+  const isProduction = process.env.NODE_ENV === 'production';
+  const message = isProduction && statusCode === 500
+    ? 'Internal Server Error'
+    : (err.message || 'Internal Server Error');
 
-  console.error(`[Error] ${req.method} ${req.url} - ${statusCode}: ${message}`);
-  if (err.stack && process.env.NODE_ENV !== 'production') {
+  console.error(`[Error] ${req.method} ${req.url} - ${statusCode}: ${err.message}`);
+  if (err.stack && !isProduction) {
     console.error(err.stack);
   }
 
   res.status(statusCode).json({
     success: false,
     message,
-    errors: err.errors || undefined,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    errors: isProduction ? undefined : (err.errors || undefined),
+    stack: isProduction ? undefined : err.stack,
   });
 }
 

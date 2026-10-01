@@ -9,11 +9,10 @@ import { AuthRequest } from '../middlewares/authMiddleware.js';
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
   phone: z.string().optional(),
-  role: z.enum(['CITIZEN', 'AUTHORITY', 'ADMIN', 'SUPER_ADMIN', 'MODERATOR']).default('CITIZEN'),
-  department: z.string().optional(),
-  designation: z.string().optional(),
+  // SECURITY: role is NOT accepted from client — always CITIZEN
+  // department and designation are only set by admins
 });
 
 const loginSchema = z.object({
@@ -45,9 +44,7 @@ export async function register(req: Request, res: Response) {
         email: validated.email.toLowerCase().trim(),
         passwordHash,
         phone: validated.phone,
-        role: validated.role as any,
-        department: validated.department,
-        designation: validated.designation,
+        role: 'CITIZEN', // SECURITY: Always CITIZEN — role escalation prevented
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(validated.name)}`,
       },
       select: {
@@ -103,7 +100,7 @@ export async function register(req: Request, res: Response) {
     }
     return res.status(500).json({
       success: false,
-      message: error.message || 'Error creating user',
+      message: ENV.NODE_ENV === 'production' ? 'Error creating user' : (error.message || 'Error creating user'),
     });
   }
 }
@@ -205,7 +202,7 @@ export async function login(req: Request, res: Response) {
     }
     return res.status(500).json({
       success: false,
-      message: error.message || 'Error logging in',
+      message: ENV.NODE_ENV === 'production' ? 'Error logging in' : (error.message || 'Error logging in'),
     });
   }
 }
@@ -247,7 +244,7 @@ export async function getMe(req: AuthRequest, res: Response) {
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: error.message || 'Failed to fetch user',
+      message: ENV.NODE_ENV === 'production' ? 'Failed to fetch user' : (error.message || 'Failed to fetch user'),
     });
   }
 }

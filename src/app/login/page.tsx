@@ -25,13 +25,12 @@ import {
   MapPin,
 } from 'lucide-react';
 
-const PRESET_ACCOUNTS = [
+// SECURITY: No passwords or credentials stored in frontend code
+const ROLE_TABS = [
   {
     role: 'CITIZEN' as UserRole,
     labelBn: 'নাগরিক',
     labelEn: 'Citizen',
-    email: 'citizen@nagarchitra.bd',
-    password: 'Citizen@2026!',
     badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
     icon: User,
     descBn: 'নাগরিক সমস্যা রিপোর্ট ও যাচাইকরণ',
@@ -41,19 +40,15 @@ const PRESET_ACCOUNTS = [
     role: 'AUTHORITY' as UserRole,
     labelBn: 'কর্তৃপক্ষ / কর্মকর্তা',
     labelEn: 'Authority Officer',
-    email: 'authority@dncc.gov.bd',
-    password: 'DhakaZone4@2026!',
     badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-400/40',
     icon: Building2,
-    descBn: 'ওয়ার্ক-অর্ডার, মেরামত ও সমাধান প্রমাণ',
+    descBn: 'ওয়ার্ক-অর্ডার, মেরামত ও সমাধান প্রমাণ',
     descEn: 'Zonal engineering & resolution dispatch',
   },
   {
     role: 'ADMIN' as UserRole,
     labelBn: 'অ্যাডমিনিস্ট্রেটর',
     labelEn: 'System Admin',
-    email: 'admin@nagarchitra.org',
-    password: 'AdminPass@2026!',
     badge: 'bg-purple-500/20 text-purple-300 border-purple-400/40',
     icon: Shield,
     descBn: 'মডারেশন, স্প্যাম ফিল্টারিং ও অডিট',
@@ -63,11 +58,9 @@ const PRESET_ACCOUNTS = [
     role: 'SUPER_ADMIN' as UserRole,
     labelBn: 'সুপার অ্যাডমিন',
     labelEn: 'Super Admin (Root)',
-    email: 'superadmin@nagarchitra.gov.bd',
-    password: 'SuperAdmin@Dhaka#2026!',
     badge: 'bg-amber-500/20 text-amber-300 border-amber-400/40',
     icon: Crown,
-    descBn: 'সম্পূর্ণ সিস্টেম ও সাইবার নিরাপত্তা নিয়ন্ত্রণ',
+    descBn: 'সম্পূর্ণ সিস্টেম ও সাইবার নিরাপত্তা নিয়ন্ত্রণ',
     descEn: 'Master cryptographic root governance',
   },
 ];
@@ -81,8 +74,8 @@ function LoginContent() {
   const redirectUrl = searchParams.get('redirect');
 
   const [activeRoleTab, setActiveRoleTab] = useState<UserRole>('CITIZEN');
-  const [email, setEmail] = useState('citizen@nagarchitra.bd');
-  const [password, setPassword] = useState('Citizen@2026!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isLocked, setIsLocked] = useState(false);
@@ -91,24 +84,20 @@ function LoginContent() {
 
   const handleRoleTabChange = (role: UserRole) => {
     setActiveRoleTab(role);
-    const found = PRESET_ACCOUNTS.find((a) => a.role === role);
-    if (found) {
-      setEmail(found.email);
-      setPassword(found.password);
-    }
     setErrorMsg('');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg('');
 
-    const res = login(email, password, activeRoleTab);
+    const res = await login(email, password, activeRoleTab);
     setIsLoading(false);
 
     if (res.success) {
-      if (redirectUrl) {
+      // SECURITY (VULN-018): Validate redirect URL — only allow relative paths
+      if (redirectUrl && redirectUrl.startsWith('/') && !redirectUrl.startsWith('//')) {
         router.push(redirectUrl);
       } else if (activeRoleTab === 'SUPER_ADMIN') {
         router.push('/super-admin');
@@ -150,15 +139,15 @@ function LoginContent() {
           </h2>
           <p className="text-xs text-slate-400 mt-1">
             {language === 'bn'
-              ? 'ক্রিপ্টোগ্রাফিক টোকেন ও সাইবার সিকিউরিটি দ্বারা সুরক্ষিত'
-              : 'Cryptographically sealed session with RBAC access control'}
+              ? 'JWT টোকেন ও সার্ভার-সাইড অথেন্টিকেশন দ্বারা সুরক্ষিত'
+              : 'Server-side JWT authentication with RBAC access control'}
           </p>
         </div>
 
         {/* Security Pill */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-mono">
           <Shield className="w-3.5 h-3.5 text-accent" />
-          <span>256-BIT ENCRYPTED · HMAC SIGNED</span>
+          <span>JWT SIGNED · BCRYPT HASHED · RATE LIMITED</span>
         </div>
       </div>
 
@@ -170,14 +159,14 @@ function LoginContent() {
               {language === 'bn' ? 'অ্যাক্সেস রোল নির্বাচন করুন:' : 'Select Login Role Clearance:'}
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {PRESET_ACCOUNTS.map((account) => {
-                const isSelected = activeRoleTab === account.role;
-                const IconC = account.icon;
+              {ROLE_TABS.map((tab) => {
+                const isSelected = activeRoleTab === tab.role;
+                const IconC = tab.icon;
                 return (
                   <button
-                    key={account.role}
+                    key={tab.role}
                     type="button"
-                    onClick={() => handleRoleTabChange(account.role)}
+                    onClick={() => handleRoleTabChange(tab.role)}
                     className={`p-2.5 rounded-2xl border text-center transition flex flex-col items-center gap-1.5 ${
                       isSelected
                         ? 'bg-[#0A2E26] border-accent text-white shadow-sm ring-1 ring-accent/40'
@@ -186,25 +175,12 @@ function LoginContent() {
                   >
                     <IconC className={`w-4 h-4 ${isSelected ? 'text-accent' : 'text-slate-400'}`} />
                     <span className="text-[11px] font-extrabold leading-tight">
-                      {language === 'bn' ? account.labelBn : account.labelEn}
+                      {language === 'bn' ? tab.labelBn : tab.labelEn}
                     </span>
                   </button>
                 );
               })}
             </div>
-          </div>
-
-          {/* Quick preset credentials helper */}
-          <div className="p-3 bg-[#031512] rounded-2xl border border-[#0b2b24] flex items-center justify-between text-xs">
-            <div className="space-y-0.5">
-              <span className="text-[10px] text-slate-400 block font-mono">
-                {language === 'bn' ? 'স্বয়ংক্রিয় প্রিসেট অ্যাকাউন্ট:' : 'Auto-Filled Test Account:'}
-              </span>
-              <span className="font-bold text-slate-200 text-[11px] font-mono">{email}</span>
-            </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent/20 text-accent font-bold font-mono">
-              Ready
-            </span>
           </div>
 
           {/* Error Message */}
@@ -233,6 +209,7 @@ function LoginContent() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder={language === 'bn' ? 'আপনার ইমেইল লিখুন' : 'Enter your email'}
                   className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#031512] border border-[#103d35] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent font-mono transition"
                 />
               </div>
@@ -240,7 +217,7 @@ function LoginContent() {
 
             <div className="space-y-1">
               <label className="text-xs font-bold text-slate-300 block">
-                {language === 'bn' ? 'গোপন পাসওয়ার্ড' : 'Password'}
+                {language === 'bn' ? 'গোপন পাসওয়ার্ড' : 'Password'}
               </label>
               <div className="relative">
                 <KeyRound className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -249,6 +226,7 @@ function LoginContent() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder={language === 'bn' ? 'আপনার পাসওয়ার্ড লিখুন' : 'Enter your password'}
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-[#031512] border border-[#103d35] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent font-mono transition"
                 />
                 <button
@@ -266,12 +244,18 @@ function LoginContent() {
               disabled={isLoading || isLocked}
               className="w-full py-3 px-4 rounded-xl bg-accent hover:bg-accent-400 text-slate-950 font-black text-xs transition shadow-md shadow-accent/20 flex items-center justify-center gap-2 group disabled:opacity-50"
             >
-              <span>
-                {language === 'bn'
-                  ? `${activeRoleTab === 'SUPER_ADMIN' ? 'সুপার অ্যাডমিন হিসেবে ' : ''}লগইন করুন`
-                  : `Authenticate as ${activeRoleTab}`}
-              </span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              {isLoading ? (
+                <span>{language === 'bn' ? 'যাচাই করা হচ্ছে...' : 'Authenticating...'}</span>
+              ) : (
+                <>
+                  <span>
+                    {language === 'bn'
+                      ? `${activeRoleTab === 'SUPER_ADMIN' ? 'সুপার অ্যাডমিন হিসেবে ' : ''}লগইন করুন`
+                      : `Authenticate as ${activeRoleTab}`}
+                  </span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+                </>
+              )}
             </button>
           </form>
 

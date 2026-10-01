@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 import prisma from '../services/prisma.js';
 import { AuthRequest } from '../middlewares/authMiddleware.js';
+import { ENV } from '../config/env.js';
 import {
   broadcastNewIssue,
   broadcastIssueConfirmation,
@@ -237,7 +238,7 @@ export async function getIssues(req: AuthRequest, res: Response) {
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: error.message || 'Error fetching issues',
+      message: ENV.NODE_ENV === 'production' ? 'Error fetching issues' : (error.message || 'Error fetching issues'),
     });
   }
 }
@@ -292,7 +293,7 @@ export async function getIssueById(req: AuthRequest, res: Response) {
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: error.message || 'Error fetching issue details',
+      message: ENV.NODE_ENV === 'production' ? 'Error fetching issue details' : (error.message || 'Error fetching issue details'),
     });
   }
 }
@@ -301,24 +302,8 @@ export async function createIssue(req: AuthRequest, res: Response) {
   try {
     const validated = createIssueSchema.parse(req.body);
 
-    // Fallback citizen if not authenticated
-    let userId = req.user?.id;
-    if (!userId) {
-      const defaultUser = await prisma.user.findFirst({ where: { role: 'CITIZEN' } });
-      if (defaultUser) {
-        userId = defaultUser.id;
-      } else {
-        const createdAnon = await prisma.user.create({
-          data: {
-            name: 'নাগরিক ব্যবহারকারী',
-            email: `citizen_${Date.now()}@nagarchitra.bd`,
-            passwordHash: 'guest_hash',
-            role: 'CITIZEN',
-          },
-        });
-        userId = createdAnon.id;
-      }
-    }
+    // SECURITY: Authentication is required (enforced by route middleware)
+    const userId = req.user!.id;
 
     const trackingNumber = generateTrackingNumber();
 
@@ -384,8 +369,8 @@ export async function createIssue(req: AuthRequest, res: Response) {
             oldStatus: null,
             newStatus: 'SUBMITTED',
             changedById: userId,
-            changedByName: req.user?.name || 'নাগরিক ব্যবহারকারী',
-            changedByRole: (req.user?.role || 'CITIZEN') as any,
+            changedByName: req.user!.name || 'নাগরিক ব্যবহারকারী',
+            changedByRole: (req.user!.role || 'CITIZEN') as any,
             note: 'সমস্যাটি প্ল্যাটফর্মে সফলভাবে সাবমিট ও নথিভুক্ত করা হয়েছে।',
             noteBn: 'সমস্যাটি প্ল্যাটফর্মে সফলভাবে সাবমিট ও নথিভুক্ত করা হয়েছে।',
           },
@@ -428,7 +413,7 @@ export async function createIssue(req: AuthRequest, res: Response) {
     }
     return res.status(500).json({
       success: false,
-      message: error.message || 'Error creating issue',
+      message: ENV.NODE_ENV === 'production' ? 'Error creating issue' : (error.message || 'Error creating issue'),
     });
   }
 }
@@ -446,6 +431,19 @@ export async function updateIssueStatus(req: AuthRequest, res: Response) {
 
     if (!newStatus) {
       return res.status(400).json({ success: false, message: 'newStatus is required' });
+    }
+
+    // SECURITY: Validate newStatus against allowed IssueStatus enum values
+    const VALID_STATUSES = [
+      'DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'VERIFIED', 'ASSIGNED',
+      'IN_PROGRESS', 'RESOLVED', 'CITIZEN_VERIFICATION', 'CLOSED',
+      'REOPENED', 'REJECTED', 'DUPLICATE'
+    ];
+    if (!VALID_STATUSES.includes(newStatus)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`,
+      });
     }
 
     const currentIssue = await prisma.issue.findUnique({
@@ -530,7 +528,7 @@ export async function updateIssueStatus(req: AuthRequest, res: Response) {
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: error.message || 'Failed to update issue status',
+      message: ENV.NODE_ENV === 'production' ? 'Failed to update issue status' : (error.message || 'Failed to update issue status'),
     });
   }
 }
@@ -538,12 +536,8 @@ export async function updateIssueStatus(req: AuthRequest, res: Response) {
 export async function confirmIssue(req: AuthRequest, res: Response) {
   try {
     const { id } = req.params;
-    let userId = req.user?.id;
-
-    if (!userId) {
-      const defaultUser = await prisma.user.findFirst({ where: { role: 'CITIZEN' } });
-      userId = defaultUser?.id || 'anon-citizen';
-    }
+    // SECURITY: Authentication required (enforced by route middleware)
+    const userId = req.user!.id;
 
     // Check if user already confirmed
     const existing = await prisma.userConfirmIssue.findUnique({
@@ -600,7 +594,7 @@ export async function confirmIssue(req: AuthRequest, res: Response) {
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: error.message || 'Failed to confirm issue',
+      message: ENV.NODE_ENV === 'production' ? 'Failed to confirm issue' : (error.message || 'Failed to confirm issue'),
     });
   }
 }
@@ -617,14 +611,9 @@ export async function voteResolution(req: AuthRequest, res: Response) {
       });
     }
 
-    let userId = req.user?.id;
-    let userName = req.user?.name;
-
-    if (!userId) {
-      const defaultUser = await prisma.user.findFirst({ where: { role: 'CITIZEN' } });
-      userId = defaultUser?.id || 'anon-voter';
-      userName = defaultUser?.name || 'নাগরিক ভোটার';
-    }
+    // SECURITY: Authentication required (enforced by route middleware)
+    const userId = req.user!.id;
+    const userName = req.user!.name;
 
     // Upsert vote
     await prisma.citizenVerificationVote.upsert({
@@ -692,7 +681,7 @@ export async function voteResolution(req: AuthRequest, res: Response) {
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: error.message || 'Failed to record vote',
+      message: ENV.NODE_ENV === 'production' ? 'Failed to record vote' : (error.message || 'Failed to record vote'),
     });
   }
 }
@@ -738,7 +727,7 @@ export async function followIssue(req: AuthRequest, res: Response) {
   } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: error.message || 'Failed to toggle follow status',
+      message: ENV.NODE_ENV === 'production' ? 'Failed to toggle follow status' : (error.message || 'Failed to toggle follow status'),
     });
   }
 }

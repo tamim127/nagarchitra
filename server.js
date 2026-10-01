@@ -40,46 +40,9 @@ app.prepare().then(() => {
     // Send initial online count to the connected client
     io.emit('users:count', { onlineCount: connectedCount });
 
-    // Handle new civic issue submission
-    socket.on('issue:new', (newIssue) => {
-      console.log(`[Socket.io] New issue broadcasted: ${newIssue?.title || newIssue?.id}`);
-      // Broadcast to all connected clients including sender
-      io.emit('issue:created', {
-        issue: newIssue,
-        broadcastTime: new Date().toISOString(),
-        senderId: socket.id,
-      });
-    });
-
-    // Handle community issue confirmation / upvote
-    socket.on('issue:confirm', (payload) => {
-      console.log(`[Socket.io] Issue confirmed: ${payload?.id}`);
-      io.emit('issue:confirmed', {
-        ...payload,
-        broadcastTime: new Date().toISOString(),
-        senderId: socket.id,
-      });
-    });
-
-    // Handle authority status changes & timeline audits
-    socket.on('issue:statusChange', (payload) => {
-      console.log(`[Socket.io] Issue status changed: ${payload?.id} -> ${payload?.newStatus}`);
-      io.emit('issue:updated', {
-        ...payload,
-        broadcastTime: new Date().toISOString(),
-        senderId: socket.id,
-      });
-    });
-
-    // Handle citizen resolution verification vote
-    socket.on('issue:vote', (payload) => {
-      console.log(`[Socket.io] Issue resolution vote: ${payload?.id} -> ${payload?.vote}`);
-      io.emit('issue:voted', {
-        ...payload,
-        broadcastTime: new Date().toISOString(),
-        senderId: socket.id,
-      });
-    });
+    // SECURITY: Removed unauthenticated event handlers (issue:new, issue:confirm, 
+    // issue:statusChange, issue:vote). All real-time broadcasts are now handled 
+    // exclusively by the backend API controllers after authentication & authorization.
 
     // Handle ping/liveness
     socket.on('ping', () => {

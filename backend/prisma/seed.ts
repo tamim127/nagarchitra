@@ -4,6 +4,12 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
+  // SECURITY: Prevent seeding in production environment
+  if (process.env.NODE_ENV === 'production') {
+    console.error('❌ FATAL: Database seeding is disabled in production.');
+    process.exit(1);
+  }
+
   console.log('🌱 Starting database seeding for NagarChitra BD...');
 
   const passwordHash = await bcrypt.hash('password123', 10);

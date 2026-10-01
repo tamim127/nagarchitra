@@ -26,8 +26,8 @@ router.get('/', optionalAuthenticateToken, getIssues);
 // Get single issue details
 router.get('/:id', optionalAuthenticateToken, getIssueById);
 
-// Submit new civic issue (optional auth or citizen)
-router.post('/', optionalAuthenticateToken, createIssue);
+// Submit new civic issue (SECURITY: requires authentication)
+router.post('/', authenticateToken, createIssue);
 
 // Authority / Admin update issue status & timeline
 router.patch(
@@ -37,11 +37,11 @@ router.patch(
   updateIssueStatus
 );
 
-// Citizen confirm issue ("I See This Too")
-router.post('/:id/confirm', optionalAuthenticateToken, confirmIssue);
+// Citizen confirm issue ("I See This Too") — SECURITY: requires authentication
+router.post('/:id/confirm', authenticateToken, confirmIssue);
 
-// Citizen vote resolution ("FIXED" or "STILL_EXISTS")
-router.post('/:id/vote', optionalAuthenticateToken, voteResolution);
+// Citizen vote resolution ("FIXED" or "STILL_EXISTS") — SECURITY: requires authentication
+router.post('/:id/vote', authenticateToken, voteResolution);
 
 // Toggle follow issue updates
 router.post('/:id/follow', authenticateToken, followIssue);

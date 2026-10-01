@@ -33,7 +33,7 @@ export default function RegisterPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
 
@@ -48,13 +48,18 @@ export default function RegisterPage() {
     }
 
     setIsLoading(true);
-    const res = register(name, email, password, location);
-    setIsLoading(false);
+    try {
+      const res = await register(name, email, password, location);
+      setIsLoading(false);
 
-    if (res.success) {
-      router.push('/dashboard');
-    } else {
-      setErrorMsg(res.error || 'Registration failed.');
+      if (res.success) {
+        router.push('/dashboard');
+      } else {
+        setErrorMsg(res.error || 'Registration failed.');
+      }
+    } catch (err: any) {
+      setIsLoading(false);
+      setErrorMsg(err.message || 'Registration failed.');
     }
   };
 
