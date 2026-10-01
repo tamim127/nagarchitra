@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "node server.js",
     "dev:next": "next dev -H 0.0.0.0",
+    "dev:backend": "npm --prefix backend run dev",
+    "backend:migrate": "npm --prefix backend run prisma:push",
+    "backend:seed": "npm --prefix backend run prisma:seed",
     "build": "next build",
     "start": "node server.js",
     "lint": "next lint"
